@@ -31,9 +31,32 @@ def rsi(closes, period=14):
     return round(100 - 100 / (1 + avg_gain / avg_loss), 1)
 
 
-def entry_target(bars, levels, ema21, last_close):
-    """Entry accumulation zone (nearest support -> 21EMA) and profit targets
-    (next resistances / prior high). Stops are the trader's own — none here."""
+def atr(bars, period=14):
+    """Average True Range — the stock's daily volatility."""
+    trs = []
+    for i in range(1, len(bars)):
+        h, l, pc = bars[i]["high"], bars[i]["low"], bars[i - 1]["close"]
+        if None in (h, l, pc):
+            continue
+        trs.append(max(h - l, abs(h - pc), abs(l - pc)))
+    if len(trs) < period:
+        return None
+    return sum(trs[-period:]) / period
+
+
+def monthly_move_pct(bars, last_close):
+    """Expected ~1-month move as % — daily ATR scaled to ~21 trading days."""
+    a = atr(bars)
+    if not a or not last_close:
+        return None
+    return round(a / last_close * 100 * 4.58, 1)
+
+
+def entry_target(bars, levels, ema21, last_close, min_reward=4.0):
+    """1-MONTH entry zone + targets. Targets must be far enough to be a monthly
+    objective (>= min_reward), scaled to the stock's own monthly range. Stops are
+    the trader's own — none here. Returns reward_pct=None if there's no monthly
+    room (caller drops it as an idea)."""
     lv = levels.get("3m", {})
     sup = [s["price"] for s in lv.get("support", [])]
     res = sorted(p["price"] for p in lv.get("resistance", []) if p["price"] > last_close)
@@ -43,16 +66,28 @@ def entry_target(bars, levels, ema21, last_close):
     zone_high = ema21 if ema21 else round(last_close * 1.005, 2)
     if zone_low >= zone_high:
         zone_low = round(min(zone_low, (ema21 or last_close) * 0.98), 2)
+    entry_mid = (zone_low + zone_high) / 2
 
+    mv = monthly_move_pct(bars, last_close) or 8.0
     hi63 = max((b["high"] for b in bars[-63:] if b["high"]), default=None)
-    t1 = res[0] if res else round(last_close * 1.04, 2)
-    t2 = res[1] if len(res) > 1 else hi63
-    if t2 and t2 <= t1:
+
+    # First resistance at least min_reward above the entry; the tiny near ones don't count.
+    far_res = [r for r in res if (r / entry_mid - 1) * 100 >= min_reward]
+    if far_res:
+        t1 = far_res[0]
+        t2 = far_res[1] if len(far_res) > 1 else (hi63 if hi63 and hi63 > t1 else None)
+    else:
+        prior_high = hi63 if hi63 and (hi63 / entry_mid - 1) * 100 >= min_reward else None
+        t1 = prior_high or round(entry_mid * (1 + mv / 100), 2)
         t2 = None
+
+    reward = round((t1 / entry_mid - 1) * 100, 1)
     return {
         "entry": [round(zone_low, 2), round(zone_high, 2)],
         "t1": round(t1, 2),
-        "t2": round(t2, 2) if t2 else None,
+        "t2": round(t2, 2) if t2 and t2 > t1 else None,
+        "reward_pct": reward if reward >= min_reward else None,
+        "month_move_pct": mv,
     }
 
 
@@ -252,9 +287,11 @@ def summarise(bars, settings):
     idea = None
     if signal["trend"] == "up" and above50 and htf_up and not overbought and (signal["entry_setup"] or near_sup):
         lv = entry_target(bars, levels, signal["ema"], last_close)
-        reason = "confirmed 21EMA pullback" if signal["entry_setup"] else "at support, uptrend intact"
-        idea = {"kind": "enter", "reason": reason, **lv}
-    elif signal["trend"] == "up" and (overbought or near_res):
+        # Only a 1-month idea if the target is a real monthly objective (has room).
+        if lv["reward_pct"] is not None:
+            reason = "confirmed 21EMA pullback" if signal["entry_setup"] else "at support, uptrend intact"
+            idea = {"kind": "enter", "reason": reason, **lv}
+    if idea is None and signal["trend"] == "up" and (overbought or near_res):
         idea = {"kind": "take_profit", "reason": "overbought" if overbought else "at resistance"}
 
     return {
