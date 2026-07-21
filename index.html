@@ -145,7 +145,7 @@ function keyRemark(inst) {
   const conf = [];
   if (inst.above50 != null) conf.push(inst.above50 ? "✓struct" : "✗below50");
   if (inst.htf_up != null) conf.push(inst.htf_up ? "✓HTF" : "✗HTF");
-  if (inst.vol_ratio != null) conf.push(`vol ${inst.vol_ratio}×${inst.vol_ratio >= 1.5 ? " heavy" : inst.vol_ratio <= 0.8 ? " light" : ""}`);
+  if (inst.vol_ratio != null) conf.push(`vol ${inst.vol_ratio}×${inst.vol_ratio >= 1.2 ? " rising" : inst.vol_ratio <= 0.85 ? " drying" : ""}`);
   const confStr = conf.length ? `<span class="muted">[${conf.join(" · ")}]</span> ` : "";
 
   let tag = "", cls = "muted";
