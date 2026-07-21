@@ -209,19 +209,17 @@ def summarise(bars, settings):
 
     flags = proximity_flags(last_close, levels, settings["proximity_alert_pct"])
     rsi_val = rsi(closes)
-    rsi_prev = rsi(closes[:-1])
-    rsi_rising = rsi_val is not None and rsi_prev is not None and rsi_val > rsi_prev
     overbought = rsi_val is not None and rsi_val >= 70
     near_res = any(f["kind"] == "resistance" for f in flags)
     near_sup = any(f["kind"] == "support" for f in flags)
 
     # Idea = swing-long: medium-term uptrend + pullback into the 20/50DMA zone,
-    # confirmed by RSI turning up (the bullish reaction) and not yet overbought.
+    # with RSI in the 35-65 pullback zone (pulled back, room to run, not overbought).
     # Exit/take-profit = RSI overbought or price at a 1m/3m resistance.
     idea = None
-    if signal["entry_setup"] and rsi_rising and rsi_val is not None and rsi_val < 68:
+    if signal["entry_setup"] and rsi_val is not None and 35 <= rsi_val <= 65:
         lv = entry_target(bars, levels, signal["sma20"], signal["sma50"], signal["zone"], last_close)
-        reason = f"pullback to {signal['zone']}, RSI↑" + (" + support" if near_sup else "")
+        reason = f"pullback to {signal['zone']}, RSI {rsi_val:.0f}" + (" + support" if near_sup else "")
         idea = {"kind": "enter", "reason": reason, **lv}
     elif signal["trend"] == "up" and (overbought or near_res):
         idea = {"kind": "take_profit", "reason": f"RSI {rsi_val:.0f} overbought" if overbought else "at resistance"}

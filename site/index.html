@@ -128,11 +128,8 @@ function earnTag(dateStr) {
 function fundLine(inst) {
   const f = inst.fund, iv = inst.iv, p = [];
   if (f) {
+    if (f.fwd_pe != null) p.push(`P/E ${f.fwd_pe.toFixed(1)}`);
     if (f.peg != null) p.push(`PEG ${f.peg.toFixed(2)}`);
-    else if (f.fwd_pe != null) p.push(`P/E ${f.fwd_pe.toFixed(1)}`);
-    if (f.rev_growth != null) p.push(`rev ${f.rev_growth >= 0 ? "+" : ""}${(f.rev_growth * 100).toFixed(0)}%`);
-    const up = f.rev_up || 0, dn = f.rev_down || 0;
-    if (up || dn) p.push(`rev↑${up}/↓${dn}`);
     if (f.next_earnings) p.push(earnTag(f.next_earnings));
   }
   if (iv) {
