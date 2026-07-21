@@ -135,8 +135,8 @@ def main():
                     "stale": False,
                     "fund": fundamentals.get(member["id"]),
                 })
-                if group["name"] == "Indices":
-                    entry["idea"] = None  # indices are context, not tradeable ideas
+                if group["name"] == "Index ETF":
+                    entry["idea"] = None  # market context, not a stock pick
                 entries.append(entry)
                 print(f"  ok   {member['id']:<8} {entry['last_close']:>12,.2f}  "
                       f"{len(bars)} bars")
