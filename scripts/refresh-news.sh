@@ -7,3 +7,5 @@ export PATH="/opt/homebrew/bin:/Users/chelsqueck/.local/bin:/usr/local/bin:/usr/
 ~/x-reader/.venv/bin/python ~/x-reader/x_scrape.py >/dev/null 2>&1 || true
 # Tag the news to tickers (writes ~/stock-monitor/data/news.json).
 ~/stock-monitor/.venv/bin/python ~/stock-monitor/scripts/news.py
+# IV rank / implied move from IBKR (keeps last iv.json if Gateway is down).
+~/stock-monitor/.venv/bin/python ~/stock-monitor/scripts/ivdata.py || true
