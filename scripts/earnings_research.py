@@ -4,6 +4,7 @@ last-quarter guidance. Writes data/earnings.json {id: "line [src]"} which build.
 merges as inst.earn. Grounded only — blank if no source.
 """
 import os
+import re
 import json
 import datetime
 import subprocess
@@ -53,8 +54,11 @@ def main():
             "End the line with the source outlet in brackets, e.g. [Bloomberg]. No preamble."
         )
         line = " ".join(ask_fable(prompt).split())
+        # Drop the trailing "Sources:" markdown block Fable tends to append, and any (url).
+        line = re.split(r"\s*Sources?:", line, flags=re.I)[0].strip()
+        line = re.sub(r"\((https?://[^)]+)\)", "", line).strip()
         if line and line.upper() != "NONE" and "[" in line:
-            out[tid] = line[:220]
+            out[tid] = line[:200]
             print(f"  {tid}: {line[:90]}")
         else:
             print(f"  {tid}: (no source)")
