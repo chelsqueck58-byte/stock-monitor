@@ -20,6 +20,7 @@ CONFIG = ROOT / "config" / "universe.json"
 OUTPUT = ROOT / "site" / "data.json"
 ALERT_STATE = ROOT / "data" / "alert_state.json"
 FUNDAMENTALS = ROOT / "data" / "fundamentals.json"
+NEWS = ROOT / "data" / "news.json"
 TELEGRAM = Path.home() / ".claude" / "skills" / "telegram-sender" / "send.sh"
 
 
@@ -112,6 +113,13 @@ def main():
         except (json.JSONDecodeError, OSError):
             pass
 
+    news = {}
+    if NEWS.exists():
+        try:
+            news = json.loads(NEWS.read_text())
+        except (json.JSONDecodeError, OSError):
+            pass
+
     entries = []
     failures = []
     reused = []
@@ -134,6 +142,7 @@ def main():
                     "currency": meta.get("currency"),
                     "stale": False,
                     "fund": fundamentals.get(member["id"]),
+                    "news": news.get(member["id"]),
                 })
                 if group["name"] == "Index ETF":
                     entry["idea"] = None  # market context, not a stock pick
