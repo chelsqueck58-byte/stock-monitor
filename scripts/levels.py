@@ -15,6 +15,39 @@ def moving_averages(bars, periods):
     return latest
 
 
+def trend_signal(bars, ma_latest, settings):
+    """MA-discipline signals: long above a rising 200DMA, enter on 50DMA pullbacks.
+
+    trend: 'up' = above a rising 200DMA · 'down' = below 200DMA · 'flat' = otherwise.
+    entry_setup: in an uptrend and pulled back to within entry_pullback_pct of the 50DMA.
+    """
+    closes = [bar["close"] for bar in bars]
+    last = closes[-1]
+    ma50 = ma_latest.get("50")
+    ma200 = ma_latest.get("200")
+    lookback = settings.get("ma_slope_lookback", 20)
+    pullback = settings.get("entry_pullback_pct", 2.0)
+
+    slope_pct = None
+    if ma200 and len(closes) >= 200 + lookback:
+        prev200 = sum(closes[-200 - lookback:-lookback]) / 200
+        if prev200:
+            slope_pct = round((ma200 / prev200 - 1) * 100, 2)
+
+    above200 = ma200 is not None and last > ma200
+    rising = slope_pct is None or slope_pct > 0
+    if above200 and rising:
+        trend = "up"
+    elif ma200 is not None and last < ma200:
+        trend = "down"
+    else:
+        trend = "flat"
+
+    entry = trend == "up" and ma50 is not None and abs((last / ma50 - 1) * 100) <= pullback
+
+    return {"trend": trend, "ma200_slope_pct": slope_pct, "entry_setup": entry}
+
+
 def swing_points(bars, window):
     """Pivot highs and lows: extremes within +/- window bars."""
     highs = []
@@ -109,6 +142,7 @@ def summarise(bars, settings):
     last_close = bars[-1]["close"]
     ma_latest = moving_averages(bars, settings["ma_periods"])
     levels = compute_levels(bars, settings)
+    signal = trend_signal(bars, ma_latest, settings)
 
     ytd_open = next(
         (bar["close"] for bar in bars if bar["date"][:4] == bars[-1]["date"][:4]),
@@ -126,6 +160,9 @@ def summarise(bars, settings):
             period: round((last_close / value - 1) * 100, 2)
             for period, value in ma_latest.items() if value
         },
+        "trend": signal["trend"],
+        "ma200_slope_pct": signal["ma200_slope_pct"],
+        "entry_setup": signal["entry_setup"],
         "levels": levels,
         "flags": proximity_flags(last_close, levels, settings["proximity_alert_pct"]),
         "bars": [

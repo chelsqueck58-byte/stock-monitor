@@ -49,6 +49,13 @@
   .note::placeholder { color:var(--muted); }
   .flags { padding:4px 12px; font-size:11px; color:var(--muted); }
   .flags b.res { color:var(--res); } .flags b.sup { color:var(--sup); }
+  .badge { font-size:10px; font-weight:600; padding:1px 6px; border-radius:4px; white-space:nowrap; }
+  .badge.up { color:var(--up); background:rgba(38,166,65,.14); }
+  .badge.down { color:var(--down); background:rgba(248,81,73,.14); }
+  .badge.flat { color:var(--muted); background:rgba(125,133,144,.14); }
+  .badge.entry { color:#f0b429; background:rgba(240,180,41,.16); }
+  .card.setup { border-color:#f0b429; box-shadow:inset 0 0 0 1px #f0b429; }
+  .legend { color:var(--muted); font-size:11px; }
 </style>
 </head>
 <body>
@@ -56,6 +63,7 @@
 <header>
   <h1>stock-monitor</h1>
   <span class="meta" id="meta">loading…</span>
+  <span class="legend">▲UP = above rising 200DMA · ⚡ENTRY = pulled back to 50DMA in uptrend · chart = YTD · bold lines = 50 &amp; 200DMA</span>
 </header>
 <nav id="tabs"></nav>
 <main id="grid"></main>
@@ -64,7 +72,10 @@
 <script>
 "use strict";
 const MA_PERIODS = [20, 50, 100, 200];
-const MA_COLORS = { 20:"#58a6ff", 50:"#d29922", 100:"#bc8cff", 200:"#7d8590" };
+// 50DMA (entry line) and 200DMA (trend filter) are emphasised; 20/100 are muted.
+const MA_COLORS = { 20:"#6e7681", 50:"#e3b341", 100:"#57606a", 200:"#58a6ff" };
+const MA_EMPH = { 50:true, 200:true };
+const TREND_ORDER = { up: 0, flat: 1, down: 2 };
 let DATA = null, STALE = false, ACTIVE = null;
 
 function sma(closes, period) {
@@ -160,7 +171,11 @@ function drawChart(el, inst) {
   MA_PERIODS.forEach(p => {
     if (inst.bars.length < p) return;
     const series = sma(closes, p);
-    const line = chart.addLineSeries({ color: MA_COLORS[p], lineWidth: 1, priceLineVisible: false, lastValueVisible: false });
+    const emph = !!MA_EMPH[p];
+    const line = chart.addLineSeries({
+      color: MA_COLORS[p], lineWidth: emph ? 2 : 1,
+      priceLineVisible: false, lastValueVisible: emph, title: emph ? `${p}MA` : "",
+    });
     line.setData(inst.bars.map((b, i) => ({ time: b.d, value: series[i] })).filter(x => x.value !== null));
   });
 
@@ -180,13 +195,28 @@ function drawChart(el, inst) {
       }));
     }
   }
-  chart.timeScale().fitContent();
+  // A1 — default view to year-to-date (Jan 1 of the latest bar's year → today).
+  const lastDate = inst.bars[inst.bars.length - 1].d;
+  try {
+    chart.timeScale().setVisibleRange({ from: `${lastDate.slice(0, 4)}-01-01`, to: lastDate });
+  } catch (e) {
+    chart.timeScale().fitContent();
+  }
   return chart;
+}
+
+function trendBadge(inst) {
+  const t = inst.trend || "flat";
+  const label = t === "up" ? "▲ UP" : t === "down" ? "▼ DOWN" : "– FLAT";
+  const slope = inst.ma200_slope_pct;
+  const tip = t === "up" ? "above rising 200DMA" : t === "down" ? "below 200DMA" : "no clean trend";
+  const entry = inst.entry_setup ? ` <span class="badge entry" title="within 2% of the 50DMA in an uptrend">⚡ ENTRY</span>` : "";
+  return `<span class="badge ${t}" title="${tip}${slope != null ? ` · 200DMA ${slope >= 0 ? "+" : ""}${slope}%/1mo` : ""}">${label}</span>${entry}`;
 }
 
 function card(inst) {
   const el = document.createElement("div");
-  el.className = "card";
+  el.className = "card" + (inst.entry_setup ? " setup" : "");
 
   const mas = MA_PERIODS.map(p => {
     const vs = inst.vs_ma ? inst.vs_ma[p] : null;
@@ -207,6 +237,7 @@ function card(inst) {
     <div class="top">
       <span class="name">${inst.label}</span>
       <span class="id">${inst.id} · ${inst.currency || ""}</span>
+      ${trendBadge(inst)}
       <span class="px">${inst.last_close.toLocaleString(undefined,{maximumFractionDigits:2})}</span>
       ${fmtPct(inst.change_pct)} ${fmtPct(inst.ytd_pct)}
     </div>
@@ -226,7 +257,13 @@ function card(inst) {
 function renderGroup() {
   const grid = document.getElementById("grid");
   grid.innerHTML = "";
-  DATA.instruments.filter(i => i.group === ACTIVE).forEach(i => grid.appendChild(card(i)));
+  // A8 — within the sector, float the actionable names up: entry-setups first,
+  // then by trend (up → flat → down). Sector tabs themselves are unchanged.
+  const items = DATA.instruments.filter(i => i.group === ACTIVE).slice().sort((a, b) => {
+    if (!!b.entry_setup !== !!a.entry_setup) return (b.entry_setup ? 1 : 0) - (a.entry_setup ? 1 : 0);
+    return (TREND_ORDER[a.trend] ?? 3) - (TREND_ORDER[b.trend] ?? 3);
+  });
+  items.forEach(i => grid.appendChild(card(i)));
 }
 
 async function load() {

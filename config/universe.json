@@ -113,6 +113,8 @@
     "proximity_alert_pct": 1.5,
     "stale_after_hours": 30,
     "min_bars": 210,
-    "alert_cooldown_hours": 18
+    "alert_cooldown_hours": 18,
+    "entry_pullback_pct": 2.0,
+    "ma_slope_lookback": 20
   }
 }
