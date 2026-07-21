@@ -11,7 +11,7 @@ from ib_insync import IB, Stock, util
 ROOT = Path(__file__).resolve().parent.parent
 CONFIG = ROOT / "config" / "universe.json"
 OUT = ROOT / "data" / "iv.json"
-FOREIGN = {"SEHK", "KRX", "KSE", "SGX", "TWSE"}  # no US options -> skip
+NO_OPTIONS = {"KRX", "KSE", "SGX", "TWSE"}  # no options IV; US + HK (SEHK) work
 
 
 def series(ib, contract, what, dur):
@@ -36,9 +36,10 @@ def main():
     for group in config["groups"]:
         for member in group["members"]:
             spec = member.get("ibkr", {})
-            if spec.get("exchange") in FOREIGN:
+            if spec.get("exchange") in NO_OPTIONS:
                 continue
-            contract = Stock(spec.get("symbol", member["id"]), "SMART", "USD")
+            contract = Stock(spec.get("symbol", member["id"]),
+                             spec.get("exchange", "SMART"), spec.get("currency", "USD"))
             try:
                 ib.qualifyContracts(contract)
             except Exception:

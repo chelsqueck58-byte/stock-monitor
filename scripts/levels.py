@@ -207,6 +207,17 @@ def summarise(bars, settings):
     )
     prior_close = bars[-2]["close"] if len(bars) > 1 else None
 
+    # Realized volatility (annualised) + expected ~1-month move, from daily returns.
+    # Fallback vol figure for names with no options IV (KR/SG); every name gets one.
+    rets = [closes[i] / closes[i - 1] - 1 for i in range(1, len(closes)) if closes[i - 1]]
+    window = rets[-21:] if len(rets) >= 21 else rets
+    rvol = rmove = None
+    if len(window) >= 5:
+        mean = sum(window) / len(window)
+        dstd = (sum((r - mean) ** 2 for r in window) / len(window)) ** 0.5
+        rvol = round(dstd * (252 ** 0.5) * 100, 1)
+        rmove = round(dstd * (21 ** 0.5) * 100, 1)
+
     flags = proximity_flags(last_close, levels, settings["proximity_alert_pct"])
     rsi_val = rsi(closes)
     overbought = rsi_val is not None and rsi_val >= 70
@@ -236,6 +247,8 @@ def summarise(bars, settings):
         "trend": signal["trend"],
         "entry_setup": signal["entry_setup"],
         "zone": signal["zone"],
+        "rvol": rvol,
+        "rmove": rmove,
         "cta": donchian_signal(bars, settings.get("donchian_period", 20)),
         "idea": idea,
         "levels": levels,

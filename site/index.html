@@ -135,6 +135,8 @@ function fundLine(inst) {
   if (iv) {
     const hot = iv.iv_rank >= 80 ? ' class="er-soon"' : "";
     p.push(`<span${hot}>IVr ${iv.iv_rank}% · ±${iv.move_1m}%/mo</span>`);
+  } else if (inst.rvol != null) {
+    p.push(`vol ${inst.rvol}% · ±${inst.rmove}%/mo`);
   }
   return p.join(" · ");
 }
