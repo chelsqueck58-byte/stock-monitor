@@ -48,6 +48,8 @@
   .remark .muted { color:var(--muted); }
   .fund { padding:4px 10px; font-size:11px; color:var(--muted); border-bottom:1px solid var(--border);
     font-variant-numeric:tabular-nums; }
+  .news { padding:5px 10px; font-size:11px; color:#9fd0ff; border-bottom:1px solid var(--border); }
+  .ideabox .nw { color:#9fd0ff; font-size:11px; margin-top:3px; }
   .chart { height:300px; }
   /* Top ideas section */
   #ideas { padding:10px 12px; border-bottom:1px solid var(--border); background:#12161c; }
@@ -145,6 +147,7 @@ function ideaBox(inst) {
     <div class="ih"><b>${inst.label}</b> <span class="id">${inst.id}</span> · ${val}</div>
     <div class="ir">${i.reason}${er ? " · " + er : ""}</div>
     <div class="il">Entry ${fmt(i.entry[0])}–${fmt(i.entry[1])} → ${tgt}</div>
+    ${inst.news ? `<div class="nw">📰 ${inst.news}</div>` : ""}
   </div>`;
 }
 function renderIdeas() {
@@ -257,6 +260,7 @@ function card(inst) {
       ${fmtPct(inst.change_pct)} ${fmtPct(inst.ytd_pct)}
     </div>
     ${fl ? `<div class="fund">${fl}</div>` : ""}
+    ${inst.news ? `<div class="news">📰 ${inst.news}</div>` : ""}
     <div class="remark ${rem.cls}">${rem.html}</div>
     <div class="chart" data-pending="1"></div>
     <textarea class="note" placeholder="notes — ${inst.id}"></textarea>`;
