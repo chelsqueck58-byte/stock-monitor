@@ -250,7 +250,8 @@ function earningsBox(inst) {
     const num = Math.abs(s) >= 100 ? "(n/m)" : `${s >= 0 ? "+" : ""}${s}%`;  // near-zero EPS -> % not meaningful
     return `<span class="pct ${s >= 0 ? "u" : "d"}">${(q.q || "").slice(0, 7)} ${s >= 0 ? "beat" : "miss"} ${num}</span>`;
   }).filter(Boolean).join(" ");
-  const focus = inst.earn ? `<div class="efocus">${inst.earn}</div>` : "";
+  const focusText = inst.earn ? inst.earn.split(/\s*Sources?:/i)[0].replace(/\((https?:[^)]+)\)/g, "").trim() : "";
+  const focus = focusText ? `<div class="efocus">${focusText}</div>` : "";
   return `<div class="earn"><b>⏰ Earnings ${f.next_earnings} (${days}d)</b>${f.curr_est ? ` · est $${f.curr_est.toFixed(2)}` : ""}<br><span class="eh">Last 4Q:</span> ${beats || "—"}${focus}</div>`;
 }
 
