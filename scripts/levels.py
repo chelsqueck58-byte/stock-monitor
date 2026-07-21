@@ -75,17 +75,14 @@ def entry_target(bars, levels, ema21, last_close, min_reward=4.0):
     far_res = [r for r in res if (r / entry_mid - 1) * 100 >= min_reward]
     if far_res:
         t1 = far_res[0]
-        t2 = far_res[1] if len(far_res) > 1 else (hi63 if hi63 and hi63 > t1 else None)
     else:
         prior_high = hi63 if hi63 and (hi63 / entry_mid - 1) * 100 >= min_reward else None
         t1 = prior_high or round(entry_mid * (1 + mv / 100), 2)
-        t2 = None
 
     reward = round((t1 / entry_mid - 1) * 100, 1)
     return {
         "entry": [round(zone_low, 2), round(zone_high, 2)],
         "t1": round(t1, 2),
-        "t2": round(t2, 2) if t2 and t2 > t1 else None,
         "reward_pct": reward if reward >= min_reward else None,
         "month_move_pct": mv,
     }
