@@ -7,283 +7,215 @@
 <style>
   :root {
     --bg:#0d1117; --panel:#161b22; --border:#21262d; --text:#e6edf3;
-    --muted:#7d8590; --up:#26a641; --down:#f85149; --accent:#58a6ff;
-    --sup:#26a641; --res:#f85149;
+    --muted:#7d8590; --up:#26a641; --down:#f85149;
+    --ema:#e3b341; --sma:#58a6ff; --vwap:#bc8cff;
   }
   * { box-sizing:border-box; }
   body { margin:0; background:var(--bg); color:var(--text);
     font:13px/1.4 -apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif; }
-  header { padding:12px 16px; border-bottom:1px solid var(--border);
-    display:flex; align-items:baseline; gap:14px; flex-wrap:wrap; }
-  header h1 { margin:0; font-size:15px; font-weight:600; letter-spacing:.3px; }
-  header .meta { color:var(--muted); font-size:12px; }
-  #stale { display:none; background:var(--down); color:#fff; padding:10px 16px;
-    font-weight:600; text-align:center; }
+  header { padding:10px 16px; border-bottom:1px solid var(--border); position:sticky; top:0;
+    background:var(--bg); z-index:5; }
+  header h1 { margin:0 0 3px; font-size:15px; font-weight:600; letter-spacing:.3px; display:inline; }
+  header .meta { color:var(--muted); font-size:12px; margin-left:10px; }
+  header .legend { color:var(--muted); font-size:11px; display:block; margin-top:4px; }
+  header .legend b.ema { color:var(--ema); } header .legend b.sma { color:var(--sma); }
+  header .legend b.vwap { color:var(--vwap); }
+  #stale { display:none; background:var(--down); color:#fff; padding:10px 16px; font-weight:600; text-align:center; }
   #stale.show { display:block; }
-  nav { display:flex; gap:2px; padding:8px 12px; border-bottom:1px solid var(--border);
-    flex-wrap:wrap; position:sticky; top:0; background:var(--bg); z-index:5; }
-  nav button { background:transparent; border:1px solid transparent; color:var(--muted);
-    padding:6px 12px; border-radius:6px; cursor:pointer; font-size:13px; }
-  nav button.active { background:var(--panel); color:var(--text); border-color:var(--border); }
-  nav .spacer { flex:1; }
-  nav .export { color:var(--accent); border-color:var(--border); }
-  main { padding:12px; display:grid; gap:12px;
-    grid-template-columns:repeat(auto-fill,minmax(440px,1fr)); }
-  .card { background:var(--panel); border:1px solid var(--border); border-radius:8px;
-    overflow:hidden; }
-  .card .top { display:flex; align-items:baseline; gap:8px; padding:10px 12px;
-    border-bottom:1px solid var(--border); flex-wrap:wrap; }
+  main { padding:12px; display:grid; gap:10px; grid-template-columns:repeat(auto-fill,minmax(320px,1fr)); }
+  .section { grid-column:1/-1; font-size:12px; font-weight:600; color:var(--muted);
+    text-transform:uppercase; letter-spacing:.5px; padding:8px 2px 2px; border-bottom:1px solid var(--border); }
+  .card { background:var(--panel); border:1px solid var(--border); border-radius:8px; overflow:hidden; }
+  .card.setup { border-color:var(--ema); box-shadow:inset 0 0 0 1px var(--ema); }
+  .card .top { display:flex; align-items:center; gap:6px; padding:8px 10px; flex-wrap:wrap; }
   .card .name { font-weight:600; }
   .card .id { color:var(--muted); font-size:11px; }
   .card .px { margin-left:auto; font-variant-numeric:tabular-nums; font-weight:600; }
-  .pct { font-variant-numeric:tabular-nums; padding:1px 5px; border-radius:4px; font-size:11px; }
+  .pct { font-variant-numeric:tabular-nums; font-size:11px; }
   .pct.u { color:var(--up); } .pct.d { color:var(--down); }
-  .mas { display:flex; gap:5px; padding:6px 12px; flex-wrap:wrap;
-    border-bottom:1px solid var(--border); }
-  .ma { font-size:10px; color:var(--muted); font-variant-numeric:tabular-nums; }
-  .ma b { color:var(--text); font-weight:600; }
-  .ma.above b { color:var(--up); } .ma.below b { color:var(--down); }
-  .chart { height:220px; }
-  .note { width:100%; border:none; border-top:1px solid var(--border); background:transparent;
-    color:var(--text); padding:8px 12px; resize:vertical; min-height:44px; font:inherit; }
-  .note::placeholder { color:var(--muted); }
-  .flags { padding:4px 12px; font-size:11px; color:var(--muted); }
-  .flags b.res { color:var(--res); } .flags b.sup { color:var(--sup); }
-  .badge { font-size:10px; font-weight:600; padding:1px 6px; border-radius:4px; white-space:nowrap; }
+  .badge { font-size:10px; font-weight:600; padding:1px 5px; border-radius:4px; white-space:nowrap; }
   .badge.up { color:var(--up); background:rgba(38,166,65,.14); }
   .badge.down { color:var(--down); background:rgba(248,81,73,.14); }
   .badge.flat { color:var(--muted); background:rgba(125,133,144,.14); }
-  .badge.entry { color:#f0b429; background:rgba(240,180,41,.16); }
-  .card.setup { border-color:#f0b429; box-shadow:inset 0 0 0 1px #f0b429; }
-  .legend { color:var(--muted); font-size:11px; }
+  .badge.entry { color:var(--ema); background:rgba(227,179,65,.16); }
+  .badge.cta-long { color:var(--up); background:rgba(38,166,65,.10); }
+  .badge.cta-short { color:var(--down); background:rgba(248,81,73,.10); }
+  .chart { height:150px; }
+  .note { width:100%; border:none; border-top:1px solid var(--border); background:transparent;
+    color:var(--text); padding:6px 10px; resize:vertical; min-height:32px; font:inherit; font-size:12px; }
+  .note::placeholder { color:var(--muted); }
 </style>
 </head>
 <body>
 <div id="stale"></div>
 <header>
-  <h1>stock-monitor</h1>
-  <span class="meta" id="meta">loading…</span>
-  <span class="legend">▲UP = above rising 200DMA · ⚡ENTRY = pulled back to 50DMA in uptrend · chart = YTD · bold lines = 50 &amp; 200DMA</span>
+  <h1>stock-monitor</h1><span class="meta" id="meta">loading…</span>
+  <span class="legend">
+    <b class="ema">21EMA</b> (entry) · <b class="sma">50SMA</b> · <b class="vwap">VWAP</b> · S/R lines ·
+    ▲ above rising 21EMA · ⚡ pullback entry · CTA↑ = 20-day breakout · chart = YTD
+  </span>
 </header>
-<nav id="tabs"></nav>
 <main id="grid"></main>
 
 <script src="./vendor/lightweight-charts.standalone.production.js"></script>
 <script>
 "use strict";
-const MA_PERIODS = [20, 50, 100, 200];
-// 50DMA (entry line) and 200DMA (trend filter) are emphasised; 20/100 are muted.
-const MA_COLORS = { 20:"#6e7681", 50:"#e3b341", 100:"#57606a", 200:"#58a6ff" };
-const MA_EMPH = { 50:true, 200:true };
 const TREND_ORDER = { up: 0, flat: 1, down: 2 };
-let DATA = null, STALE = false, ACTIVE = null;
+let DATA = null, STALE = false, OBSERVER = null;
 
-function sma(closes, period) {
-  const out = [];
-  let sum = 0;
+function emaSeries(closes, period) {
+  const out = []; const k = 2 / (period + 1); let e = null;
   for (let i = 0; i < closes.length; i++) {
-    sum += closes[i];
-    if (i >= period) sum -= closes[i - period];
+    if (i < period - 1) { out.push(null); continue; }
+    if (e === null) { let s = 0; for (let j = i - period + 1; j <= i; j++) s += closes[j]; e = s / period; }
+    else { e = closes[i] * k + e * (1 - k); }
+    out.push(e);
+  }
+  return out;
+}
+function smaSeries(closes, period) {
+  const out = []; let sum = 0;
+  for (let i = 0; i < closes.length; i++) {
+    sum += closes[i]; if (i >= period) sum -= closes[i - period];
     out.push(i >= period - 1 ? sum / period : null);
   }
   return out;
 }
-
-function fmtPct(v) {
-  if (v === null || v === undefined) return "–";
-  const cls = v >= 0 ? "u" : "d";
-  return `<span class="pct ${cls}">${v >= 0 ? "+" : ""}${v.toFixed(2)}%</span>`;
+function avwapSeries(bars) {
+  const N = Math.min(63, bars.length); const start = bars.length - N;
+  let anchor = start, lo = Infinity;
+  for (let i = start; i < bars.length; i++) if (bars[i].l < lo) { lo = bars[i].l; anchor = i; }
+  let pv = 0, vv = 0; const out = [];
+  for (let i = 0; i < bars.length; i++) {
+    if (i < anchor) { out.push(null); continue; }
+    const v = bars[i].v || 0; const tp = (bars[i].h + bars[i].l + bars[i].c) / 3;
+    pv += tp * v; vv += v; out.push(vv ? pv / vv : null);
+  }
+  return out;
 }
-
-function checkStale(payload) {
-  const gen = new Date(payload.generated_at).getTime();
-  const ageH = (Date.now() - gen) / 3.6e6;
-  const limit = payload.stale_after_hours || 30;
-  const banner = document.getElementById("stale");
+function fmtPct(v) {
+  if (v === null || v === undefined) return "";
+  return `<span class="pct ${v >= 0 ? "u" : "d"}">${v >= 0 ? "+" : ""}${v.toFixed(2)}%</span>`;
+}
+function checkStale(p) {
+  const ageH = (Date.now() - new Date(p.generated_at).getTime()) / 3.6e6;
+  const limit = p.stale_after_hours || 30;
+  const b = document.getElementById("stale");
   if (ageH > limit) {
-    banner.textContent =
-      `⚠ DATA STALE — generated ${ageH.toFixed(1)}h ago (limit ${limit}h). ` +
-      `Levels are hidden; do not trade off this page until it refreshes.`;
-    banner.classList.add("show");
-    return true;
+    b.textContent = `⚠ DATA STALE — ${ageH.toFixed(1)}h old (limit ${limit}h). Levels hidden; don't trade off this until it refreshes.`;
+    b.classList.add("show"); return true;
   }
   return false;
 }
-
-function buildTabs() {
-  const groups = [...new Set(DATA.instruments.map(i => i.group))];
-  const nav = document.getElementById("tabs");
-  nav.innerHTML = "";
-  groups.forEach((g, idx) => {
-    const b = document.createElement("button");
-    b.textContent = g;
-    if (idx === 0) { b.classList.add("active"); ACTIVE = g; }
-    b.onclick = () => {
-      [...nav.querySelectorAll("button")].forEach(x => x.classList.remove("active"));
-      b.classList.add("active");
-      ACTIVE = g;
-      renderGroup();
-    };
-    nav.appendChild(b);
-  });
-  const spacer = document.createElement("span");
-  spacer.className = "spacer";
-  nav.appendChild(spacer);
-  const exp = document.createElement("button");
-  exp.className = "export";
-  exp.textContent = "⤓ export notes";
-  exp.onclick = exportNotes;
-  nav.appendChild(exp);
-}
-
 function noteKey(id) { return `stockmon.note.${id}`; }
 
-function exportNotes() {
-  const notes = {};
-  DATA.instruments.forEach(i => {
-    const v = localStorage.getItem(noteKey(i.id));
-    if (v) notes[i.id] = v;
-  });
-  const blob = new Blob([JSON.stringify(notes, null, 2)], { type: "application/json" });
-  const a = document.createElement("a");
-  a.href = URL.createObjectURL(blob);
-  a.download = "stock-monitor-notes.json";
-  a.click();
-  URL.revokeObjectURL(a.href);
+function badges(inst) {
+  const t = inst.trend || "flat";
+  const tl = t === "up" ? "▲" : t === "down" ? "▼" : "–";
+  const entry = inst.entry_setup ? `<span class="badge entry" title="pullback to 21EMA in uptrend">⚡ ENTRY</span>` : "";
+  let cta = "";
+  if (inst.cta === "long") cta = `<span class="badge cta-long" title="20-day breakout up">CTA↑</span>`;
+  else if (inst.cta === "short") cta = `<span class="badge cta-short" title="20-day breakdown">CTA↓</span>`;
+  return `<span class="badge ${t}" title="trend vs 21EMA">${tl}</span>${entry}${cta}`;
 }
 
 function drawChart(el, inst) {
   const chart = LightweightCharts.createChart(el, {
-    layout: { background: { color: "transparent" }, textColor: "#7d8590" },
-    grid: { vertLines: { color: "#21262d" }, horzLines: { color: "#21262d" } },
+    layout: { background: { color: "transparent" }, textColor: "#7d8590", fontSize: 10 },
+    grid: { vertLines: { color: "#1b2027" }, horzLines: { color: "#1b2027" } },
     rightPriceScale: { borderColor: "#21262d" },
     timeScale: { borderColor: "#21262d", timeVisible: false },
-    crosshair: { mode: 0 },
-    height: 220,
+    crosshair: { mode: 0 }, height: 150,
   });
   const candle = chart.addCandlestickSeries({
     upColor: "#26a641", downColor: "#f85149", borderVisible: false,
     wickUpColor: "#26a641", wickDownColor: "#f85149",
   });
   candle.setData(inst.bars.map(b => ({ time: b.d, open: b.o, high: b.h, low: b.l, close: b.c })));
-
   const closes = inst.bars.map(b => b.c);
-  MA_PERIODS.forEach(p => {
-    if (inst.bars.length < p) return;
-    const series = sma(closes, p);
-    const emph = !!MA_EMPH[p];
-    const line = chart.addLineSeries({
-      color: MA_COLORS[p], lineWidth: emph ? 2 : 1,
-      priceLineVisible: false, lastValueVisible: emph, title: emph ? `${p}MA` : "",
-    });
-    line.setData(inst.bars.map((b, i) => ({ time: b.d, value: series[i] })).filter(x => x.value !== null));
-  });
-
-  // Support/resistance zones — suppressed when data is stale (levels untrustworthy).
+  const overlays = [
+    ["#e3b341", 2, emaSeries(closes, 21)],
+    ["#58a6ff", 1, smaSeries(closes, 50)],
+    ["#bc8cff", 1, avwapSeries(inst.bars)],
+  ];
+  for (const [color, width, series] of overlays) {
+    const line = chart.addLineSeries({ color, lineWidth: width, priceLineVisible: false, lastValueVisible: false });
+    line.setData(inst.bars.map((b, i) => ({ time: b.d, value: series[i] })).filter(x => x.value != null));
+  }
   if (!STALE && inst.levels) {
-    for (const win of ["3m", "1m"]) {
-      const lv = inst.levels[win];
-      if (!lv) continue;
-      const style = win === "1m" ? LightweightCharts.LineStyle.Dotted : LightweightCharts.LineStyle.Dashed;
-      (lv.support || []).forEach(s => candle.createPriceLine({
-        price: s.price, color: "#26a641", lineWidth: 1, lineStyle: style,
-        axisLabelVisible: true, title: `S ${win}`,
-      }));
-      (lv.resistance || []).forEach(r => candle.createPriceLine({
-        price: r.price, color: "#f85149", lineWidth: 1, lineStyle: style,
-        axisLabelVisible: true, title: `R ${win}`,
-      }));
+    for (const win of ["3m"]) {
+      const lv = inst.levels[win]; if (!lv) continue;
+      (lv.support || []).forEach(s => candle.createPriceLine({ price: s.price, color: "#26a641", lineWidth: 1, lineStyle: 2, axisLabelVisible: true, title: "S" }));
+      (lv.resistance || []).forEach(r => candle.createPriceLine({ price: r.price, color: "#f85149", lineWidth: 1, lineStyle: 2, axisLabelVisible: true, title: "R" }));
     }
   }
-  // A1 — default view to year-to-date (Jan 1 of the latest bar's year → today).
   const lastDate = inst.bars[inst.bars.length - 1].d;
-  try {
-    chart.timeScale().setVisibleRange({ from: `${lastDate.slice(0, 4)}-01-01`, to: lastDate });
-  } catch (e) {
-    chart.timeScale().fitContent();
-  }
-  return chart;
-}
-
-function trendBadge(inst) {
-  const t = inst.trend || "flat";
-  const label = t === "up" ? "▲ UP" : t === "down" ? "▼ DOWN" : "– FLAT";
-  const slope = inst.ma200_slope_pct;
-  const tip = t === "up" ? "above rising 200DMA" : t === "down" ? "below 200DMA" : "no clean trend";
-  const entry = inst.entry_setup ? ` <span class="badge entry" title="within 2% of the 50DMA in an uptrend">⚡ ENTRY</span>` : "";
-  return `<span class="badge ${t}" title="${tip}${slope != null ? ` · 200DMA ${slope >= 0 ? "+" : ""}${slope}%/1mo` : ""}">${label}</span>${entry}`;
+  try { chart.timeScale().setVisibleRange({ from: `${lastDate.slice(0, 4)}-01-01`, to: lastDate }); }
+  catch (e) { chart.timeScale().fitContent(); }
 }
 
 function card(inst) {
   const el = document.createElement("div");
   el.className = "card" + (inst.entry_setup ? " setup" : "");
-
-  const mas = MA_PERIODS.map(p => {
-    const vs = inst.vs_ma ? inst.vs_ma[p] : null;
-    if (vs === null || vs === undefined) return `<span class="ma">${p}: –</span>`;
-    const dir = vs >= 0 ? "above" : "below";
-    return `<span class="ma ${dir}">${p} <b>${vs >= 0 ? "+" : ""}${vs.toFixed(1)}%</b></span>`;
-  }).join("");
-
-  let flagsHtml = "";
-  if (!STALE && inst.flags && inst.flags.length) {
-    flagsHtml = '<div class="flags">near: ' + inst.flags.map(f => {
-      const kind = f.kind === "support" ? "sup" : "res";
-      return `<b class="${kind}">${f.kind[0].toUpperCase()}</b> ${f.price.toLocaleString(undefined,{maximumFractionDigits:2})} (${f.window} ${f.distance_pct>=0?"+":""}${f.distance_pct.toFixed(1)}%)`;
-    }).join(" · ") + "</div>";
-  }
-
   el.innerHTML = `
     <div class="top">
       <span class="name">${inst.label}</span>
-      <span class="id">${inst.id} · ${inst.currency || ""}</span>
-      ${trendBadge(inst)}
-      <span class="px">${inst.last_close.toLocaleString(undefined,{maximumFractionDigits:2})}</span>
+      <span class="id">${inst.id}</span>
+      ${badges(inst)}
+      <span class="px">${inst.last_close.toLocaleString(undefined, { maximumFractionDigits: 2 })}</span>
       ${fmtPct(inst.change_pct)} ${fmtPct(inst.ytd_pct)}
     </div>
-    <div class="mas">${mas}</div>
-    ${flagsHtml}
-    <div class="chart"></div>
-    <textarea class="note" placeholder="notes — ${inst.id} (saved on this device)"></textarea>`;
-
+    <div class="chart" data-pending="1"></div>
+    <textarea class="note" placeholder="notes — ${inst.id}"></textarea>`;
   const ta = el.querySelector(".note");
   ta.value = localStorage.getItem(noteKey(inst.id)) || "";
   ta.addEventListener("input", () => localStorage.setItem(noteKey(inst.id), ta.value));
-
-  requestAnimationFrame(() => drawChart(el.querySelector(".chart"), inst));
+  el.querySelector(".chart")._inst = inst;
   return el;
 }
 
-function renderGroup() {
+function sortFn(a, b) {
+  if (!!b.entry_setup !== !!a.entry_setup) return (b.entry_setup ? 1 : 0) - (a.entry_setup ? 1 : 0);
+  return (TREND_ORDER[a.trend] ?? 3) - (TREND_ORDER[b.trend] ?? 3);
+}
+
+function render() {
   const grid = document.getElementById("grid");
   grid.innerHTML = "";
-  // A8 — within the sector, float the actionable names up: entry-setups first,
-  // then by trend (up → flat → down). Sector tabs themselves are unchanged.
-  const items = DATA.instruments.filter(i => i.group === ACTIVE).slice().sort((a, b) => {
-    if (!!b.entry_setup !== !!a.entry_setup) return (b.entry_setup ? 1 : 0) - (a.entry_setup ? 1 : 0);
-    return (TREND_ORDER[a.trend] ?? 3) - (TREND_ORDER[b.trend] ?? 3);
-  });
-  items.forEach(i => grid.appendChild(card(i)));
+  const groups = [...new Set(DATA.instruments.map(i => i.group))];
+  for (const g of groups) {
+    const h = document.createElement("div"); h.className = "section"; h.textContent = g;
+    grid.appendChild(h);
+    DATA.instruments.filter(i => i.group === g).sort(sortFn).forEach(i => grid.appendChild(card(i)));
+  }
+  // Lazy-render charts as cards scroll into view (59 charts at once is heavy).
+  OBSERVER = new IntersectionObserver((entries) => {
+    for (const e of entries) {
+      if (e.isIntersecting && e.target.dataset.pending) {
+        delete e.target.dataset.pending;
+        drawChart(e.target, e.target._inst);
+        OBSERVER.unobserve(e.target);
+      }
+    }
+  }, { rootMargin: "200px" });
+  document.querySelectorAll(".chart").forEach(c => OBSERVER.observe(c));
 }
 
 async function load() {
   try {
     const res = await fetch("./data.json", { cache: "no-store" });
-    if (!res.ok) throw new Error(`data.json HTTP ${res.status}`);
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
     DATA = await res.json();
   } catch (err) {
     document.getElementById("meta").textContent = `failed to load data.json: ${err.message}`;
     return;
   }
   STALE = checkStale(DATA);
-  const gen = new Date(DATA.generated_at);
-  const fails = DATA.failures && DATA.failures.length ? ` · ${DATA.failures.length} failed` : "";
+  const setups = DATA.instruments.filter(i => i.entry_setup).length;
   document.getElementById("meta").textContent =
-    `${DATA.instruments.length} instruments · ${DATA.source} · generated ${gen.toLocaleString()}${fails}`;
-  buildTabs();
-  renderGroup();
+    `${DATA.instruments.length} names · ${setups} entry setups · ${DATA.source} · ${new Date(DATA.generated_at).toLocaleString()}`;
+  render();
 }
-
 load();
 </script>
 </body>
