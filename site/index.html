@@ -126,15 +126,19 @@ function earnTag(dateStr) {
   return `ER ${dateStr}`;
 }
 function fundLine(inst) {
-  const f = inst.fund;
-  if (!f) return "";
-  const p = [];
-  if (f.peg != null) p.push(`PEG ${f.peg.toFixed(2)}`);
-  else if (f.fwd_pe != null) p.push(`P/E ${f.fwd_pe.toFixed(1)}`);
-  if (f.rev_growth != null) p.push(`rev ${f.rev_growth >= 0 ? "+" : ""}${(f.rev_growth * 100).toFixed(0)}%`);
-  const up = f.rev_up || 0, dn = f.rev_down || 0;
-  if (up || dn) p.push(`rev↑${up}/↓${dn}`);
-  if (f.next_earnings) p.push(earnTag(f.next_earnings));
+  const f = inst.fund, iv = inst.iv, p = [];
+  if (f) {
+    if (f.peg != null) p.push(`PEG ${f.peg.toFixed(2)}`);
+    else if (f.fwd_pe != null) p.push(`P/E ${f.fwd_pe.toFixed(1)}`);
+    if (f.rev_growth != null) p.push(`rev ${f.rev_growth >= 0 ? "+" : ""}${(f.rev_growth * 100).toFixed(0)}%`);
+    const up = f.rev_up || 0, dn = f.rev_down || 0;
+    if (up || dn) p.push(`rev↑${up}/↓${dn}`);
+    if (f.next_earnings) p.push(earnTag(f.next_earnings));
+  }
+  if (iv) {
+    const hot = iv.iv_rank >= 80 ? ' class="er-soon"' : "";
+    p.push(`<span${hot}>IVr ${iv.iv_rank}% · ±${iv.move_1m}%/mo</span>`);
+  }
   return p.join(" · ");
 }
 function ideaBox(inst) {
@@ -147,6 +151,7 @@ function ideaBox(inst) {
     <div class="ih"><b>${inst.label}</b> <span class="id">${inst.id}</span> · ${val}</div>
     <div class="ir">${i.reason}${er ? " · " + er : ""}</div>
     <div class="il">Entry ${fmt(i.entry[0])}–${fmt(i.entry[1])} → ${tgt}</div>
+    ${inst.iv && inst.iv.iv_rank >= 80 ? `<div class="nw" style="color:var(--down)">⚠ event risk — IV rank ${inst.iv.iv_rank}%, options pricing ±${inst.iv.move_1m}%/mo</div>` : ""}
     ${inst.news ? `<div class="nw">📰 ${inst.news}</div>` : ""}
   </div>`;
 }

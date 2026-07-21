@@ -21,6 +21,7 @@ OUTPUT = ROOT / "site" / "data.json"
 ALERT_STATE = ROOT / "data" / "alert_state.json"
 FUNDAMENTALS = ROOT / "data" / "fundamentals.json"
 NEWS = ROOT / "data" / "news.json"
+IV = ROOT / "data" / "iv.json"
 TELEGRAM = Path.home() / ".claude" / "skills" / "telegram-sender" / "send.sh"
 
 
@@ -120,6 +121,13 @@ def main():
         except (json.JSONDecodeError, OSError):
             pass
 
+    iv = {}
+    if IV.exists():
+        try:
+            iv = json.loads(IV.read_text())
+        except (json.JSONDecodeError, OSError):
+            pass
+
     entries = []
     failures = []
     reused = []
@@ -143,6 +151,7 @@ def main():
                     "stale": False,
                     "fund": fundamentals.get(member["id"]),
                     "news": news.get(member["id"]),
+                    "iv": iv.get(member["id"]),
                 })
                 if group["name"] == "Index ETF":
                     entry["idea"] = None  # market context, not a stock pick
