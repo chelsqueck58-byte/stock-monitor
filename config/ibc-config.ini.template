@@ -1,0 +1,22 @@
+# IBC config template for auto-login of IB Gateway (LIVE, port 4001, read-only API).
+# Copy to ~/ibc/config.ini, fill the two secrets, then chmod 600 ~/ibc/config.ini.
+# Do NOT commit the filled file. IBC: https://github.com/IbcAlpha/IBC
+#
+# Decisions locked: LIVE account, port 4001, read-only API enabled, IBC auto-login.
+
+IbLoginId=YOUR_IBKR_USERNAME
+IbPassword=YOUR_IBKR_PASSWORD
+
+TradingMode=live
+# Read-only API — belt-and-braces against the read-only constraint; Gateway can
+# still never place an order even if downstream code tried.
+ReadOnlyApi=yes
+AcceptIncomingConnectionAction=accept
+OverrideTwsApiPort=4001
+
+# 2FA pushes to IBKR Mobile and cannot be automated. IBC handles the daily
+# auto-restart; expect a manual phone re-auth roughly weekly.
+ExitAfterSecondFactorAuthenticationTimeout=yes
+SecondFactorAuthenticationExitInterval=60
+IbAutoClosedown=no
+ClosedownAt=

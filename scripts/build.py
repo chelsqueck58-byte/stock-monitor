@@ -1,0 +1,188 @@
+"""Pull bars, compute levels, write data.json for the site.
+
+Usage: build.py [--source yahoo|ibkr] [--no-alert]
+"""
+import argparse
+import json
+import os
+import subprocess
+import sys
+from datetime import datetime, timedelta, timezone
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).parent))
+
+from levels import summarise
+from sources import SourceError, get_source
+
+ROOT = Path(__file__).resolve().parent.parent
+CONFIG = ROOT / "config" / "universe.json"
+OUTPUT = ROOT / "site" / "data.json"
+ALERT_STATE = ROOT / "data" / "alert_state.json"
+TELEGRAM = Path.home() / ".claude" / "skills" / "telegram-sender" / "send.sh"
+
+
+def load_config():
+    try:
+        return json.loads(CONFIG.read_text())
+    except FileNotFoundError:
+        sys.exit(f"Missing config: {CONFIG}")
+    except json.JSONDecodeError as exc:
+        sys.exit(f"Bad config JSON: {exc}")
+
+
+def adr_premium(entries, groups):
+    """Percent premium of an ADR over its local line, FX-unadjusted."""
+    by_id = {entry["id"]: entry for entry in entries}
+    premiums = {}
+
+    for group in groups:
+        for member in group["members"]:
+            pair = member.get("adr_pair")
+            if not pair:
+                continue
+            adr = by_id.get(member["id"])
+            local = by_id.get(pair["local"])
+            if not adr or not local or not local.get("last_close"):
+                continue
+            implied = local["last_close"] * pair["ratio"]
+            premiums[member["id"]] = {
+                "local": pair["local"],
+                "ratio": pair["ratio"],
+                "note": "FX-unadjusted; compare trend, not the absolute level",
+                "raw_pct": round((adr["last_close"] / implied - 1) * 100, 2),
+            }
+    return premiums
+
+
+def notify(message):
+    """Push an alert to Telegram, if the sender is configured."""
+    if not TELEGRAM.exists():
+        print(f"[alert skipped, no sender] {message}")
+        return
+    try:
+        subprocess.run([str(TELEGRAM), message], check=True, capture_output=True, timeout=30)
+    except (subprocess.CalledProcessError, subprocess.TimeoutExpired) as exc:
+        print(f"[alert failed] {exc}")
+
+
+def load_alert_state():
+    try:
+        return json.loads(ALERT_STATE.read_text())
+    except (FileNotFoundError, json.JSONDecodeError):
+        return {}
+
+
+def save_alert_state(state):
+    ALERT_STATE.parent.mkdir(parents=True, exist_ok=True)
+    ALERT_STATE.write_text(json.dumps(state, separators=(",", ":")))
+
+
+def fresh_flags(entries, cooldown_hours, now):
+    """Return flag lines not already alerted within the cooldown window.
+
+    Keyed by (instrument, window, kind, rounded price) so the same level sitting
+    in play across the day's runs fires once, not on every run.
+    """
+    state = load_alert_state()
+    cutoff = now - timedelta(hours=cooldown_hours)
+    lines = []
+    for entry in entries:
+        for flag in entry["flags"]:
+            key = f"{entry['id']}|{flag['window']}|{flag['kind']}|{flag['price']:.2f}"
+            last = state.get(key)
+            if last and datetime.fromisoformat(last) > cutoff:
+                continue
+            state[key] = now.isoformat()
+            lines.append(
+                f"{entry['label']} {flag['kind'][:3].upper()} {flag['price']:,.2f} "
+                f"({flag['window']}, {flag['distance_pct']:+.1f}%)"
+            )
+    # Drop keys not seen for well beyond the cooldown so the file can't grow forever.
+    stale = now - timedelta(hours=cooldown_hours * 8)
+    state = {k: v for k, v in state.items() if datetime.fromisoformat(v) > stale}
+    save_alert_state(state)
+    return lines
+
+
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--source", default=os.environ.get("PRICE_SOURCE", "yahoo"))
+    parser.add_argument("--no-alert", action="store_true")
+    args = parser.parse_args()
+
+    config = load_config()
+    settings = config["settings"]
+
+    try:
+        source = get_source(args.source)
+    except SourceError as exc:
+        sys.exit(str(exc))
+
+    entries = []
+    failures = []
+
+    for group in config["groups"]:
+        for member in group["members"]:
+            try:
+                bars, meta = source.fetch_bars(member)
+                minimum = settings.get("min_bars", 210)
+                if len(bars) < minimum:
+                    raise SourceError(
+                        f"{member['id']}: only {len(bars)} bars, need {minimum} "
+                        f"for a valid 200DMA - check the symbol"
+                    )
+                entry = summarise(bars, settings)
+                entry.update({
+                    "id": member["id"],
+                    "label": member["label"],
+                    "group": group["name"],
+                    "currency": meta.get("currency"),
+                })
+                entries.append(entry)
+                print(f"  ok   {member['id']:<8} {entry['last_close']:>12,.2f}  "
+                      f"{len(bars)} bars")
+            except SourceError as exc:
+                failures.append(member["id"])
+                print(f"  FAIL {member['id']:<8} {exc}")
+
+    if not entries:
+        sys.exit("No instruments fetched - refusing to write data.json")
+
+    premiums = adr_premium(entries, config["groups"])
+
+    # ma_series is fully derivable from bars in the browser; dropping it here
+    # roughly halves the payload (see HANDOFF section 4).
+    for entry in entries:
+        entry.pop("ma_series", None)
+
+    payload = {
+        "generated_at": datetime.now(timezone.utc).isoformat(),
+        "source": source.name,
+        "stale_after_hours": settings["stale_after_hours"],
+        "failures": failures,
+        "adr_premium": premiums,
+        "instruments": entries,
+    }
+
+    OUTPUT.parent.mkdir(parents=True, exist_ok=True)
+    OUTPUT.write_text(json.dumps(payload, separators=(",", ":")))
+
+    size_kb = OUTPUT.stat().st_size / 1024
+    print(f"\nWrote {OUTPUT} ({size_kb:.0f} KB) - "
+          f"{len(entries)} ok, {len(failures)} failed, source={source.name}")
+
+    if args.no_alert:
+        return
+
+    cooldown = settings.get("alert_cooldown_hours", 18)
+    triggered = fresh_flags(entries, cooldown, datetime.now(timezone.utc))
+    if triggered:
+        head = f"<b>Levels touched</b> ({len(triggered)})\n"
+        notify(head + "\n".join(f"• {line}" for line in triggered[:20]))
+    if failures:
+        notify(f"<b>Data gap</b>: {len(failures)} failed - {', '.join(failures[:10])}")
+
+
+if __name__ == "__main__":
+    main()
