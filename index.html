@@ -128,7 +128,7 @@ function earnTag(dateStr) {
 function fundLine(inst) {
   const f = inst.fund, iv = inst.iv, p = [];
   if (f) {
-    if (f.fwd_pe != null) p.push(`P/E ${f.fwd_pe.toFixed(1)}`);
+    if (f.fwd_pe != null) p.push(`fwd P/E ${f.fwd_pe.toFixed(1)}`);
     if (f.peg != null) p.push(`PEG ${f.peg.toFixed(2)}`);
     if (f.next_earnings) p.push(earnTag(f.next_earnings));
   }
@@ -140,7 +140,7 @@ function fundLine(inst) {
 }
 function ideaBox(inst) {
   const i = inst.idea, f = inst.fund;
-  const val = f && f.peg != null ? `PEG ${f.peg.toFixed(2)}` : (f && f.fwd_pe != null ? `P/E ${f.fwd_pe.toFixed(1)}` : "");
+  const val = f ? [f.fwd_pe != null ? `fwd P/E ${f.fwd_pe.toFixed(1)}` : "", f.peg != null ? `PEG ${f.peg.toFixed(2)}` : ""].filter(Boolean).join(" · ") : "";
   const er = f && f.next_earnings ? earnTag(f.next_earnings) : "";
   const fmt = n => n.toLocaleString(undefined, { maximumFractionDigits: 2 });
   const tgt = i.t1 ? `Target ${fmt(i.t1)} (+${i.reward_pct}%)` : "no overhead resistance (running)";
