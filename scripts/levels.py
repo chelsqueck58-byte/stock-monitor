@@ -162,9 +162,12 @@ def summarise(bars, settings):
     # (50SMA structure), the higher timeframe (100SMA regime), and volume.
     sma100 = sum(closes[-100:]) / 100 if len(closes) >= 100 else None
     sma50_prev = sum(closes[-60:-10]) / 50 if len(closes) >= 60 else None
+    # 5-day vs 20-day average volume — robust to the current incomplete session
+    # (a single partial last bar would otherwise read as fake-low volume).
     vols = [bar.get("volume") or 0 for bar in bars]
     avg_vol = sum(vols[-20:]) / 20 if len(vols) >= 20 and sum(vols[-20:]) else 0
-    vol_ratio = round(vols[-1] / avg_vol, 2) if avg_vol else None
+    vol5 = sum(vols[-5:]) / 5 if len(vols) >= 5 else 0
+    vol_ratio = round(vol5 / avg_vol, 2) if avg_vol else None
     above50 = sma50 is not None and last_close > sma50
     sma50_up = sma50 is not None and sma50_prev is not None and sma50 > sma50_prev
     htf_up = sma100 is not None and last_close > sma100
