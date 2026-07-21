@@ -71,6 +71,22 @@
   .ideabox:hover, .tpchip:hover { filter:brightness(1.25); }
   .card.flash { animation:flash 1.2s ease-out; }
   @keyframes flash { 0% { box-shadow:inset 0 0 0 2px #58a6ff; } 100% { box-shadow:none; } }
+  .tabs { display:flex; gap:4px; margin-top:6px; }
+  .tabs button { background:transparent; border:1px solid var(--border); border-bottom:none;
+    color:var(--muted); padding:5px 14px; border-radius:6px 6px 0 0; cursor:pointer; font-size:13px; }
+  .tabs button.active { background:var(--panel); color:var(--text); }
+  #history { padding:12px; display:grid; gap:12px; grid-template-columns:repeat(auto-fill,minmax(470px,1fr)); }
+  .hcard { background:var(--panel); border:1px solid var(--border); border-radius:8px; overflow:hidden; }
+  .hcard .htop { padding:8px 10px; font-weight:600; border-bottom:1px solid var(--border); }
+  .hcard .htop .id { color:var(--muted); font-size:11px; font-weight:400; }
+  .hchart { height:120px; }
+  .moves { padding:4px 10px 8px; font-size:12px; }
+  .mv { display:flex; gap:8px; padding:3px 0; border-top:1px solid #1b2027; align-items:baseline; }
+  .mv .md { color:var(--muted); font-variant-numeric:tabular-nums; white-space:nowrap; }
+  .mv .mp { font-variant-numeric:tabular-nums; font-weight:600; white-space:nowrap; min-width:48px; }
+  .mv .mp.u { color:var(--up); } .mv .mp.d { color:var(--down); }
+  .mv .mr b { color:var(--text); } .mv .mr .mw { color:var(--muted); }
+  .mv .msrc { color:var(--muted); font-size:10px; }
   .note { width:100%; border:none; border-top:1px solid var(--border); background:transparent;
     color:var(--text); padding:6px 10px; resize:vertical; min-height:32px; font:inherit; font-size:12px; }
   .note::placeholder { color:var(--muted); }
@@ -84,9 +100,10 @@
     <b class="ema">20SMA</b> · <b class="sma">50SMA</b> · <b class="vwap">200SMA</b> · S/R lines ·
     ⬤ ENTER = pullback to 20/50DMA in a 50&gt;200 uptrend, RSI turning up · trim at 1m/3m resistance or RSI&gt;70 · CTA↑/↓ = trend-follower regime · click an idea to jump · chart = late-Apr → now
   </span>
+  <nav class="tabs"><button id="tab-monitor" class="active" onclick="showTab('monitor')">Monitor</button><button id="tab-history" onclick="showTab('history')">History (≥5% moves)</button></nav>
 </header>
-<div id="ideas"></div>
-<main id="grid"></main>
+<div id="monitor"><div id="ideas"></div><main id="grid"></main></div>
+<div id="history" style="display:none"></div>
 
 <script src="./vendor/lightweight-charts.standalone.production.js"></script>
 <script>
@@ -300,6 +317,48 @@ function render() {
     }
   }, { rootMargin: "200px" });
   document.querySelectorAll(".chart").forEach(c => OBSERVER.observe(c));
+}
+
+let MOVES = null;
+window.showTab = function (t) {
+  document.getElementById("monitor").style.display = t === "monitor" ? "" : "none";
+  document.getElementById("history").style.display = t === "history" ? "" : "none";
+  document.getElementById("tab-monitor").classList.toggle("active", t === "monitor");
+  document.getElementById("tab-history").classList.toggle("active", t === "history");
+  if (t === "history" && !MOVES) loadHistory();
+};
+async function loadHistory() {
+  const h = document.getElementById("history");
+  try { MOVES = await (await fetch("./moves.json", { cache: "no-store" })).json(); }
+  catch (e) { h.innerHTML = '<div style="padding:16px;color:var(--muted)">move history not available yet</div>'; return; }
+  h.innerHTML = "";
+  for (const inst of DATA.instruments) {
+    const m = MOVES[inst.id];
+    if (!m || !m.moves.length) continue;
+    const rows = m.moves.map(mv => {
+      const cls = mv.pct >= 0 ? "u" : "d";
+      const reason = mv.reason
+        ? (mv.market_wide ? `<span class="mw">${mv.reason} <i>(market-wide)</i></span>` : `<b>${mv.reason}</b>`)
+        : `<span class="mw">—</span>`;
+      const src = mv.source ? ` <span class="msrc">[${mv.source}]</span>` : "";
+      return `<div class="mv"><span class="md">${mv.d}</span><span class="mp ${cls}">${mv.pct >= 0 ? "+" : ""}${mv.pct}%</span><span class="mr">${reason}${src}</span></div>`;
+    }).join("");
+    const el = document.createElement("div");
+    el.className = "hcard";
+    el.innerHTML = `<div class="htop">${inst.label} <span class="id">${inst.id}</span></div><div class="hchart"></div><div class="moves">${rows}</div>`;
+    document.getElementById("history").appendChild(el);
+    const chartEl = el.querySelector(".hchart");
+    requestAnimationFrame(() => {
+      const chart = LightweightCharts.createChart(chartEl, {
+        layout: { background: { color: "transparent" }, textColor: "#7d8590", fontSize: 9 },
+        grid: { vertLines: { color: "#1b2027" }, horzLines: { color: "#1b2027" } },
+        rightPriceScale: { borderColor: "#21262d" }, timeScale: { borderColor: "#21262d" }, height: 120,
+      });
+      const a = chart.addAreaSeries({ lineColor: "#f0648b", lineWidth: 2, topColor: "rgba(240,100,139,.25)", bottomColor: "rgba(240,100,139,.02)", priceLineVisible: false, lastValueVisible: true });
+      a.setData(inst.bars.map(b => ({ time: b.d, value: b.c })));
+      chart.timeScale().fitContent();
+    });
+  }
 }
 
 async function load() {

@@ -183,6 +183,11 @@ def main():
     OUTPUT.parent.mkdir(parents=True, exist_ok=True)
     OUTPUT.write_text(json.dumps(payload, separators=(",", ":")))
 
+    # Publish the moves file (History tab) alongside the site so it deploys too.
+    moves_src = ROOT / "data" / "moves.json"
+    if moves_src.exists():
+        (OUTPUT.parent / "moves.json").write_text(moves_src.read_text())
+
     size_kb = OUTPUT.stat().st_size / 1024
     print(f"\nWrote {OUTPUT} ({size_kb:.0f} KB) - "
           f"{len(entries)} ok, {len(failures)} failed, source={source.name}")
