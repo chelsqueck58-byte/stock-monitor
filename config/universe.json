@@ -106,7 +106,6 @@
     }
   ],
   "settings": {
-    "ma_periods": [20, 50, 100, 200],
     "lookbacks": {"1m": 21, "3m": 63},
     "swing_window": 5,
     "level_cluster_pct": 1.5,
