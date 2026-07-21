@@ -14,4 +14,5 @@ if [[ ! -x "$DIR/.venv/bin/python" ]]; then
 fi
 
 SOURCE="${PRICE_SOURCE:-yahoo}"
-exec "$DIR/.venv/bin/python" "$DIR/scripts/build.py" --source "$SOURCE"
+"$DIR/.venv/bin/python" "$DIR/scripts/build.py" --source "$SOURCE"
+"$DIR/scripts/deploy-pages.sh" || echo "[warn] pages deploy failed"
