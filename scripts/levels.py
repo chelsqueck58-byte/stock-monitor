@@ -1,15 +1,5 @@
-"""Lean per-instrument analytics: one EMA entry, 50DMA, S/R, trend, CTA breakout."""
-
-
-def ema(closes, period):
-    """Exponential moving average, latest value."""
-    if len(closes) < period:
-        return None
-    k = 2 / (period + 1)
-    value = sum(closes[:period]) / period
-    for close in closes[period:]:
-        value = close * k + value * (1 - k)
-    return round(value, 4)
+"""Per-instrument analytics: 50>200 swing trend, 20/50DMA pullback entry,
+1m/3m resistance targets, S/R levels, RSI, CTA breakout."""
 
 
 def rsi(closes, period=14):
@@ -31,78 +21,31 @@ def rsi(closes, period=14):
     return round(100 - 100 / (1 + avg_gain / avg_loss), 1)
 
 
-def atr(bars, period=14):
-    """Average True Range — the stock's daily volatility."""
-    trs = []
-    for i in range(1, len(bars)):
-        h, l, pc = bars[i]["high"], bars[i]["low"], bars[i - 1]["close"]
-        if None in (h, l, pc):
-            continue
-        trs.append(max(h - l, abs(h - pc), abs(l - pc)))
-    if len(trs) < period:
-        return None
-    return sum(trs[-period:]) / period
+def entry_target(bars, levels, sma20, sma50, zone, last_close):
+    """Entry = the pullback support zone (the 20/50DMA being bought into, bracketed
+    with the nearest horizontal support). Exit = nearest 1-month or 3-month
+    resistance above (per the user's rule). Stops are the trader's own — none here."""
+    sup3 = [s["price"] for s in levels.get("3m", {}).get("support", [])]
+    nearest_sup = max((p for p in sup3 if p < last_close), default=None)
+    ma_zone = (sma20 if zone == "20DMA" else sma50) or last_close
 
-
-def monthly_move_pct(bars, last_close):
-    """Expected ~1-month move as % — daily ATR scaled to ~21 trading days."""
-    a = atr(bars)
-    if not a or not last_close:
-        return None
-    return round(a / last_close * 100 * 4.58, 1)
-
-
-def entry_target(bars, levels, ema21, last_close, min_reward=4.0):
-    """1-MONTH entry zone + targets. Targets must be far enough to be a monthly
-    objective (>= min_reward), scaled to the stock's own monthly range. Stops are
-    the trader's own — none here. Returns reward_pct=None if there's no monthly
-    room (caller drops it as an idea)."""
-    lv = levels.get("3m", {})
-    sup = [s["price"] for s in lv.get("support", [])]
-    res = sorted(p["price"] for p in lv.get("resistance", []) if p["price"] > last_close)
-    nearest_sup = max((p for p in sup if p < last_close), default=None)
-
-    zone_low = nearest_sup if nearest_sup else round(last_close * 0.98, 2)
-    zone_high = ema21 if ema21 else round(last_close * 1.005, 2)
+    zone_low = min(ma_zone, nearest_sup) if nearest_sup else round(ma_zone * 0.985, 2)
+    zone_high = max(ma_zone, last_close)
     if zone_low >= zone_high:
-        zone_low = round(min(zone_low, (ema21 or last_close) * 0.98), 2)
-    entry_mid = (zone_low + zone_high) / 2
+        zone_low = round(zone_high * 0.98, 2)
 
-    mv = monthly_move_pct(bars, last_close) or 8.0
+    res = sorted({p["price"] for p in levels.get("3m", {}).get("resistance", [])} |
+                 {p["price"] for p in levels.get("1m", {}).get("resistance", [])})
+    res_above = [r for r in res if r > last_close]
     hi63 = max((b["high"] for b in bars[-63:] if b["high"]), default=None)
-
-    # First resistance at least min_reward above the entry; the tiny near ones don't count.
-    far_res = [r for r in res if (r / entry_mid - 1) * 100 >= min_reward]
-    if far_res:
-        t1 = far_res[0]
-    else:
-        prior_high = hi63 if hi63 and (hi63 / entry_mid - 1) * 100 >= min_reward else None
-        t1 = prior_high or round(entry_mid * (1 + mv / 100), 2)
-
-    reward = round((t1 / entry_mid - 1) * 100, 1)
+    t1 = res_above[0] if res_above else (hi63 if hi63 and hi63 > last_close else None)
+    entry_mid = (zone_low + zone_high) / 2
+    reward = round((t1 / entry_mid - 1) * 100, 1) if t1 else None
     return {
         "entry": [round(zone_low, 2), round(zone_high, 2)],
-        "t1": round(t1, 2),
-        "reward_pct": reward if reward >= min_reward else None,
-        "month_move_pct": mv,
+        "t1": round(t1, 2) if t1 else None,
+        "reward_pct": reward,
     }
-
-
-def weekly_trend(bars, span=8):
-    """Higher-timeframe confirmation done properly: aggregate daily -> weekly
-    (last close of each ~5-day block) and check the weekly trend is up. One
-    timeframe above a daily 1D-1M swing, not a slow 100-day daily lag."""
-    closes = [bar["close"] for bar in bars]
-    if len(closes) < span * 5 + 10:
-        return None
-    idx = list(range(len(closes) - 1, -1, -5))[::-1]  # weekly closes, ending on latest
-    weekly = [closes[i] for i in idx]
-    now = ema(weekly, span)
-    prev = ema(weekly[:-2], span) if len(weekly) > span + 2 else None
-    if now is None:
-        return None
-    rising = prev is None or now > prev
-    return weekly[-1] > now and rising
 
 
 def donchian_signal(bars, period):
@@ -126,32 +69,40 @@ def donchian_signal(bars, period):
     return "neutral"
 
 
+def sma_at(closes, period, offset=0):
+    """SMA of `period` closes ending `offset` bars from the latest."""
+    end = len(closes) - offset
+    return sum(closes[end - period:end]) / period if end >= period else None
+
+
 def trend_signal(bars, settings):
-    """One EMA-based entry: long above a rising entry-EMA, enter on pullbacks to it."""
+    """Swing-long framework: medium-term uptrend (price > 50 & 200DMA, 50 > 200,
+    both rising) + a pullback into the 20DMA (shallow) or 50DMA (deeper) zone."""
     closes = [bar["close"] for bar in bars]
     last = closes[-1]
-    period = settings.get("entry_ema", 21)
-    lookback = settings.get("ma_slope_lookback", 10)
-    pullback = settings.get("entry_pullback_pct", 2.0)
+    s20, s50, s200 = sma_at(closes, 20), sma_at(closes, 50), sma_at(closes, 200)
+    s50_prev, s200_prev = sma_at(closes, 50, 10), sma_at(closes, 200, 20)
+    s50_up = s50 is not None and s50_prev is not None and s50 > s50_prev
+    s200_up = s200 is not None and s200_prev is not None and s200 > s200_prev
 
-    ema_now = ema(closes, period)
-    slope = None
-    if ema_now is not None and len(closes) > period + lookback:
-        ema_prev = ema(closes[:-lookback], period)
-        if ema_prev:
-            slope = round((ema_now / ema_prev - 1) * 100, 2)
-
-    above = ema_now is not None and last > ema_now
-    rising = slope is None or slope > 0
-    if above and rising:
+    if s50 and s200 and last > s50 and last > s200 and s50 > s200 and s50_up and s200_up:
         trend = "up"
-    elif ema_now is not None and last < ema_now:
+    elif s50 and (last < s50 or (s200 and s50 < s200)):
         trend = "down"
     else:
         trend = "flat"
 
-    entry = trend == "up" and ema_now is not None and abs((last / ema_now - 1) * 100) <= pullback
-    return {"ema": ema_now, "trend": trend, "entry_setup": entry}
+    near20 = s20 is not None and abs(last / s20 - 1) * 100 <= 2.0
+    near50 = s50 is not None and abs(last / s50 - 1) * 100 <= 3.0
+    entry = trend == "up" and (near20 or near50)
+    return {
+        "sma20": round(s20, 4) if s20 else None,
+        "sma50": round(s50, 4) if s50 else None,
+        "sma200": round(s200, 4) if s200 else None,
+        "trend": trend,
+        "entry_setup": entry,
+        "zone": "20DMA" if near20 else ("50DMA" if near50 else None),
+    }
 
 
 def swing_points(bars, window):
@@ -248,24 +199,12 @@ def summarise(bars, settings):
     last_close = bars[-1]["close"]
     closes = [bar["close"] for bar in bars]
     signal = trend_signal(bars, settings)
-    sma50 = round(sum(closes[-50:]) / 50, 4) if len(closes) >= 50 else None
     levels = compute_levels(bars, settings)
 
-    # 21EMA is never a signal in isolation — qualify it with the broader trend
-    # (50SMA structure), the higher timeframe (weekly), and volume.
-    sma50_prev = sum(closes[-60:-10]) / 50 if len(closes) >= 60 else None
-    # 5-day vs 20-day average volume — robust to the current incomplete session
-    # (a single partial last bar would otherwise read as fake-low volume).
     vols = [bar.get("volume") or 0 for bar in bars]
     avg_vol = sum(vols[-20:]) / 20 if len(vols) >= 20 and sum(vols[-20:]) else 0
     vol5 = sum(vols[-5:]) / 5 if len(vols) >= 5 else 0
     vol_ratio = round(vol5 / avg_vol, 2) if avg_vol else None
-    above50 = sma50 is not None and last_close > sma50
-    sma50_up = sma50 is not None and sma50_prev is not None and sma50 > sma50_prev
-    htf_up = weekly_trend(bars) is True
-    entry_quality = None
-    if signal["entry_setup"]:
-        entry_quality = "strong" if (above50 and sma50_up and htf_up) else "weak"
 
     ytd_open = next(
         (bar["close"] for bar in bars if bar["date"][:4] == bars[-1]["date"][:4]),
@@ -279,16 +218,14 @@ def summarise(bars, settings):
     near_sup = any(f["kind"] == "support" for f in flags)
     near_res = any(f["kind"] == "resistance" for f in flags)
 
-    # Idea = a 1-month entry candidate: uptrend confirmed (21EMA + 50 + weekly),
-    # sitting on a dip (pullback or support), not overbought. Take-profit = extended.
+    # Idea = the swing-long setup: medium-term uptrend + pullback into the 20/50DMA
+    # zone, not overbought. Exit = nearest 1m/3m resistance. Take-profit = extended.
     idea = None
-    if signal["trend"] == "up" and above50 and htf_up and not overbought and (signal["entry_setup"] or near_sup):
-        lv = entry_target(bars, levels, signal["ema"], last_close)
-        # Only a 1-month idea if the target is a real monthly objective (has room).
-        if lv["reward_pct"] is not None:
-            reason = "confirmed 21EMA pullback" if signal["entry_setup"] else "at support, uptrend intact"
-            idea = {"kind": "enter", "reason": reason, **lv}
-    if idea is None and signal["trend"] == "up" and (overbought or near_res):
+    if signal["entry_setup"] and not overbought:
+        lv = entry_target(bars, levels, signal["sma20"], signal["sma50"], signal["zone"], last_close)
+        reason = f"pullback to {signal['zone']}" + (" + support" if near_sup else "")
+        idea = {"kind": "enter", "reason": reason, **lv}
+    elif signal["trend"] == "up" and (overbought or near_res):
         idea = {"kind": "take_profit", "reason": "overbought" if overbought else "at resistance"}
 
     return {
@@ -296,15 +233,13 @@ def summarise(bars, settings):
         "last_date": bars[-1]["date"],
         "change_pct": round((last_close / prior_close - 1) * 100, 2) if prior_close else None,
         "ytd_pct": round((last_close / ytd_open - 1) * 100, 2) if ytd_open else None,
-        "ema21": signal["ema"],
-        "sma50": sma50,
+        "sma20": signal["sma20"],
+        "sma50": signal["sma50"],
+        "sma200": signal["sma200"],
         "rsi": rsi_val,
         "trend": signal["trend"],
         "entry_setup": signal["entry_setup"],
-        "entry_quality": entry_quality,
-        "above50": above50,
-        "sma50_up": sma50_up,
-        "htf_up": htf_up,
+        "zone": signal["zone"],
         "vol_ratio": vol_ratio,
         "cta": donchian_signal(bars, settings.get("donchian_period", 20)),
         "idea": idea,
