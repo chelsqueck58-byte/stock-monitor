@@ -137,7 +137,8 @@ function noteKey(id) { return `stockmon.note.${id}`; }
 function earnTag(dateStr) {
   if (!dateStr) return "";
   const days = Math.round((new Date(dateStr + "T00:00:00") - Date.now()) / 8.64e7);
-  if (days >= 0 && days <= 30) return `<span class="er-soon">ER ${dateStr} (${days}d)</span>`;
+  if (days < 0) return "";  // stale/past date from the data source — don't show
+  if (days <= 30) return `<span class="er-soon">ER ${dateStr} (${days}d)</span>`;
   return `ER ${dateStr}`;
 }
 function fundLine(inst) {
