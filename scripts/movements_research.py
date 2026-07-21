@@ -1,6 +1,7 @@
-"""Fill the 'reason' for each >=5% move in data/moves.json using the Fable model
-+ web search (subscription CLI, no API bill). Grounded only — blank if no credible
-source. Writes back incrementally so partial progress is saved.
+"""Fill the 'reason' for every >=5% move in data/moves.json using Fable + web
+search — grounded, blank if no source. Parallel + chunked: several stocks at once,
+a focused call per ~12 moves, so each move gets real research (not 79 rushed in one
+call). Writes moves.json incrementally under a lock, so progress is always saved.
 
 Run:  .venv/bin/python scripts/movements_research.py
 """
@@ -8,10 +9,15 @@ import os
 import re
 import json
 import subprocess
+import threading
+from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 MOVES = ROOT / "data" / "moves.json"
+CHUNK = 12
+WORKERS = 6
+_lock = threading.Lock()
 
 
 def ask_fable(prompt):
@@ -21,11 +27,10 @@ def ask_fable(prompt):
         r = subprocess.run(
             ["claude", "-p", prompt, "--model", "claude-fable-5",
              "--allowedTools", "WebSearch,WebFetch"],
-            capture_output=True, text=True, env=env, timeout=600)
+            capture_output=True, text=True, env=env, timeout=700)
         return r.stdout.strip() if r.returncode == 0 else ""
     except Exception as exc:
-        print(f"[fable err] {exc}")
-        return ""
+        return f"[err {exc}]"
 
 
 def parse_array(text):
@@ -40,38 +45,49 @@ def parse_array(text):
         return []
 
 
-def main():
-    data = json.loads(MOVES.read_text())
-    for tid, entry in data.items():
-        todo = [m for m in entry["moves"] if not m.get("reason")]
-        if not todo:
-            continue
-        prompt = (
-            f"You research why a stock moved on specific days. Stock: {entry['label']} ({tid}).\n"
-            "For EACH dated move below, use web search to find the specific reason it moved that day.\n"
-            "RULES: the reason must be grounded in a real dated article. If you cannot find a "
-            'credible source for a date, set its reason to "". Never invent. reason <=140 chars.\n'
-            "market_wide=true ONLY if it was a sector/index-wide move (e.g. broad China selloff), "
-            "not company-specific. source = outlet name (e.g. Bloomberg).\n"
-            'Output ONLY a JSON array: '
-            '[{"date":"YYYY-MM-DD","reason":"...","source":"...","market_wide":false}]\n\n'
-            "MOVES:\n" + "\n".join(f"{m['d']} {m['pct']:+}%" for m in todo)
-        )
-        researched = {r.get("date"): r for r in parse_array(ask_fable(prompt)) if isinstance(r, dict)}
-        for m in entry["moves"]:
+def research_chunk(item):
+    tid, label, moves = item
+    prompt = (
+        f"You research why {label} ({tid}) moved on specific days. For EACH dated move below, "
+        "use web search to find the SPECIFIC reason it moved that day.\n"
+        'RULES: the reason must be grounded in a real dated article. If no credible source, set '
+        'reason to "". Never invent. reason <=140 chars. market_wide=true ONLY if it was a '
+        "sector/index-wide move (e.g. broad China selloff), not company-specific. source = outlet.\n"
+        'Output ONLY a JSON array: '
+        '[{"date":"YYYY-MM-DD","reason":"...","source":"...","market_wide":false}]\n\n'
+        "MOVES:\n" + "\n".join(f"{m['d']} {m['pct']:+}%" for m in moves)
+    )
+    researched = {r.get("date"): r for r in parse_array(ask_fable(prompt)) if isinstance(r, dict)}
+    with _lock:
+        data = json.loads(MOVES.read_text())
+        for m in data[tid]["moves"]:
             r = researched.get(m["d"])
-            if r:
+            if r and not m.get("reason"):
                 m["reason"] = (r.get("reason") or "").strip() or None
                 m["source"] = (r.get("source") or "").strip() or None
                 if isinstance(r.get("market_wide"), bool):
                     m["market_wide"] = r["market_wide"]
         MOVES.write_text(json.dumps(data, ensure_ascii=False, separators=(",", ":")))
-        done = sum(1 for m in entry["moves"] if m.get("reason"))
-        print(f"  {tid:7} researched {done}/{len(entry['moves'])}")
+    return tid, sum(1 for v in researched.values() if (v.get("reason") or "").strip())
 
-    total = sum(len(v["moves"]) for v in data.values())
-    filled = sum(1 for v in data.values() for m in v["moves"] if m.get("reason"))
-    print(f"done: {filled}/{total} moves have a sourced reason")
+
+def main():
+    data = json.loads(MOVES.read_text())
+    items = []
+    for tid, entry in data.items():
+        todo = [m for m in entry["moves"] if not m.get("reason")]
+        for i in range(0, len(todo), CHUNK):
+            items.append((tid, entry["label"], todo[i:i + CHUNK]))
+    print(f"{len(items)} chunks across {len(data)} names, {WORKERS} in parallel")
+
+    with ThreadPoolExecutor(max_workers=WORKERS) as ex:
+        for tid, n in ex.map(research_chunk, items):
+            done = sum(1 for m in json.loads(MOVES.read_text())[tid]["moves"] if m.get("reason"))
+            print(f"  {tid:7} chunk +{n}")
+
+    filled = sum(1 for v in json.loads(MOVES.read_text()).values() for m in v["moves"] if m.get("reason"))
+    total = sum(len(v["moves"]) for v in json.loads(MOVES.read_text()).values())
+    print(f"done: {filled}/{total} moves sourced")
 
 
 if __name__ == "__main__":

@@ -9,8 +9,8 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 CONFIG = ROOT / "config" / "universe.json"
 OUT = ROOT / "data" / "moves.json"
-BIG = 5.0        # research threshold
-CAP = 14         # keep the largest N per name
+BIG = 5.0        # research threshold — every move this size or bigger
+CAP = 999        # comprehensive: keep them all
 MARKET_MOVE = 1.5  # if the index moved >= this same-direction, tag market-wide
 
 
