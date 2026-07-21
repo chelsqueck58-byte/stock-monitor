@@ -80,7 +80,7 @@
   <h1>stock-monitor</h1><span class="meta" id="meta">loading…</span>
   <span class="legend">
     <b class="ema">20SMA</b> · <b class="sma">50SMA</b> · <b class="vwap">200SMA</b> · S/R lines ·
-    ⬤ ENTER = pullback to 20/50DMA in a 50&gt;200 uptrend · exit at 1m/3m resistance · click an idea to jump to its chart · chart = late-Apr → now
+    ⬤ ENTER = pullback to 20/50DMA in a 50&gt;200 uptrend, RSI turning up · trim at 1m/3m resistance or RSI&gt;70 · CTA↑/↓ = trend-follower regime · click an idea to jump · chart = late-Apr → now
   </span>
 </header>
 <div id="ideas"></div>
@@ -187,10 +187,10 @@ function keyRemark(inst) {
   const i = inst.idea;
   let tag = "", cls = "muted";
   if (i && i.kind === "enter") { tag = `⬤ ENTER — ${i.reason}`; cls = "enter"; }
-  else if (i && i.kind === "take_profit") { tag = `▲ ${i.reason === "overbought" ? "overbought — trim" : "at resistance — trim"}`; cls = "exit"; }
+  else if (i && i.kind === "take_profit") { tag = `▲ trim — ${i.reason}`; cls = "exit"; }
   else if (inst.trend === "down") { tag = "downtrend — not a long"; cls = "muted"; }
-  const vol = inst.vol_ratio != null ? ` <span class="muted">vol ${inst.vol_ratio}×</span>` : "";
-  return { html: (tag ? `<b>${tag}</b>` : "") + (items.length ? " · " + items.join(" · ") : "") + vol, cls };
+  const rsiStr = inst.rsi != null ? ` <span class="muted">RSI ${inst.rsi}</span>` : "";
+  return { html: (tag ? `<b>${tag}</b>` : "") + (items.length ? " · " + items.join(" · ") : "") + rsiStr, cls };
 }
 
 function badges(inst) {
@@ -198,8 +198,8 @@ function badges(inst) {
   const tl = t === "up" ? "▲" : t === "down" ? "▼" : "–";
   const entry = inst.entry_setup ? `<span class="badge entry" title="pullback to 21EMA in uptrend">⚡ ENTRY</span>` : "";
   let cta = "";
-  if (inst.cta === "long") cta = `<span class="badge cta-long" title="20-day breakout up">CTA↑</span>`;
-  else if (inst.cta === "short") cta = `<span class="badge cta-short" title="20-day breakdown">CTA↓</span>`;
+  if (inst.cta === "long") cta = `<span class="badge cta-long" title="trend-followers long — market believes in the uptrend">CTA↑</span>`;
+  else if (inst.cta === "short") cta = `<span class="badge cta-short" title="trend-followers flipping short — storm risk rising">CTA↓</span>`;
   return `<span class="badge ${t}" title="trend vs 21EMA">${tl}</span>${entry}${cta}`;
 }
 

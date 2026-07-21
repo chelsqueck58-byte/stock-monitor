@@ -201,11 +201,6 @@ def summarise(bars, settings):
     signal = trend_signal(bars, settings)
     levels = compute_levels(bars, settings)
 
-    vols = [bar.get("volume") or 0 for bar in bars]
-    avg_vol = sum(vols[-20:]) / 20 if len(vols) >= 20 and sum(vols[-20:]) else 0
-    vol5 = sum(vols[-5:]) / 5 if len(vols) >= 5 else 0
-    vol_ratio = round(vol5 / avg_vol, 2) if avg_vol else None
-
     ytd_open = next(
         (bar["close"] for bar in bars if bar["date"][:4] == bars[-1]["date"][:4]),
         None,
@@ -214,19 +209,22 @@ def summarise(bars, settings):
 
     flags = proximity_flags(last_close, levels, settings["proximity_alert_pct"])
     rsi_val = rsi(closes)
+    rsi_prev = rsi(closes[:-1])
+    rsi_rising = rsi_val is not None and rsi_prev is not None and rsi_val > rsi_prev
     overbought = rsi_val is not None and rsi_val >= 70
-    near_sup = any(f["kind"] == "support" for f in flags)
     near_res = any(f["kind"] == "resistance" for f in flags)
+    near_sup = any(f["kind"] == "support" for f in flags)
 
-    # Idea = the swing-long setup: medium-term uptrend + pullback into the 20/50DMA
-    # zone, not overbought. Exit = nearest 1m/3m resistance. Take-profit = extended.
+    # Idea = swing-long: medium-term uptrend + pullback into the 20/50DMA zone,
+    # confirmed by RSI turning up (the bullish reaction) and not yet overbought.
+    # Exit/take-profit = RSI overbought or price at a 1m/3m resistance.
     idea = None
-    if signal["entry_setup"] and not overbought:
+    if signal["entry_setup"] and rsi_rising and rsi_val is not None and rsi_val < 68:
         lv = entry_target(bars, levels, signal["sma20"], signal["sma50"], signal["zone"], last_close)
-        reason = f"pullback to {signal['zone']}" + (" + support" if near_sup else "")
+        reason = f"pullback to {signal['zone']}, RSI↑" + (" + support" if near_sup else "")
         idea = {"kind": "enter", "reason": reason, **lv}
     elif signal["trend"] == "up" and (overbought or near_res):
-        idea = {"kind": "take_profit", "reason": "overbought" if overbought else "at resistance"}
+        idea = {"kind": "take_profit", "reason": f"RSI {rsi_val:.0f} overbought" if overbought else "at resistance"}
 
     return {
         "last_close": round(last_close, 4),
@@ -240,7 +238,6 @@ def summarise(bars, settings):
         "trend": signal["trend"],
         "entry_setup": signal["entry_setup"],
         "zone": signal["zone"],
-        "vol_ratio": vol_ratio,
         "cta": donchian_signal(bars, settings.get("donchian_period", 20)),
         "idea": idea,
         "levels": levels,
