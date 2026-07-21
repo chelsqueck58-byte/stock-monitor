@@ -79,8 +79,8 @@
 <header>
   <h1>stock-monitor</h1><span class="meta" id="meta">loading…</span>
   <span class="legend">
-    <b class="ema">21EMA</b> · <b class="sma">50SMA</b> · <b class="vwap">VWAP</b> · S/R lines ·
-    ⚡ entry only if confirmed by [✓struct=above 50SMA · ✓HTF=above 100SMA regime · vol] · top line = enter/exit cue · chart = late-Apr → now
+    <b class="ema">20SMA</b> · <b class="sma">50SMA</b> · <b class="vwap">200SMA</b> · S/R lines ·
+    ⬤ ENTER = pullback to 20/50DMA in a 50&gt;200 uptrend · exit at 1m/3m resistance · click an idea to jump to its chart · chart = late-Apr → now
   </span>
 </header>
 <div id="ideas"></div>
@@ -92,33 +92,11 @@
 const TREND_ORDER = { up: 0, flat: 1, down: 2 };
 let DATA = null, STALE = false, OBSERVER = null;
 
-function emaSeries(closes, period) {
-  const out = []; const k = 2 / (period + 1); let e = null;
-  for (let i = 0; i < closes.length; i++) {
-    if (i < period - 1) { out.push(null); continue; }
-    if (e === null) { let s = 0; for (let j = i - period + 1; j <= i; j++) s += closes[j]; e = s / period; }
-    else { e = closes[i] * k + e * (1 - k); }
-    out.push(e);
-  }
-  return out;
-}
 function smaSeries(closes, period) {
   const out = []; let sum = 0;
   for (let i = 0; i < closes.length; i++) {
     sum += closes[i]; if (i >= period) sum -= closes[i - period];
     out.push(i >= period - 1 ? sum / period : null);
-  }
-  return out;
-}
-function avwapSeries(bars) {
-  const N = Math.min(63, bars.length); const start = bars.length - N;
-  let anchor = start, lo = Infinity;
-  for (let i = start; i < bars.length; i++) if (bars[i].l < lo) { lo = bars[i].l; anchor = i; }
-  let pv = 0, vv = 0; const out = [];
-  for (let i = 0; i < bars.length; i++) {
-    if (i < anchor) { out.push(null); continue; }
-    const v = bars[i].v || 0; const tp = (bars[i].h + bars[i].l + bars[i].c) / 3;
-    pv += tp * v; vv += v; out.push(vv ? pv / vv : null);
   }
   return out;
 }
@@ -162,11 +140,11 @@ function ideaBox(inst) {
   const val = f && f.peg != null ? `PEG ${f.peg.toFixed(2)}` : (f && f.fwd_pe != null ? `P/E ${f.fwd_pe.toFixed(1)}` : "");
   const er = f && f.next_earnings ? earnTag(f.next_earnings) : "";
   const fmt = n => n.toLocaleString(undefined, { maximumFractionDigits: 2 });
+  const tgt = i.t1 ? `Target ${fmt(i.t1)} (+${i.reward_pct}%)` : "no overhead resistance (running)";
   return `<div class="ideabox" onclick="goTo('${inst.id}')">
     <div class="ih"><b>${inst.label}</b> <span class="id">${inst.id}</span> · ${val}</div>
     <div class="ir">${i.reason}${er ? " · " + er : ""}</div>
-    <div class="il">Entry ${fmt(i.entry[0])}–${fmt(i.entry[1])} → Target ${fmt(i.t1)} (+${i.reward_pct}%)</div>
-    <div class="ir">1-mo target · typical monthly range ${i.month_move_pct}%</div>
+    <div class="il">Entry ${fmt(i.entry[0])}–${fmt(i.entry[1])} → ${tgt}</div>
   </div>`;
 }
 function renderIdeas() {
@@ -193,48 +171,26 @@ window.goTo = function (id) {
   el.classList.remove("flash"); void el.offsetWidth; el.classList.add("flash");
 };
 
-function latestVwap(bars) {
-  const s = avwapSeries(bars);
-  for (let i = s.length - 1; i >= 0; i--) if (s[i] != null) return s[i];
-  return null;
-}
-
-// Actionable proximity remark: what key line/level price is sitting on, + enter/exit cue.
+// Actionable remark: the enter/exit cue + which key line/level price sits on.
 function keyRemark(inst) {
   const last = inst.last_close, items = [];
-  const add = (label, ref, kind) => {
+  const add = (label, ref) => {
     if (!ref) return;
     const d = (last / ref - 1) * 100;
-    if (Math.abs(d) <= 2) items.push({ label: `${label} ${d >= 0 ? "+" : ""}${d.toFixed(1)}%`, kind });
+    if (Math.abs(d) <= 3) items.push(`${label} ${d >= 0 ? "+" : ""}${d.toFixed(1)}%`);
   };
-  add("21EMA", inst.ema21, "ema");
-  add("50SMA", inst.sma50, "ma");
-  add("VWAP", latestVwap(inst.bars), "vwap");
-  (inst.flags || []).forEach(f => items.push({
-    label: `${f.kind === "support" ? "Sup" : "Res"} ${f.price.toLocaleString(undefined, { maximumFractionDigits: 1 })} ${f.distance_pct >= 0 ? "+" : ""}${f.distance_pct.toFixed(1)}%`,
-    kind: f.kind,
-  }));
-  if (!items.length) return { html: "— no key level nearby", cls: "muted" };
+  add("20DMA", inst.sma20);
+  add("50DMA", inst.sma50);
+  (inst.flags || []).forEach(f => items.push(
+    `${f.kind === "support" ? "Sup" : "Res"} ${f.price.toLocaleString(undefined, { maximumFractionDigits: 1 })} ${f.distance_pct >= 0 ? "+" : ""}${f.distance_pct.toFixed(1)}%`));
 
-  const nearRes = items.some(i => i.kind === "resistance");
-  const nearSup = items.some(i => i.kind === "support");
-  const nearEma = items.some(i => i.kind === "ema" || i.kind === "vwap");
-  // 21EMA is not a signal in isolation — carry the confirmations alongside it.
-  const conf = [];
-  if (inst.above50 != null) conf.push(inst.above50 ? "✓struct" : "✗below50");
-  if (inst.htf_up != null) conf.push(inst.htf_up ? "✓HTF" : "✗HTF");
-  if (inst.vol_ratio != null) conf.push(`vol ${inst.vol_ratio}×${inst.vol_ratio >= 1.2 ? " rising" : inst.vol_ratio <= 0.85 ? " drying" : ""}`);
-  const confStr = conf.length ? `<span class="muted">[${conf.join(" · ")}]</span> ` : "";
-
+  const i = inst.idea;
   let tag = "", cls = "muted";
-  if (inst.entry_setup && inst.entry_quality === "strong") { tag = "⚡ ENTER — 21EMA pullback, confirmed (trend+HTF)"; cls = "enter"; }
-  else if (inst.entry_setup) { tag = "⚡ ENTER? (weak) — 21EMA pullback but not confirmed"; cls = "muted"; }
-  else if (nearRes && inst.trend !== "up") { tag = "⚠ EXIT — stalling at resistance"; cls = "exit"; }
-  else if (nearSup && inst.trend === "up" && inst.above50) { tag = "ENTER watch — holding support in uptrend"; cls = "enter"; }
-  else if (nearEma && inst.trend === "up" && inst.above50) { tag = "ENTER watch — testing 21EMA support"; cls = "enter"; }
-  else if (nearEma && inst.trend === "down") { tag = "⚠ break watch — losing the 21EMA"; cls = "exit"; }
-  else if (nearRes) { tag = "⚠ into resistance — watch for rejection"; cls = "exit"; }
-  return { html: (tag ? `<b>${tag}</b> ` : "") + confStr + items.map(i => i.label).join(" · "), cls };
+  if (i && i.kind === "enter") { tag = `⬤ ENTER — ${i.reason}`; cls = "enter"; }
+  else if (i && i.kind === "take_profit") { tag = `▲ ${i.reason === "overbought" ? "overbought — trim" : "at resistance — trim"}`; cls = "exit"; }
+  else if (inst.trend === "down") { tag = "downtrend — not a long"; cls = "muted"; }
+  const vol = inst.vol_ratio != null ? ` <span class="muted">vol ${inst.vol_ratio}×</span>` : "";
+  return { html: (tag ? `<b>${tag}</b>` : "") + (items.length ? " · " + items.join(" · ") : "") + vol, cls };
 }
 
 function badges(inst) {
@@ -265,9 +221,9 @@ function drawChart(el, inst) {
 
   const closes = inst.bars.map(b => b.c);
   const overlays = [
-    ["#e3b341", emaSeries(closes, 21)],   // 21 EMA
-    ["#58a6ff", smaSeries(closes, 50)],   // 50 SMA
-    ["#bc8cff", avwapSeries(inst.bars)],  // anchored VWAP
+    ["#e3b341", smaSeries(closes, 20)],    // 20 SMA
+    ["#58a6ff", smaSeries(closes, 50)],    // 50 SMA
+    ["#f778ba", smaSeries(closes, 200)],   // 200 SMA
   ];
   for (const [color, series] of overlays) {
     const line = chart.addLineSeries({ color, lineWidth: 1, priceLineVisible: false, lastValueVisible: false });
