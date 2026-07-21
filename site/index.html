@@ -49,6 +49,11 @@
   .fund { padding:4px 10px; font-size:11px; color:var(--muted); border-bottom:1px solid var(--border);
     font-variant-numeric:tabular-nums; }
   .news { padding:5px 10px; font-size:11px; color:#9fd0ff; border-bottom:1px solid var(--border); }
+  .cat { padding:5px 10px; font-size:11px; color:var(--text); border-top:1px solid var(--border); }
+  .cat b.e { color:var(--down); }
+  .earn { padding:6px 10px; font-size:11px; border-top:1px solid var(--border); background:rgba(88,166,255,.05); }
+  .earn .eh { color:var(--muted); }
+  .earn .efocus { color:#9fd0ff; margin-top:3px; }
   .ideabox .nw { color:#9fd0ff; font-size:11px; margin-top:3px; }
   .chart { height:300px; }
   /* Top ideas section */
@@ -217,6 +222,37 @@ function keyRemark(inst) {
   return { html: (tag ? `<b>${tag}</b>` : "") + (items.length ? " · " + items.join(" · ") : "") + rsiStr, cls };
 }
 
+function daysTo(ds) {
+  return ds ? Math.round((new Date(ds + "T00:00:00") - Date.now()) / 8.64e7) : null;
+}
+function catalystTimeline(inst) {
+  const f = inst.fund;
+  const items = [];
+  if (f) {
+    const ed = daysTo(f.next_earnings);
+    if (ed != null && ed >= 0 && ed <= 45) items.push({ d: f.next_earnings, days: ed, label: "Earnings", earn: true });
+    const xd = daysTo(f.ex_div);
+    if (xd != null && xd >= 0 && xd <= 30) items.push({ d: f.ex_div, days: xd, label: "Ex-div", earn: false });
+  }
+  (inst.events || []).forEach(e => { const dd = daysTo(e.date); if (dd != null && dd >= 0 && dd <= 30) items.push({ d: e.date, days: dd, label: e.event, earn: false }); });
+  if (!items.length) return "";
+  items.sort((a, b) => a.days - b.days);
+  return `<div class="cat">📅 ${items.map(i => i.earn ? `<b class="e">${i.label} ${i.d} (${i.days}d)</b>` : `${i.label} ${i.d} (${i.days}d)`).join(" · ")}</div>`;
+}
+function earningsBox(inst) {
+  const f = inst.fund;
+  if (!f || !f.next_earnings) return "";
+  const days = daysTo(f.next_earnings);
+  if (days == null || days < 0 || days > 35) return "";
+  const beats = (f.earnings_history || []).map(q => {
+    const s = q.surprise;
+    if (s == null) return "";
+    return `<span class="pct ${s >= 0 ? "u" : "d"}">${(q.q || "").slice(0, 7)} ${s >= 0 ? "beat +" : "miss "}${s}%</span>`;
+  }).filter(Boolean).join(" ");
+  const focus = inst.earn ? `<div class="efocus">${inst.earn}</div>` : "";
+  return `<div class="earn"><b>⏰ Earnings ${f.next_earnings} (${days}d)</b>${f.curr_est ? ` · est $${f.curr_est.toFixed(2)}` : ""}<br><span class="eh">Last 4Q:</span> ${beats || "—"}${focus}</div>`;
+}
+
 function badges(inst) {
   const t = inst.trend || "flat";
   const tl = t === "up" ? "▲" : t === "down" ? "▼" : "–";
@@ -283,6 +319,8 @@ function card(inst) {
     ${inst.news ? `<div class="news">📰 ${inst.news}</div>` : ""}
     <div class="remark ${rem.cls}">${rem.html}</div>
     <div class="chart" data-pending="1"></div>
+    ${catalystTimeline(inst)}
+    ${earningsBox(inst)}
     <textarea class="note" placeholder="notes — ${inst.id}"></textarea>`;
   const ta = el.querySelector(".note");
   ta.value = localStorage.getItem(noteKey(inst.id)) || "";

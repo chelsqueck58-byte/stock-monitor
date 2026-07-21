@@ -13,7 +13,7 @@ import requests
 ROOT = Path(__file__).resolve().parent.parent
 CONFIG = ROOT / "config" / "universe.json"
 OUT = ROOT / "data" / "fundamentals.json"
-MODULES = "defaultKeyStatistics,earningsTrend,financialData,calendarEvents"
+MODULES = "defaultKeyStatistics,earningsTrend,financialData,calendarEvents,earningsHistory"
 HEADERS = {"User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)"}
 
 
@@ -38,6 +38,14 @@ def raw(node, *path):
     return node.get("raw") if isinstance(node, dict) else None
 
 
+def fmt(node, *path):
+    for key in path:
+        if not isinstance(node, dict):
+            return None
+        node = node.get(key, {})
+    return node.get("fmt") if isinstance(node, dict) else None
+
+
 def fetch(session, crumb, symbol):
     url = f"https://query1.finance.yahoo.com/v10/finance/quoteSummary/{symbol}"
     resp = session.get(url, params={"modules": MODULES, "crumb": crumb}, timeout=15)
@@ -48,9 +56,22 @@ def fetch(session, crumb, symbol):
     d = result[0]
     ks, fd = d.get("defaultKeyStatistics", {}), d.get("financialData", {})
     trend = d.get("earningsTrend", {}).get("trend", [])
-    ce = d.get("calendarEvents", {}).get("earnings", {})
+    cal = d.get("calendarEvents", {})
+    ce = cal.get("earnings", {})
     dates = ce.get("earningsDate") or []
     next_earn = dates[0].get("fmt") if dates and isinstance(dates[0], dict) else None
+
+    # Last 4 quarters beat/miss.
+    hist = []
+    for q in d.get("earningsHistory", {}).get("history", []):
+        surp = raw(q, "surprisePercent")
+        hist.append({
+            "q": fmt(q, "quarter"),
+            "actual": raw(q, "epsActual"),
+            "est": raw(q, "epsEstimate"),
+            "surprise": round(surp * 100, 1) if surp is not None else None,
+        })
+
     return {
         "rev_growth": raw(fd, "revenueGrowth"),
         "eps_growth": raw(fd, "earningsGrowth"),
@@ -59,6 +80,9 @@ def fetch(session, crumb, symbol):
         "rev_up": raw(trend[0], "epsRevisions", "upLast30days") if trend else None,
         "rev_down": raw(trend[0], "epsRevisions", "downLast30days") if trend else None,
         "next_earnings": next_earn,
+        "ex_div": fmt(cal, "exDividendDate"),
+        "curr_est": raw(trend[0], "earningsEstimate", "avg") if trend else None,
+        "earnings_history": hist[:4],
     }
 
 
