@@ -4,7 +4,9 @@ to map items to the universe tickers, and writes data/news.json which build.py
 merges onto each instrument. Fundamentals move slowly; run this a few times/day.
 """
 import os
+import base64
 import json
+import pickle
 import subprocess
 from pathlib import Path
 
@@ -12,6 +14,9 @@ ROOT = Path(__file__).resolve().parent.parent
 CONFIG = ROOT / "config" / "universe.json"
 OUT = ROOT / "data" / "news.json"
 X_DIGEST = Path.home() / "x-reader" / "digest.json"
+GMAIL_TOKEN = Path.home() / "bots" / "evening-brief" / "tokens" / "token_chelsfinnews.pkl"
+TG_SCRAPER = Path.home() / "telegram-reader" / "scrape_channel.py"
+TG_CHANNELS = ["tradehaven", "Fin_Watch", "tech"]
 
 
 def collect_x():
@@ -22,7 +27,50 @@ def collect_x():
     except (json.JSONDecodeError, OSError):
         return []
     return [f"[X @{p['handle']}] {' '.join(p['text'].split())}"
-            for p in posts if "error" not in p][:120]
+            for p in posts if "error" not in p][:80]
+
+
+def _email_body(payload):
+    if payload.get("mimeType") == "text/plain":
+        data = payload.get("body", {}).get("data", "")
+        return base64.urlsafe_b64decode(data).decode("utf-8", "ignore") if data else ""
+    return "".join(_email_body(p) for p in payload.get("parts", []))
+
+
+def collect_gmail():
+    try:
+        from google.auth.transport.requests import Request
+        from googleapiclient.discovery import build as gbuild
+        creds = pickle.load(open(GMAIL_TOKEN, "rb"))
+        if creds.expired and creds.refresh_token:
+            creds.refresh(Request())
+        svc = gbuild("gmail", "v1", credentials=creds)
+        msgs = svc.users().messages().list(
+            userId="me", q="newer_than:1d", maxResults=15).execute().get("messages", [])
+        items = []
+        for m in msgs:
+            d = svc.users().messages().get(userId="me", id=m["id"], format="full").execute()
+            hdr = {h["name"].lower(): h["value"] for h in d["payload"].get("headers", [])}
+            body = " ".join(_email_body(d["payload"]).split())
+            if body:
+                items.append(f"[Email: {hdr.get('subject', '')[:80]}] {body[:1400]}")
+        return items
+    except Exception as exc:
+        print(f"[gmail collect failed] {exc}")
+        return []
+
+
+def collect_telegram():
+    items = []
+    for ch in TG_CHANNELS:
+        try:
+            r = subprocess.run(["python3", str(TG_SCRAPER), ch, "1"],
+                               capture_output=True, text=True, timeout=90)
+            if r.returncode == 0 and r.stdout.strip():
+                items.append(f"[Telegram @{ch}] {r.stdout[:2500]}")
+        except Exception:
+            pass
+    return items
 
 
 def ask_claude(prompt):
@@ -52,7 +100,9 @@ def parse_json(text):
 def main():
     config = json.loads(CONFIG.read_text())
     tickers = {m["id"]: m["label"] for g in config["groups"] for m in g["members"]}
-    items = collect_x()
+    x, gm, tg = collect_x(), collect_gmail(), collect_telegram()
+    items = x + gm + tg
+    print(f"sources: X={len(x)} Gmail={len(gm)} Telegram={len(tg)}")
     if not items:
         OUT.write_text("{}")
         print("no source items")
