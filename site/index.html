@@ -65,6 +65,10 @@
     color:var(--down); background:rgba(248,81,73,.06); }
   .card.enter-idea { border-color:#f5c518; box-shadow:inset 0 0 0 2px #f5c518; }
   .er-soon { color:var(--down); font-weight:600; }
+  .ideabox, .tpchip { cursor:pointer; }
+  .ideabox:hover, .tpchip:hover { filter:brightness(1.25); }
+  .card.flash { animation:flash 1.2s ease-out; }
+  @keyframes flash { 0% { box-shadow:inset 0 0 0 2px #58a6ff; } 100% { box-shadow:none; } }
   .note { width:100%; border:none; border-top:1px solid var(--border); background:transparent;
     color:var(--text); padding:6px 10px; resize:vertical; min-height:32px; font:inherit; font-size:12px; }
   .note::placeholder { color:var(--muted); }
@@ -161,7 +165,7 @@ function ideaBox(inst) {
   const t1p = ((i.t1 / inst.last_close - 1) * 100).toFixed(1);
   let tgt = `T1 ${fmt(i.t1)} (+${t1p}%)`;
   if (i.t2) tgt += ` · T2 ${fmt(i.t2)}`;
-  return `<div class="ideabox">
+  return `<div class="ideabox" onclick="goTo('${inst.id}')">
     <div class="ih"><b>${inst.label}</b> <span class="id">${inst.id}</span> · ${val}</div>
     <div class="ir">${i.reason}${er ? " · " + er : ""}</div>
     <div class="il">Entry ${fmt(i.entry[0])}–${fmt(i.entry[1])} → ${tgt}</div>
@@ -179,10 +183,17 @@ function renderIdeas() {
   }
   if (tps.length) {
     html += `<div class="ideas-head tp">Take profit / trim</div>`;
-    html += `<div class="ideas-row">${tps.map(i => `<span class="tpchip"><b>${i.id}</b> ${i.idea.reason}</span>`).join("")}</div>`;
+    html += `<div class="ideas-row">${tps.map(i => `<span class="tpchip" onclick="goTo('${i.id}')"><b>${i.id}</b> ${i.idea.reason}</span>`).join("")}</div>`;
   }
   el.innerHTML = html || `<div class="ideas-head">No confirmed entries right now — cash is a position.</div>`;
 }
+
+window.goTo = function (id) {
+  const el = document.getElementById("t-" + id);
+  if (!el) return;
+  el.scrollIntoView({ behavior: "smooth", block: "center" });
+  el.classList.remove("flash"); void el.offsetWidth; el.classList.add("flash");
+};
 
 function latestVwap(bars) {
   const s = avwapSeries(bars);
@@ -278,6 +289,7 @@ function drawChart(el, inst) {
 
 function card(inst) {
   const el = document.createElement("div");
+  el.id = "t-" + inst.id;
   const isEnter = inst.idea && inst.idea.kind === "enter";
   el.className = "card" + (isEnter ? " enter-idea" : "");
   const rem = keyRemark(inst);
