@@ -19,6 +19,7 @@ ROOT = Path(__file__).resolve().parent.parent
 CONFIG = ROOT / "config" / "universe.json"
 OUTPUT = ROOT / "site" / "data.json"
 ALERT_STATE = ROOT / "data" / "alert_state.json"
+FUNDAMENTALS = ROOT / "data" / "fundamentals.json"
 TELEGRAM = Path.home() / ".claude" / "skills" / "telegram-sender" / "send.sh"
 
 
@@ -104,6 +105,13 @@ def main():
         except (json.JSONDecodeError, OSError):
             pass
 
+    fundamentals = {}
+    if FUNDAMENTALS.exists():
+        try:
+            fundamentals = json.loads(FUNDAMENTALS.read_text())
+        except (json.JSONDecodeError, OSError):
+            pass
+
     entries = []
     failures = []
     reused = []
@@ -125,6 +133,7 @@ def main():
                     "group": group["name"],
                     "currency": meta.get("currency"),
                     "stale": False,
+                    "fund": fundamentals.get(member["id"]),
                 })
                 entries.append(entry)
                 print(f"  ok   {member['id']:<8} {entry['last_close']:>12,.2f}  "

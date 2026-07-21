@@ -12,6 +12,50 @@ def ema(closes, period):
     return round(value, 4)
 
 
+def rsi(closes, period=14):
+    """Wilder's RSI, latest value."""
+    if len(closes) < period + 1:
+        return None
+    gains = losses = 0.0
+    for i in range(1, period + 1):
+        change = closes[i] - closes[i - 1]
+        gains += max(change, 0)
+        losses += max(-change, 0)
+    avg_gain, avg_loss = gains / period, losses / period
+    for i in range(period + 1, len(closes)):
+        change = closes[i] - closes[i - 1]
+        avg_gain = (avg_gain * (period - 1) + max(change, 0)) / period
+        avg_loss = (avg_loss * (period - 1) + max(-change, 0)) / period
+    if avg_loss == 0:
+        return 100.0
+    return round(100 - 100 / (1 + avg_gain / avg_loss), 1)
+
+
+def entry_target(bars, levels, ema21, last_close):
+    """Entry accumulation zone (nearest support -> 21EMA) and profit targets
+    (next resistances / prior high). Stops are the trader's own — none here."""
+    lv = levels.get("3m", {})
+    sup = [s["price"] for s in lv.get("support", [])]
+    res = sorted(p["price"] for p in lv.get("resistance", []) if p["price"] > last_close)
+    nearest_sup = max((p for p in sup if p < last_close), default=None)
+
+    zone_low = nearest_sup if nearest_sup else round(last_close * 0.98, 2)
+    zone_high = ema21 if ema21 else round(last_close * 1.005, 2)
+    if zone_low >= zone_high:
+        zone_low = round(min(zone_low, (ema21 or last_close) * 0.98), 2)
+
+    hi63 = max((b["high"] for b in bars[-63:] if b["high"]), default=None)
+    t1 = res[0] if res else round(last_close * 1.04, 2)
+    t2 = res[1] if len(res) > 1 else hi63
+    if t2 and t2 <= t1:
+        t2 = None
+    return {
+        "entry": [round(zone_low, 2), round(zone_high, 2)],
+        "t1": round(t1, 2),
+        "t2": round(t2, 2) if t2 else None,
+    }
+
+
 def weekly_trend(bars, span=8):
     """Higher-timeframe confirmation done properly: aggregate daily -> weekly
     (last close of each ~5-day block) and check the weekly trend is up. One
@@ -197,6 +241,22 @@ def summarise(bars, settings):
     )
     prior_close = bars[-2]["close"] if len(bars) > 1 else None
 
+    flags = proximity_flags(last_close, levels, settings["proximity_alert_pct"])
+    rsi_val = rsi(closes)
+    overbought = rsi_val is not None and rsi_val >= 70
+    near_sup = any(f["kind"] == "support" for f in flags)
+    near_res = any(f["kind"] == "resistance" for f in flags)
+
+    # Idea = a 1-month entry candidate: uptrend confirmed (21EMA + 50 + weekly),
+    # sitting on a dip (pullback or support), not overbought. Take-profit = extended.
+    idea = None
+    if signal["trend"] == "up" and above50 and htf_up and not overbought and (signal["entry_setup"] or near_sup):
+        lv = entry_target(bars, levels, signal["ema"], last_close)
+        reason = "confirmed 21EMA pullback" if signal["entry_setup"] else "at support, uptrend intact"
+        idea = {"kind": "enter", "reason": reason, **lv}
+    elif signal["trend"] == "up" and (overbought or near_res):
+        idea = {"kind": "take_profit", "reason": "overbought" if overbought else "at resistance"}
+
     return {
         "last_close": round(last_close, 4),
         "last_date": bars[-1]["date"],
@@ -204,6 +264,7 @@ def summarise(bars, settings):
         "ytd_pct": round((last_close / ytd_open - 1) * 100, 2) if ytd_open else None,
         "ema21": signal["ema"],
         "sma50": sma50,
+        "rsi": rsi_val,
         "trend": signal["trend"],
         "entry_setup": signal["entry_setup"],
         "entry_quality": entry_quality,
@@ -212,8 +273,9 @@ def summarise(bars, settings):
         "htf_up": htf_up,
         "vol_ratio": vol_ratio,
         "cta": donchian_signal(bars, settings.get("donchian_period", 20)),
+        "idea": idea,
         "levels": levels,
-        "flags": proximity_flags(last_close, levels, settings["proximity_alert_pct"]),
+        "flags": flags,
         "bars": [
             {"d": bar["date"], "o": bar["open"], "h": bar["high"],
              "l": bar["low"], "c": bar["close"], "v": bar.get("volume")}

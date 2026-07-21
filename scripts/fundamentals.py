@@ -1,0 +1,91 @@
+"""Fundamental snapshot per instrument via Yahoo quoteSummary: growth, valuation,
+estimate revisions, next earnings. Cached to data/fundamentals.json and merged by
+build.py. Fundamentals move slowly — refresh daily, not every price build.
+
+Run:  .venv/bin/python scripts/fundamentals.py
+"""
+import json
+import time
+from pathlib import Path
+
+import requests
+
+ROOT = Path(__file__).resolve().parent.parent
+CONFIG = ROOT / "config" / "universe.json"
+OUT = ROOT / "data" / "fundamentals.json"
+MODULES = "defaultKeyStatistics,earningsTrend,financialData,calendarEvents"
+HEADERS = {"User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)"}
+
+
+def session_with_crumb():
+    s = requests.Session()
+    s.headers.update(HEADERS)
+    try:
+        s.get("https://fc.yahoo.com", timeout=10)
+    except requests.RequestException:
+        pass
+    crumb = s.get("https://query1.finance.yahoo.com/v1/test/getcrumb", timeout=10).text
+    if not crumb or "<" in crumb:
+        raise RuntimeError("could not get Yahoo crumb")
+    return s, crumb
+
+
+def raw(node, *path):
+    for key in path:
+        if not isinstance(node, dict):
+            return None
+        node = node.get(key, {})
+    return node.get("raw") if isinstance(node, dict) else None
+
+
+def fetch(session, crumb, symbol):
+    url = f"https://query1.finance.yahoo.com/v10/finance/quoteSummary/{symbol}"
+    resp = session.get(url, params={"modules": MODULES, "crumb": crumb}, timeout=15)
+    resp.raise_for_status()
+    result = (resp.json().get("quoteSummary") or {}).get("result")
+    if not result:
+        return None
+    d = result[0]
+    ks, fd = d.get("defaultKeyStatistics", {}), d.get("financialData", {})
+    trend = d.get("earningsTrend", {}).get("trend", [])
+    ce = d.get("calendarEvents", {}).get("earnings", {})
+    dates = ce.get("earningsDate") or []
+    next_earn = dates[0].get("fmt") if dates and isinstance(dates[0], dict) else None
+    return {
+        "rev_growth": raw(fd, "revenueGrowth"),
+        "eps_growth": raw(fd, "earningsGrowth"),
+        "fwd_pe": raw(ks, "forwardPE"),
+        "peg": raw(ks, "pegRatio"),
+        "rev_up": raw(trend[0], "epsRevisions", "upLast30days") if trend else None,
+        "rev_down": raw(trend[0], "epsRevisions", "downLast30days") if trend else None,
+        "next_earnings": next_earn,
+    }
+
+
+def main():
+    config = json.loads(CONFIG.read_text())
+    session, crumb = session_with_crumb()
+    out, ok, missing = {}, 0, []
+    for group in config["groups"]:
+        for member in group["members"]:
+            symbol = member.get("yahoo")
+            try:
+                snap = fetch(session, crumb, symbol)
+            except Exception:
+                snap = None
+            if snap and any(v is not None for v in snap.values()):
+                out[member["id"]] = snap
+                ok += 1
+            else:
+                missing.append(member["id"])
+            time.sleep(0.4)
+
+    OUT.parent.mkdir(parents=True, exist_ok=True)
+    OUT.write_text(json.dumps(out, separators=(",", ":")))
+    print(f"fundamentals: {ok} ok, {len(missing)} missing -> {OUT}")
+    if missing:
+        print("  missing:", ", ".join(missing))
+
+
+if __name__ == "__main__":
+    main()
