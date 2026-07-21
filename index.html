@@ -45,6 +45,7 @@
   .remark.enter { color:var(--up); }
   .remark.exit { color:var(--down); }
   .remark.muted { color:var(--muted); }
+  .remark .muted { color:var(--muted); }
   .chart { height:300px; }
   .note { width:100%; border:none; border-top:1px solid var(--border); background:transparent;
     color:var(--text); padding:6px 10px; resize:vertical; min-height:32px; font:inherit; font-size:12px; }
@@ -57,7 +58,7 @@
   <h1>stock-monitor</h1><span class="meta" id="meta">loading…</span>
   <span class="legend">
     <b class="ema">21EMA</b> · <b class="sma">50SMA</b> · <b class="vwap">VWAP</b> · S/R lines ·
-    ⚡ pullback entry · CTA↑ = 20-day breakout · top line = enter/exit cue · chart = late-Apr → now
+    ⚡ entry only if confirmed by [✓struct=above 50SMA · ✓HTF=above 100SMA regime · vol] · top line = enter/exit cue · chart = late-Apr → now
   </span>
 </header>
 <main id="grid"></main>
@@ -140,15 +141,22 @@ function keyRemark(inst) {
   const nearRes = items.some(i => i.kind === "resistance");
   const nearSup = items.some(i => i.kind === "support");
   const nearEma = items.some(i => i.kind === "ema" || i.kind === "vwap");
-  // tag = short ENTER/EXIT cue + the reason why.
+  // 21EMA is not a signal in isolation — carry the confirmations alongside it.
+  const conf = [];
+  if (inst.above50 != null) conf.push(inst.above50 ? "✓struct" : "✗below50");
+  if (inst.htf_up != null) conf.push(inst.htf_up ? "✓HTF" : "✗HTF");
+  if (inst.vol_ratio != null) conf.push(`vol ${inst.vol_ratio}×${inst.vol_ratio >= 1.5 ? " heavy" : inst.vol_ratio <= 0.8 ? " light" : ""}`);
+  const confStr = conf.length ? `<span class="muted">[${conf.join(" · ")}]</span> ` : "";
+
   let tag = "", cls = "muted";
-  if (inst.entry_setup) { tag = "⚡ ENTER — pullback to rising 21EMA"; cls = "enter"; }
+  if (inst.entry_setup && inst.entry_quality === "strong") { tag = "⚡ ENTER — 21EMA pullback, confirmed (trend+HTF)"; cls = "enter"; }
+  else if (inst.entry_setup) { tag = "⚡ ENTER? (weak) — 21EMA pullback but not confirmed"; cls = "muted"; }
   else if (nearRes && inst.trend !== "up") { tag = "⚠ EXIT — stalling at resistance"; cls = "exit"; }
-  else if (nearSup && inst.trend === "up") { tag = "ENTER watch — holding support in uptrend"; cls = "enter"; }
-  else if (nearEma && inst.trend === "up") { tag = "ENTER watch — testing 21EMA support"; cls = "enter"; }
+  else if (nearSup && inst.trend === "up" && inst.above50) { tag = "ENTER watch — holding support in uptrend"; cls = "enter"; }
+  else if (nearEma && inst.trend === "up" && inst.above50) { tag = "ENTER watch — testing 21EMA support"; cls = "enter"; }
   else if (nearEma && inst.trend === "down") { tag = "⚠ break watch — losing the 21EMA"; cls = "exit"; }
   else if (nearRes) { tag = "⚠ into resistance — watch for rejection"; cls = "exit"; }
-  return { html: (tag ? `<b>${tag}</b> · ` : "") + items.map(i => i.label).join(" · "), cls };
+  return { html: (tag ? `<b>${tag}</b> ` : "") + confStr + items.map(i => i.label).join(" · "), cls };
 }
 
 function badges(inst) {
