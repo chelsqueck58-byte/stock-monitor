@@ -203,11 +203,10 @@ function keyRemark(inst) {
 function badges(inst) {
   const t = inst.trend || "flat";
   const tl = t === "up" ? "▲" : t === "down" ? "▼" : "–";
-  const entry = inst.entry_setup ? `<span class="badge entry" title="pullback to 21EMA in uptrend">⚡ ENTRY</span>` : "";
   let cta = "";
   if (inst.cta === "long") cta = `<span class="badge cta-long" title="trend-followers long — market believes in the uptrend">CTA↑</span>`;
   else if (inst.cta === "short") cta = `<span class="badge cta-short" title="trend-followers flipping short — storm risk rising">CTA↓</span>`;
-  return `<span class="badge ${t}" title="trend vs 21EMA">${tl}</span>${entry}${cta}`;
+  return `<span class="badge ${t}" title="trend: price vs 50/200DMA">${tl}</span>${cta}`;
 }
 
 function drawChart(el, inst) {
