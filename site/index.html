@@ -40,6 +40,11 @@
   .badge.entry { color:var(--ema); background:rgba(227,179,65,.16); }
   .badge.cta-long { color:var(--up); background:rgba(38,166,65,.10); }
   .badge.cta-short { color:var(--down); background:rgba(248,81,73,.10); }
+  .remark { padding:5px 10px; font-size:11px; border-bottom:1px solid var(--border);
+    font-variant-numeric:tabular-nums; }
+  .remark.enter { color:var(--up); }
+  .remark.exit { color:var(--down); }
+  .remark.muted { color:var(--muted); }
   .chart { height:300px; }
   .note { width:100%; border:none; border-top:1px solid var(--border); background:transparent;
     color:var(--text); padding:6px 10px; resize:vertical; min-height:32px; font:inherit; font-size:12px; }
@@ -52,7 +57,7 @@
   <h1>stock-monitor</h1><span class="meta" id="meta">loading…</span>
   <span class="legend">
     <b class="ema">21EMA</b> · <b class="sma">50SMA</b> · <b class="vwap">VWAP</b> · S/R lines ·
-    ⚡ pullback entry · CTA↑ = 20-day breakout · chart = YTD (area)
+    ⚡ pullback entry · CTA↑ = 20-day breakout · top line = enter/exit cue · chart = late-Apr → now
   </span>
 </header>
 <main id="grid"></main>
@@ -109,6 +114,41 @@ function checkStale(p) {
 }
 function noteKey(id) { return `stockmon.note.${id}`; }
 
+function latestVwap(bars) {
+  const s = avwapSeries(bars);
+  for (let i = s.length - 1; i >= 0; i--) if (s[i] != null) return s[i];
+  return null;
+}
+
+// Actionable proximity remark: what key line/level price is sitting on, + enter/exit cue.
+function keyRemark(inst) {
+  const last = inst.last_close, items = [];
+  const add = (label, ref, kind) => {
+    if (!ref) return;
+    const d = (last / ref - 1) * 100;
+    if (Math.abs(d) <= 2) items.push({ label: `${label} ${d >= 0 ? "+" : ""}${d.toFixed(1)}%`, kind });
+  };
+  add("21EMA", inst.ema21, "ema");
+  add("50SMA", inst.sma50, "ma");
+  add("VWAP", latestVwap(inst.bars), "vwap");
+  (inst.flags || []).forEach(f => items.push({
+    label: `${f.kind === "support" ? "Sup" : "Res"} ${f.price.toLocaleString(undefined, { maximumFractionDigits: 1 })} ${f.distance_pct >= 0 ? "+" : ""}${f.distance_pct.toFixed(1)}%`,
+    kind: f.kind,
+  }));
+  if (!items.length) return { html: "— no key level nearby", cls: "muted" };
+
+  const nearRes = items.some(i => i.kind === "resistance");
+  const nearSup = items.some(i => i.kind === "support");
+  const nearEma = items.some(i => i.kind === "ema" || i.kind === "vwap");
+  let tag = "", cls = "muted";
+  if (inst.entry_setup) { tag = "⚡ ENTER"; cls = "enter"; }
+  else if (nearRes && inst.trend !== "up") { tag = "⚠ EXIT — at resistance"; cls = "exit"; }
+  else if ((nearSup || nearEma) && inst.trend === "up") { tag = "ENTER watch"; cls = "enter"; }
+  else if (nearEma && inst.trend === "down") { tag = "⚠ break watch"; cls = "exit"; }
+  else if (nearRes) { tag = "⚠ resistance"; cls = "exit"; }
+  return { html: (tag ? `<b>${tag}</b> — ` : "") + items.map(i => i.label).join(" · "), cls };
+}
+
 function badges(inst) {
   const t = inst.trend || "flat";
   const tl = t === "up" ? "▲" : t === "down" ? "▼" : "–";
@@ -151,14 +191,16 @@ function drawChart(el, inst) {
     (lv.support || []).forEach(s => area.createPriceLine({ price: s.price, color: "rgba(38,166,65,.5)", lineWidth: 1, lineStyle: 2, axisLabelVisible: false }));
     (lv.resistance || []).forEach(r => area.createPriceLine({ price: r.price, color: "rgba(248,81,73,.5)", lineWidth: 1, lineStyle: 2, axisLabelVisible: false }));
   }
+  // Default view: end-April of the latest bar's year -> today.
   const lastDate = inst.bars[inst.bars.length - 1].d;
-  try { chart.timeScale().setVisibleRange({ from: `${lastDate.slice(0, 4)}-01-01`, to: lastDate }); }
+  try { chart.timeScale().setVisibleRange({ from: `${lastDate.slice(0, 4)}-04-30`, to: lastDate }); }
   catch (e) { chart.timeScale().fitContent(); }
 }
 
 function card(inst) {
   const el = document.createElement("div");
   el.className = "card" + (inst.entry_setup ? " setup" : "");
+  const rem = keyRemark(inst);
   el.innerHTML = `
     <div class="top">
       <span class="name">${inst.label}</span>
@@ -167,6 +209,7 @@ function card(inst) {
       <span class="px">${inst.last_close.toLocaleString(undefined, { maximumFractionDigits: 2 })}</span>
       ${fmtPct(inst.change_pct)} ${fmtPct(inst.ytd_pct)}
     </div>
+    <div class="remark ${rem.cls}">${rem.html}</div>
     <div class="chart" data-pending="1"></div>
     <textarea class="note" placeholder="notes — ${inst.id}"></textarea>`;
   const ta = el.querySelector(".note");
