@@ -247,7 +247,8 @@ function earningsBox(inst) {
   const beats = (f.earnings_history || []).map(q => {
     const s = q.surprise;
     if (s == null) return "";
-    return `<span class="pct ${s >= 0 ? "u" : "d"}">${(q.q || "").slice(0, 7)} ${s >= 0 ? "beat +" : "miss "}${s}%</span>`;
+    const num = Math.abs(s) >= 100 ? "(n/m)" : `${s >= 0 ? "+" : ""}${s}%`;  // near-zero EPS -> % not meaningful
+    return `<span class="pct ${s >= 0 ? "u" : "d"}">${(q.q || "").slice(0, 7)} ${s >= 0 ? "beat" : "miss"} ${num}</span>`;
   }).filter(Boolean).join(" ");
   const focus = inst.earn ? `<div class="efocus">${inst.earn}</div>` : "";
   return `<div class="earn"><b>⏰ Earnings ${f.next_earnings} (${days}d)</b>${f.curr_est ? ` · est $${f.curr_est.toFixed(2)}` : ""}<br><span class="eh">Last 4Q:</span> ${beats || "—"}${focus}</div>`;
