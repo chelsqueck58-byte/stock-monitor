@@ -115,6 +115,8 @@
     "min_bars": 210,
     "alert_cooldown_hours": 18,
     "entry_pullback_pct": 2.0,
-    "ma_slope_lookback": 20
+    "ma_slope_lookback": 10,
+    "entry_ema": 21,
+    "donchian_period": 20
   }
 }

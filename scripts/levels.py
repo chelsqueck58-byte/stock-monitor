@@ -1,51 +1,64 @@
-"""Moving averages and swing-based support/resistance."""
+"""Lean per-instrument analytics: one EMA entry, 50DMA, S/R, trend, CTA breakout."""
 
 
-def moving_averages(bars, periods):
-    """Latest SMA for each period. The chart recomputes full series from bars."""
-    closes = [bar["close"] for bar in bars]
-    latest = {}
-
-    for period in periods:
-        if len(closes) < period:
-            latest[str(period)] = None
-            continue
-        latest[str(period)] = round(sum(closes[-period:]) / period, 4)
-
-    return latest
+def ema(closes, period):
+    """Exponential moving average, latest value."""
+    if len(closes) < period:
+        return None
+    k = 2 / (period + 1)
+    value = sum(closes[:period]) / period
+    for close in closes[period:]:
+        value = close * k + value * (1 - k)
+    return round(value, 4)
 
 
-def trend_signal(bars, ma_latest, settings):
-    """MA-discipline signals: long above a rising 200DMA, enter on 50DMA pullbacks.
+def donchian_signal(bars, period):
+    """CTA-style trend-follower state from a Donchian breakout of the prior `period`.
 
-    trend: 'up' = above a rising 200DMA · 'down' = below 200DMA · 'flat' = otherwise.
-    entry_setup: in an uptrend and pulled back to within entry_pullback_pct of the 50DMA.
+    'long' = close breaks the prior N-day high · 'short' = breaks the N-day low ·
+    'neutral' = inside the channel. This is where systematic trend money flips.
     """
+    if len(bars) < period + 1:
+        return "neutral"
+    prior = bars[-period - 1:-1]
+    highs = [bar["high"] for bar in prior if bar["high"] is not None]
+    lows = [bar["low"] for bar in prior if bar["low"] is not None]
+    if not highs or not lows:
+        return "neutral"
+    last = bars[-1]["close"]
+    if last >= max(highs):
+        return "long"
+    if last <= min(lows):
+        return "short"
+    return "neutral"
+
+
+def trend_signal(bars, settings):
+    """One EMA-based entry: long above a rising entry-EMA, enter on pullbacks to it."""
     closes = [bar["close"] for bar in bars]
     last = closes[-1]
-    ma50 = ma_latest.get("50")
-    ma200 = ma_latest.get("200")
-    lookback = settings.get("ma_slope_lookback", 20)
+    period = settings.get("entry_ema", 21)
+    lookback = settings.get("ma_slope_lookback", 10)
     pullback = settings.get("entry_pullback_pct", 2.0)
 
-    slope_pct = None
-    if ma200 and len(closes) >= 200 + lookback:
-        prev200 = sum(closes[-200 - lookback:-lookback]) / 200
-        if prev200:
-            slope_pct = round((ma200 / prev200 - 1) * 100, 2)
+    ema_now = ema(closes, period)
+    slope = None
+    if ema_now is not None and len(closes) > period + lookback:
+        ema_prev = ema(closes[:-lookback], period)
+        if ema_prev:
+            slope = round((ema_now / ema_prev - 1) * 100, 2)
 
-    above200 = ma200 is not None and last > ma200
-    rising = slope_pct is None or slope_pct > 0
-    if above200 and rising:
+    above = ema_now is not None and last > ema_now
+    rising = slope is None or slope > 0
+    if above and rising:
         trend = "up"
-    elif ma200 is not None and last < ma200:
+    elif ema_now is not None and last < ema_now:
         trend = "down"
     else:
         trend = "flat"
 
-    entry = trend == "up" and ma50 is not None and abs((last / ma50 - 1) * 100) <= pullback
-
-    return {"trend": trend, "ma200_slope_pct": slope_pct, "entry_setup": entry}
+    entry = trend == "up" and ema_now is not None and abs((last / ema_now - 1) * 100) <= pullback
+    return {"ema": ema_now, "trend": trend, "entry_setup": entry}
 
 
 def swing_points(bars, window):
@@ -118,7 +131,7 @@ def compute_levels(bars, settings):
 
 
 def proximity_flags(last_close, levels, threshold_pct):
-    """Levels the price is currently sitting on, within threshold."""
+    """Levels the price is currently sitting on, within threshold (for alerts)."""
     flags = []
     for window, data in levels.items():
         for kind in ("support", "resistance"):
@@ -138,11 +151,12 @@ def proximity_flags(last_close, levels, threshold_pct):
 
 
 def summarise(bars, settings):
-    """Everything the site needs for one instrument."""
+    """Everything the site needs for one instrument — lean."""
     last_close = bars[-1]["close"]
-    ma_latest = moving_averages(bars, settings["ma_periods"])
+    closes = [bar["close"] for bar in bars]
+    signal = trend_signal(bars, settings)
+    sma50 = round(sum(closes[-50:]) / 50, 4) if len(closes) >= 50 else None
     levels = compute_levels(bars, settings)
-    signal = trend_signal(bars, ma_latest, settings)
 
     ytd_open = next(
         (bar["close"] for bar in bars if bar["date"][:4] == bars[-1]["date"][:4]),
@@ -155,24 +169,16 @@ def summarise(bars, settings):
         "last_date": bars[-1]["date"],
         "change_pct": round((last_close / prior_close - 1) * 100, 2) if prior_close else None,
         "ytd_pct": round((last_close / ytd_open - 1) * 100, 2) if ytd_open else None,
-        "ma": ma_latest,
-        "vs_ma": {
-            period: round((last_close / value - 1) * 100, 2)
-            for period, value in ma_latest.items() if value
-        },
+        "ema21": signal["ema"],
+        "sma50": sma50,
         "trend": signal["trend"],
-        "ma200_slope_pct": signal["ma200_slope_pct"],
         "entry_setup": signal["entry_setup"],
+        "cta": donchian_signal(bars, settings.get("donchian_period", 20)),
         "levels": levels,
         "flags": proximity_flags(last_close, levels, settings["proximity_alert_pct"]),
         "bars": [
-            {
-                "d": bar["date"],
-                "o": bar["open"],
-                "h": bar["high"],
-                "l": bar["low"],
-                "c": bar["close"],
-            }
+            {"d": bar["date"], "o": bar["open"], "h": bar["high"],
+             "l": bar["low"], "c": bar["close"], "v": bar.get("volume")}
             for bar in bars[-260:]
         ],
     }
