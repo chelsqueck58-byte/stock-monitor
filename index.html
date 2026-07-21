@@ -162,12 +162,10 @@ function ideaBox(inst) {
   const val = f && f.peg != null ? `PEG ${f.peg.toFixed(2)}` : (f && f.fwd_pe != null ? `P/E ${f.fwd_pe.toFixed(1)}` : "");
   const er = f && f.next_earnings ? earnTag(f.next_earnings) : "";
   const fmt = n => n.toLocaleString(undefined, { maximumFractionDigits: 2 });
-  let tgt = `T1 ${fmt(i.t1)} (+${i.reward_pct}%)`;
-  if (i.t2) tgt += ` · T2 ${fmt(i.t2)}`;
   return `<div class="ideabox" onclick="goTo('${inst.id}')">
     <div class="ih"><b>${inst.label}</b> <span class="id">${inst.id}</span> · ${val}</div>
     <div class="ir">${i.reason}${er ? " · " + er : ""}</div>
-    <div class="il">Entry ${fmt(i.entry[0])}–${fmt(i.entry[1])} → ${tgt}</div>
+    <div class="il">Entry ${fmt(i.entry[0])}–${fmt(i.entry[1])} → Target ${fmt(i.t1)} (+${i.reward_pct}%)</div>
     <div class="ir">1-mo target · typical monthly range ${i.month_move_pct}%</div>
   </div>`;
 }
