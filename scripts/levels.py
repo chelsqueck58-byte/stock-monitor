@@ -158,6 +158,20 @@ def summarise(bars, settings):
     sma50 = round(sum(closes[-50:]) / 50, 4) if len(closes) >= 50 else None
     levels = compute_levels(bars, settings)
 
+    # 21EMA is never a signal in isolation — qualify it with the broader trend
+    # (50SMA structure), the higher timeframe (100SMA regime), and volume.
+    sma100 = sum(closes[-100:]) / 100 if len(closes) >= 100 else None
+    sma50_prev = sum(closes[-60:-10]) / 50 if len(closes) >= 60 else None
+    vols = [bar.get("volume") or 0 for bar in bars]
+    avg_vol = sum(vols[-20:]) / 20 if len(vols) >= 20 and sum(vols[-20:]) else 0
+    vol_ratio = round(vols[-1] / avg_vol, 2) if avg_vol else None
+    above50 = sma50 is not None and last_close > sma50
+    sma50_up = sma50 is not None and sma50_prev is not None and sma50 > sma50_prev
+    htf_up = sma100 is not None and last_close > sma100
+    entry_quality = None
+    if signal["entry_setup"]:
+        entry_quality = "strong" if (above50 and sma50_up and htf_up) else "weak"
+
     ytd_open = next(
         (bar["close"] for bar in bars if bar["date"][:4] == bars[-1]["date"][:4]),
         None,
@@ -173,6 +187,11 @@ def summarise(bars, settings):
         "sma50": sma50,
         "trend": signal["trend"],
         "entry_setup": signal["entry_setup"],
+        "entry_quality": entry_quality,
+        "above50": above50,
+        "sma50_up": sma50_up,
+        "htf_up": htf_up,
+        "vol_ratio": vol_ratio,
         "cta": donchian_signal(bars, settings.get("donchian_period", 20)),
         "levels": levels,
         "flags": proximity_flags(last_close, levels, settings["proximity_alert_pct"]),
