@@ -9,3 +9,6 @@ export PATH="/opt/homebrew/bin:/Users/chelsqueck/.local/bin:/usr/local/bin:/usr/
 ~/stock-monitor/.venv/bin/python ~/stock-monitor/scripts/news.py
 # IV rank / implied move from IBKR (keeps last iv.json if Gateway is down).
 ~/stock-monitor/.venv/bin/python ~/stock-monitor/scripts/ivdata.py || true
+# Forward dated catalysts + upcoming-earnings focus (Fable + web, grounded).
+~/stock-monitor/.venv/bin/python ~/stock-monitor/scripts/events.py || true
+~/stock-monitor/.venv/bin/python ~/stock-monitor/scripts/earnings_research.py || true
