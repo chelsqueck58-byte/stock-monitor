@@ -140,13 +140,15 @@ function keyRemark(inst) {
   const nearRes = items.some(i => i.kind === "resistance");
   const nearSup = items.some(i => i.kind === "support");
   const nearEma = items.some(i => i.kind === "ema" || i.kind === "vwap");
+  // tag = short ENTER/EXIT cue + the reason why.
   let tag = "", cls = "muted";
-  if (inst.entry_setup) { tag = "⚡ ENTER"; cls = "enter"; }
-  else if (nearRes && inst.trend !== "up") { tag = "⚠ EXIT — at resistance"; cls = "exit"; }
-  else if ((nearSup || nearEma) && inst.trend === "up") { tag = "ENTER watch"; cls = "enter"; }
-  else if (nearEma && inst.trend === "down") { tag = "⚠ break watch"; cls = "exit"; }
-  else if (nearRes) { tag = "⚠ resistance"; cls = "exit"; }
-  return { html: (tag ? `<b>${tag}</b> — ` : "") + items.map(i => i.label).join(" · "), cls };
+  if (inst.entry_setup) { tag = "⚡ ENTER — pullback to rising 21EMA"; cls = "enter"; }
+  else if (nearRes && inst.trend !== "up") { tag = "⚠ EXIT — stalling at resistance"; cls = "exit"; }
+  else if (nearSup && inst.trend === "up") { tag = "ENTER watch — holding support in uptrend"; cls = "enter"; }
+  else if (nearEma && inst.trend === "up") { tag = "ENTER watch — testing 21EMA support"; cls = "enter"; }
+  else if (nearEma && inst.trend === "down") { tag = "⚠ break watch — losing the 21EMA"; cls = "exit"; }
+  else if (nearRes) { tag = "⚠ into resistance — watch for rejection"; cls = "exit"; }
+  return { html: (tag ? `<b>${tag}</b> · ` : "") + items.map(i => i.label).join(" · "), cls };
 }
 
 function badges(inst) {
