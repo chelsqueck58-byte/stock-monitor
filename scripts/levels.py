@@ -12,6 +12,23 @@ def ema(closes, period):
     return round(value, 4)
 
 
+def weekly_trend(bars, span=8):
+    """Higher-timeframe confirmation done properly: aggregate daily -> weekly
+    (last close of each ~5-day block) and check the weekly trend is up. One
+    timeframe above a daily 1D-1M swing, not a slow 100-day daily lag."""
+    closes = [bar["close"] for bar in bars]
+    if len(closes) < span * 5 + 10:
+        return None
+    idx = list(range(len(closes) - 1, -1, -5))[::-1]  # weekly closes, ending on latest
+    weekly = [closes[i] for i in idx]
+    now = ema(weekly, span)
+    prev = ema(weekly[:-2], span) if len(weekly) > span + 2 else None
+    if now is None:
+        return None
+    rising = prev is None or now > prev
+    return weekly[-1] > now and rising
+
+
 def donchian_signal(bars, period):
     """CTA-style trend-follower state from a Donchian breakout of the prior `period`.
 
@@ -159,8 +176,7 @@ def summarise(bars, settings):
     levels = compute_levels(bars, settings)
 
     # 21EMA is never a signal in isolation — qualify it with the broader trend
-    # (50SMA structure), the higher timeframe (100SMA regime), and volume.
-    sma100 = sum(closes[-100:]) / 100 if len(closes) >= 100 else None
+    # (50SMA structure), the higher timeframe (weekly), and volume.
     sma50_prev = sum(closes[-60:-10]) / 50 if len(closes) >= 60 else None
     # 5-day vs 20-day average volume — robust to the current incomplete session
     # (a single partial last bar would otherwise read as fake-low volume).
@@ -170,7 +186,7 @@ def summarise(bars, settings):
     vol_ratio = round(vol5 / avg_vol, 2) if avg_vol else None
     above50 = sma50 is not None and last_close > sma50
     sma50_up = sma50 is not None and sma50_prev is not None and sma50 > sma50_prev
-    htf_up = sma100 is not None and last_close > sma100
+    htf_up = weekly_trend(bars) is True
     entry_quality = None
     if signal["entry_setup"]:
         entry_quality = "strong" if (above50 and sma50_up and htf_up) else "weak"
