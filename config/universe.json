@@ -69,6 +69,21 @@
         {"id": "SGX", "label": "SGX Ltd", "yahoo": "S68.SI", "ibkr": {"symbol": "S68", "sec_type": "STK", "exchange": "SGX", "currency": "SGD"}},
         {"id": "CAPLAND", "label": "CapitaLand Investment", "yahoo": "9CI.SI", "ibkr": {"symbol": "9CI", "sec_type": "STK", "exchange": "SGX", "currency": "SGD"}}
       ]
+    },
+    {
+      "name": "Consumer",
+      "members": [
+        {"id": "MCD", "label": "McDonald's", "yahoo": "MCD", "ibkr": {"symbol": "MCD", "sec_type": "STK"}},
+        {"id": "SBUX", "label": "Starbucks", "yahoo": "SBUX", "ibkr": {"symbol": "SBUX", "sec_type": "STK"}},
+        {"id": "PEP", "label": "PepsiCo", "yahoo": "PEP", "ibkr": {"symbol": "PEP", "sec_type": "STK"}},
+        {"id": "WMT", "label": "Walmart", "yahoo": "WMT", "ibkr": {"symbol": "WMT", "sec_type": "STK"}},
+        {"id": "COST", "label": "Costco", "yahoo": "COST", "ibkr": {"symbol": "COST", "sec_type": "STK"}},
+        {"id": "PG", "label": "Procter & Gamble", "yahoo": "PG", "ibkr": {"symbol": "PG", "sec_type": "STK"}},
+        {"id": "KO", "label": "Coca-Cola", "yahoo": "KO", "ibkr": {"symbol": "KO", "sec_type": "STK"}},
+        {"id": "NKE", "label": "Nike", "yahoo": "NKE", "ibkr": {"symbol": "NKE", "sec_type": "STK"}},
+        {"id": "DPZ", "label": "Domino's Pizza", "yahoo": "DPZ", "ibkr": {"symbol": "DPZ", "sec_type": "STK"}},
+        {"id": "GRMN", "label": "Garmin", "yahoo": "GRMN", "ibkr": {"symbol": "GRMN", "sec_type": "STK"}}
+      ]
     }
   ],
   "settings": {

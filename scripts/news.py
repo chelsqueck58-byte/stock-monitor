@@ -110,13 +110,19 @@ def main():
 
     ticker_list = "\n".join(f"{tid} = {label}" for tid, label in tickers.items())
     prompt = (
-        "You map market news to a fixed ticker list. TICKERS (id = company):\n"
+        "You map market news to a fixed ticker list for a trading dashboard. Accuracy "
+        "is critical.\nTICKERS (id = company):\n"
         f"{ticker_list}\n\n"
-        "From the NEWS ITEMS below, for each ticker that is clearly the SUBJECT of an "
-        "item (direct mention or unambiguous reference), write ONE concise catalyst/focus "
-        "line (<=120 chars) with the source handle in brackets. Skip tickers with no real "
-        "news. Ignore vague macro. Output ONLY JSON: {\"TICKER_ID\": \"line [src]\", ...}. "
-        "No prose.\n\nNEWS ITEMS:\n" + "\n".join(items)
+        "RULES:\n"
+        "- Include a ticker ONLY if a NEWS ITEM below explicitly names it or its company. "
+        "No inference, no guessing.\n"
+        "- The line must be fully supported by the source text. Do NOT add numbers, dates, "
+        "prices or claims that are not in the source. Never fabricate.\n"
+        "- Keep the source tag in brackets exactly as given, e.g. [X @jukan05], [TG @tradehaven], [Email].\n"
+        "- One concise line per ticker, <=140 chars. If you are unsure a ticker is really "
+        "the subject, OMIT it.\n"
+        "Output ONLY JSON: {\"TICKER_ID\": \"line [src]\"}. No prose.\n\n"
+        "NEWS ITEMS:\n" + "\n".join(items)
     )
     result = parse_json(ask_claude(prompt))
     clean = {k: v for k, v in result.items() if k in tickers and isinstance(v, str) and v.strip()}
