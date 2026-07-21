@@ -51,8 +51,8 @@
 <header>
   <h1>stock-monitor</h1><span class="meta" id="meta">loading…</span>
   <span class="legend">
-    <b class="ema">21EMA</b> (entry) · <b class="sma">50SMA</b> · <b class="vwap">VWAP</b> · S/R lines ·
-    ▲ above rising 21EMA · ⚡ pullback entry · CTA↑ = 20-day breakout · chart = YTD
+    <b class="ema">21EMA</b> · <b class="sma">50SMA</b> · <b class="vwap">VWAP</b> · S/R lines ·
+    B/S = entry/exit markers · ⚡ pullback entry · CTA↑ = 20-day breakout · chart = YTD (area)
   </span>
 </header>
 <main id="grid"></main>
@@ -127,27 +127,39 @@ function drawChart(el, inst) {
     timeScale: { borderColor: "#21262d", timeVisible: false },
     crosshair: { mode: 0 }, height: 150,
   });
-  const candle = chart.addCandlestickSeries({
-    upColor: "#26a641", downColor: "#f85149", borderVisible: false,
-    wickUpColor: "#26a641", wickDownColor: "#f85149",
+  // Clean filled-area price line (no candles, no in-plot number labels).
+  const area = chart.addAreaSeries({
+    lineColor: "#f0648b", lineWidth: 2,
+    topColor: "rgba(240,100,139,.28)", bottomColor: "rgba(240,100,139,.02)",
+    priceLineVisible: true, lastValueVisible: true,
   });
-  candle.setData(inst.bars.map(b => ({ time: b.d, open: b.o, high: b.h, low: b.l, close: b.c })));
+  area.setData(inst.bars.map(b => ({ time: b.d, value: b.c })));
+
   const closes = inst.bars.map(b => b.c);
   const overlays = [
-    ["#e3b341", 2, emaSeries(closes, 21)],
-    ["#58a6ff", 1, smaSeries(closes, 50)],
-    ["#bc8cff", 1, avwapSeries(inst.bars)],
+    ["#e3b341", emaSeries(closes, 21)],   // 21 EMA
+    ["#58a6ff", smaSeries(closes, 50)],   // 50 SMA
+    ["#bc8cff", avwapSeries(inst.bars)],  // anchored VWAP
   ];
-  for (const [color, width, series] of overlays) {
-    const line = chart.addLineSeries({ color, lineWidth: width, priceLineVisible: false, lastValueVisible: false });
+  for (const [color, series] of overlays) {
+    const line = chart.addLineSeries({ color, lineWidth: 1, priceLineVisible: false, lastValueVisible: false });
     line.setData(inst.bars.map((b, i) => ({ time: b.d, value: series[i] })).filter(x => x.value != null));
   }
-  if (!STALE && inst.levels) {
-    for (const win of ["3m"]) {
-      const lv = inst.levels[win]; if (!lv) continue;
-      (lv.support || []).forEach(s => candle.createPriceLine({ price: s.price, color: "#26a641", lineWidth: 1, lineStyle: 2, axisLabelVisible: true, title: "S" }));
-      (lv.resistance || []).forEach(r => candle.createPriceLine({ price: r.price, color: "#f85149", lineWidth: 1, lineStyle: 2, axisLabelVisible: true, title: "R" }));
-    }
+  // S/R as subtle lines, no axis numbers (keep the chart uncluttered).
+  if (!STALE && inst.levels && inst.levels["3m"]) {
+    const lv = inst.levels["3m"];
+    (lv.support || []).forEach(s => area.createPriceLine({ price: s.price, color: "rgba(38,166,65,.5)", lineWidth: 1, lineStyle: 2, axisLabelVisible: false }));
+    (lv.resistance || []).forEach(r => area.createPriceLine({ price: r.price, color: "rgba(248,81,73,.5)", lineWidth: 1, lineStyle: 2, axisLabelVisible: false }));
+  }
+  // B / S markers on the price line.
+  if (inst.markers && inst.markers.length) {
+    area.setMarkers(inst.markers.map(m => ({
+      time: m.t,
+      position: m.s === "B" ? "belowBar" : "aboveBar",
+      color: m.s === "B" ? "#26a641" : "#f85149",
+      shape: m.s === "B" ? "arrowUp" : "arrowDown",
+      text: m.s,
+    })));
   }
   const lastDate = inst.bars[inst.bars.length - 1].d;
   try { chart.timeScale().setVisibleRange({ from: `${lastDate.slice(0, 4)}-01-01`, to: lastDate }); }
