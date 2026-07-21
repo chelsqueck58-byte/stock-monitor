@@ -95,8 +95,18 @@ def main():
     except SourceError as exc:
         sys.exit(str(exc))
 
+    # Last-good cache: a transient miss reuses the prior bars rather than dropping
+    # the name off the site entirely (graceful degradation).
+    prev = {}
+    if OUTPUT.exists():
+        try:
+            prev = {e["id"]: e for e in json.loads(OUTPUT.read_text()).get("instruments", [])}
+        except (json.JSONDecodeError, OSError):
+            pass
+
     entries = []
     failures = []
+    reused = []
 
     for group in config["groups"]:
         for member in group["members"]:
@@ -114,13 +124,21 @@ def main():
                     "label": member["label"],
                     "group": group["name"],
                     "currency": meta.get("currency"),
+                    "stale": False,
                 })
                 entries.append(entry)
                 print(f"  ok   {member['id']:<8} {entry['last_close']:>12,.2f}  "
                       f"{len(bars)} bars")
             except SourceError as exc:
-                failures.append(member["id"])
-                print(f"  FAIL {member['id']:<8} {exc}")
+                cached = prev.get(member["id"])
+                if cached:
+                    cached["stale"] = True
+                    entries.append(cached)
+                    reused.append(member["id"])
+                    print(f"  STALE {member['id']:<8} reused last-good ({exc})")
+                else:
+                    failures.append(member["id"])
+                    print(f"  FAIL {member['id']:<8} {exc}")
 
     if not entries:
         sys.exit("No instruments fetched - refusing to write data.json")
@@ -149,7 +167,9 @@ def main():
         head = f"<b>Levels touched</b> ({len(triggered)})\n"
         notify(head + "\n".join(f"• {line}" for line in triggered[:20]))
     if failures:
-        notify(f"<b>Data gap</b>: {len(failures)} failed - {', '.join(failures[:10])}")
+        notify(f"⚠ <b>Data gap</b>: {len(failures)} dropped — {', '.join(failures[:10])}")
+    if reused:
+        notify(f"⚠ <b>Stale</b>: {len(reused)} names reused last-good — {', '.join(reused[:10])}")
 
 
 if __name__ == "__main__":

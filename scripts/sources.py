@@ -31,19 +31,24 @@ class YahooSource:
             raise SourceError(f"{member['id']}: no yahoo symbol configured")
 
         params = {"range": f"{lookback_days}d", "interval": "1d"}
-        try:
-            response = requests.get(
-                YAHOO_CHART.format(symbol=symbol),
-                params=params,
-                headers=HEADERS,
-                timeout=20,
-            )
-            response.raise_for_status()
-            payload = response.json()
-        except requests.RequestException as exc:
-            raise SourceError(f"{member['id']}: network error - {exc}") from exc
-        except ValueError as exc:
-            raise SourceError(f"{member['id']}: bad JSON - {exc}") from exc
+        payload = None
+        last_exc = None
+        for attempt in range(3):  # ride out transient rate-limits / network blips
+            try:
+                response = requests.get(
+                    YAHOO_CHART.format(symbol=symbol),
+                    params=params,
+                    headers=HEADERS,
+                    timeout=20,
+                )
+                response.raise_for_status()
+                payload = response.json()
+                break
+            except (requests.RequestException, ValueError) as exc:
+                last_exc = exc
+                time.sleep(1.5 * (attempt + 1))
+        if payload is None:
+            raise SourceError(f"{member['id']}: fetch failed after 3 tries - {last_exc}")
 
         chart = payload.get("chart", {})
         if chart.get("error"):
