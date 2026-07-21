@@ -22,7 +22,7 @@
   header .legend b.vwap { color:var(--vwap); }
   #stale { display:none; background:var(--down); color:#fff; padding:10px 16px; font-weight:600; text-align:center; }
   #stale.show { display:block; }
-  main { padding:12px; display:grid; gap:10px; grid-template-columns:repeat(auto-fill,minmax(320px,1fr)); }
+  main { padding:12px; display:grid; gap:10px; grid-template-columns:repeat(auto-fill,minmax(460px,1fr)); }
   .section { grid-column:1/-1; font-size:12px; font-weight:600; color:var(--muted);
     text-transform:uppercase; letter-spacing:.5px; padding:8px 2px 2px; border-bottom:1px solid var(--border); }
   .card { background:var(--panel); border:1px solid var(--border); border-radius:8px; overflow:hidden; }
@@ -40,7 +40,7 @@
   .badge.entry { color:var(--ema); background:rgba(227,179,65,.16); }
   .badge.cta-long { color:var(--up); background:rgba(38,166,65,.10); }
   .badge.cta-short { color:var(--down); background:rgba(248,81,73,.10); }
-  .chart { height:150px; }
+  .chart { height:300px; }
   .note { width:100%; border:none; border-top:1px solid var(--border); background:transparent;
     color:var(--text); padding:6px 10px; resize:vertical; min-height:32px; font:inherit; font-size:12px; }
   .note::placeholder { color:var(--muted); }
@@ -52,7 +52,7 @@
   <h1>stock-monitor</h1><span class="meta" id="meta">loading…</span>
   <span class="legend">
     <b class="ema">21EMA</b> · <b class="sma">50SMA</b> · <b class="vwap">VWAP</b> · S/R lines ·
-    B/S = entry/exit markers · ⚡ pullback entry · CTA↑ = 20-day breakout · chart = YTD (area)
+    ⚡ pullback entry · CTA↑ = 20-day breakout · chart = YTD (area)
   </span>
 </header>
 <main id="grid"></main>
@@ -125,7 +125,7 @@ function drawChart(el, inst) {
     grid: { vertLines: { color: "#1b2027" }, horzLines: { color: "#1b2027" } },
     rightPriceScale: { borderColor: "#21262d" },
     timeScale: { borderColor: "#21262d", timeVisible: false },
-    crosshair: { mode: 0 }, height: 150,
+    crosshair: { mode: 0 }, height: 300,
   });
   // Clean filled-area price line (no candles, no in-plot number labels).
   const area = chart.addAreaSeries({
@@ -150,16 +150,6 @@ function drawChart(el, inst) {
     const lv = inst.levels["3m"];
     (lv.support || []).forEach(s => area.createPriceLine({ price: s.price, color: "rgba(38,166,65,.5)", lineWidth: 1, lineStyle: 2, axisLabelVisible: false }));
     (lv.resistance || []).forEach(r => area.createPriceLine({ price: r.price, color: "rgba(248,81,73,.5)", lineWidth: 1, lineStyle: 2, axisLabelVisible: false }));
-  }
-  // B / S markers on the price line.
-  if (inst.markers && inst.markers.length) {
-    area.setMarkers(inst.markers.map(m => ({
-      time: m.t,
-      position: m.s === "B" ? "belowBar" : "aboveBar",
-      color: m.s === "B" ? "#26a641" : "#f85149",
-      shape: m.s === "B" ? "arrowUp" : "arrowDown",
-      text: m.s,
-    })));
   }
   const lastDate = inst.bars[inst.bars.length - 1].d;
   try { chart.timeScale().setVisibleRange({ from: `${lastDate.slice(0, 4)}-01-01`, to: lastDate }); }

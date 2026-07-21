@@ -61,40 +61,6 @@ def trend_signal(bars, settings):
     return {"ema": ema_now, "trend": trend, "entry_setup": entry}
 
 
-def signal_markers(bars, settings):
-    """Historical B/S markers for the chart: B = new pullback-entry into a rising
-    entry-EMA, S = close breaks back below it (trend break). Transitions only."""
-    closes = [bar["close"] for bar in bars]
-    period = settings.get("entry_ema", 21)
-    pullback = settings.get("entry_pullback_pct", 2.0)
-    if len(closes) < period + 2:
-        return []
-
-    k = 2 / (period + 1)
-    ema_line = [None] * len(closes)
-    ema_line[period - 1] = sum(closes[:period]) / period
-    for i in range(period, len(closes)):
-        ema_line[i] = closes[i] * k + ema_line[i - 1] * (1 - k)
-
-    markers = []
-    prev_zone = False
-    prev_above = None
-    for i in range(period, len(closes)):
-        if ema_line[i] is None or ema_line[i - 1] is None:
-            continue
-        rising = ema_line[i] > ema_line[i - 1]
-        up = closes[i] > ema_line[i] and rising
-        zone = up and abs((closes[i] / ema_line[i] - 1) * 100) <= pullback
-        if zone and not prev_zone:
-            markers.append({"t": bars[i]["date"], "s": "B"})
-        if prev_above and closes[i] < ema_line[i]:
-            markers.append({"t": bars[i]["date"], "s": "S"})
-        prev_zone = zone
-        prev_above = closes[i] > ema_line[i]
-
-    return markers[-30:]
-
-
 def swing_points(bars, window):
     """Pivot highs and lows: extremes within +/- window bars."""
     highs = []
@@ -208,7 +174,6 @@ def summarise(bars, settings):
         "trend": signal["trend"],
         "entry_setup": signal["entry_setup"],
         "cta": donchian_signal(bars, settings.get("donchian_period", 20)),
-        "markers": signal_markers(bars, settings),
         "levels": levels,
         "flags": proximity_flags(last_close, levels, settings["proximity_alert_pct"]),
         "bars": [
