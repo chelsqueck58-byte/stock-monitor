@@ -31,30 +31,6 @@ def load_config():
         sys.exit(f"Bad config JSON: {exc}")
 
 
-def adr_premium(entries, groups):
-    """Percent premium of an ADR over its local line, FX-unadjusted."""
-    by_id = {entry["id"]: entry for entry in entries}
-    premiums = {}
-
-    for group in groups:
-        for member in group["members"]:
-            pair = member.get("adr_pair")
-            if not pair:
-                continue
-            adr = by_id.get(member["id"])
-            local = by_id.get(pair["local"])
-            if not adr or not local or not local.get("last_close"):
-                continue
-            implied = local["last_close"] * pair["ratio"]
-            premiums[member["id"]] = {
-                "local": pair["local"],
-                "ratio": pair["ratio"],
-                "note": "FX-unadjusted; compare trend, not the absolute level",
-                "raw_pct": round((adr["last_close"] / implied - 1) * 100, 2),
-            }
-    return premiums
-
-
 def notify(message):
     """Push an alert to Telegram, if the sender is configured."""
     if not TELEGRAM.exists():
@@ -149,19 +125,11 @@ def main():
     if not entries:
         sys.exit("No instruments fetched - refusing to write data.json")
 
-    premiums = adr_premium(entries, config["groups"])
-
-    # ma_series is fully derivable from bars in the browser; dropping it here
-    # roughly halves the payload (see HANDOFF section 4).
-    for entry in entries:
-        entry.pop("ma_series", None)
-
     payload = {
         "generated_at": datetime.now(timezone.utc).isoformat(),
         "source": source.name,
         "stale_after_hours": settings["stale_after_hours"],
         "failures": failures,
-        "adr_premium": premiums,
         "instruments": entries,
     }
 

@@ -98,7 +98,7 @@ class IbkrSource:
         if self._ib is not None:
             return self._ib
         try:
-            from ib_insync import IB
+            from ib_insync import IB, util
         except ImportError as exc:
             raise SourceError(
                 "ib_insync not installed. Run: uv pip install ib_insync"
@@ -106,7 +106,11 @@ class IbkrSource:
 
         ib = IB()
         try:
-            ib.connect(self.host, self.port, clientId=self.client_id, timeout=15)
+            # Low-level connect: socket + API handshake only. The high-level
+            # ib.connect() also syncs positions/executions, which hangs on this
+            # account and which a read-only price feed never needs.
+            util.run(ib.client.connectAsync(
+                self.host, self.port, clientId=self.client_id, timeout=15))
         except Exception as exc:
             raise SourceError(
                 f"cannot reach IB Gateway at {self.host}:{self.port} - "

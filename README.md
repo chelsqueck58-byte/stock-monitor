@@ -1,4 +1,4 @@
 # stock-monitor
 
-Read-only stock monitoring for a ~35-name tech/China universe.
+Read-only stock monitoring for a tech / China / AI-power / SG universe.
 See HANDOFF.md for full context, decisions, and setup.

@@ -3,11 +3,11 @@
     {
       "name": "Indices",
       "members": [
-        {"id": "SPX", "label": "S&P 500", "yahoo": "^GSPC", "ibkr": {"symbol": "SPX", "sec_type": "IND"}},
-        {"id": "NDX", "label": "Nasdaq Comp", "yahoo": "^IXIC", "ibkr": {"symbol": "COMP", "sec_type": "IND"}},
-        {"id": "SOX", "label": "PHLX Semis", "yahoo": "^SOX", "ibkr": {"symbol": "SOX", "sec_type": "IND"}},
-        {"id": "HSTECH", "label": "HS Tech (3033 ETF proxy)", "yahoo": "3033.HK", "ibkr": {"symbol": "HSTECH", "sec_type": "IND"}},
-        {"id": "HSI", "label": "Hang Seng", "yahoo": "^HSI", "ibkr": {"symbol": "HSI", "sec_type": "IND"}}
+        {"id": "SPX", "label": "S&P 500", "yahoo": "^GSPC", "ibkr": {"symbol": "SPX", "sec_type": "IND", "exchange": "CBOE", "currency": "USD"}},
+        {"id": "NDX", "label": "Nasdaq Comp", "yahoo": "^IXIC", "ibkr": {"symbol": "COMP", "sec_type": "IND", "exchange": "NASDAQ", "currency": "USD"}},
+        {"id": "SOX", "label": "PHLX Semis", "yahoo": "^SOX", "ibkr": {"symbol": "SOX", "sec_type": "IND", "exchange": "PHLX", "currency": "USD"}},
+        {"id": "HSTECH", "label": "HS Tech (3033 ETF proxy)", "yahoo": "3033.HK", "ibkr": {"symbol": "HSTECH", "sec_type": "IND", "exchange": "HKFE", "currency": "HKD"}},
+        {"id": "HSI", "label": "Hang Seng", "yahoo": "^HSI", "ibkr": {"symbol": "HSI", "sec_type": "IND", "exchange": "HKFE", "currency": "HKD"}}
       ]
     },
     {
@@ -30,7 +30,7 @@
         {"id": "MU", "label": "Micron", "yahoo": "MU", "ibkr": {"symbol": "MU", "sec_type": "STK"}},
         {"id": "AVGO", "label": "Broadcom", "yahoo": "AVGO", "ibkr": {"symbol": "AVGO", "sec_type": "STK"}},
         {"id": "ASML", "label": "ASML", "yahoo": "ASML", "ibkr": {"symbol": "ASML", "sec_type": "STK"}},
-        {"id": "TSM", "label": "TSMC ADR", "yahoo": "TSM", "ibkr": {"symbol": "TSM", "sec_type": "STK"}, "adr_pair": {"local": "2330", "ratio": 5}},
+        {"id": "TSM", "label": "TSMC ADR", "yahoo": "TSM", "ibkr": {"symbol": "TSM", "sec_type": "STK"}},
         {"id": "SMCI", "label": "Super Micro", "yahoo": "SMCI", "ibkr": {"symbol": "SMCI", "sec_type": "STK"}}
       ]
     },
@@ -76,6 +76,32 @@
         {"id": "SGX", "label": "SGX Ltd", "yahoo": "S68.SI", "ibkr": {"symbol": "S68", "sec_type": "STK", "exchange": "SGX", "currency": "SGD"}},
         {"id": "CAPLAND", "label": "CapitaLand Invest", "yahoo": "9CI.SI", "ibkr": {"symbol": "9CI", "sec_type": "STK", "exchange": "SGX", "currency": "SGD"}},
         {"id": "KEPPEL", "label": "Keppel", "yahoo": "BN4.SI", "ibkr": {"symbol": "BN4", "sec_type": "STK", "exchange": "SGX", "currency": "SGD"}}
+      ]
+    },
+    {
+      "name": "AI power / energy",
+      "members": [
+        {"id": "VST", "label": "Vistra", "yahoo": "VST", "ibkr": {"symbol": "VST", "sec_type": "STK"}},
+        {"id": "CEG", "label": "Constellation Energy", "yahoo": "CEG", "ibkr": {"symbol": "CEG", "sec_type": "STK"}},
+        {"id": "GEV", "label": "GE Vernova", "yahoo": "GEV", "ibkr": {"symbol": "GEV", "sec_type": "STK"}},
+        {"id": "TLN", "label": "Talen Energy", "yahoo": "TLN", "ibkr": {"symbol": "TLN", "sec_type": "STK"}},
+        {"id": "NRG", "label": "NRG Energy", "yahoo": "NRG", "ibkr": {"symbol": "NRG", "sec_type": "STK"}},
+        {"id": "ETN", "label": "Eaton", "yahoo": "ETN", "ibkr": {"symbol": "ETN", "sec_type": "STK"}},
+        {"id": "PWR", "label": "Quanta Services", "yahoo": "PWR", "ibkr": {"symbol": "PWR", "sec_type": "STK"}},
+        {"id": "CCJ", "label": "Cameco", "yahoo": "CCJ", "ibkr": {"symbol": "CCJ", "sec_type": "STK"}}
+      ]
+    },
+    {
+      "name": "AI hardware / components",
+      "members": [
+        {"id": "ALGM", "label": "Allegro MicroSystems", "yahoo": "ALGM", "ibkr": {"symbol": "ALGM", "sec_type": "STK"}},
+        {"id": "MRVL", "label": "Marvell", "yahoo": "MRVL", "ibkr": {"symbol": "MRVL", "sec_type": "STK"}},
+        {"id": "ANET", "label": "Arista Networks", "yahoo": "ANET", "ibkr": {"symbol": "ANET", "sec_type": "STK"}},
+        {"id": "CRDO", "label": "Credo Technology", "yahoo": "CRDO", "ibkr": {"symbol": "CRDO", "sec_type": "STK"}},
+        {"id": "ALAB", "label": "Astera Labs", "yahoo": "ALAB", "ibkr": {"symbol": "ALAB", "sec_type": "STK"}},
+        {"id": "MPWR", "label": "Monolithic Power", "yahoo": "MPWR", "ibkr": {"symbol": "MPWR", "sec_type": "STK"}},
+        {"id": "VRT", "label": "Vertiv", "yahoo": "VRT", "ibkr": {"symbol": "VRT", "sec_type": "STK"}},
+        {"id": "ARM", "label": "Arm Holdings", "yahoo": "ARM", "ibkr": {"symbol": "ARM", "sec_type": "STK"}}
       ]
     }
   ],

@@ -2,27 +2,17 @@
 
 
 def moving_averages(bars, periods):
-    """Latest SMA for each period, plus the full series for charting."""
+    """Latest SMA for each period. The chart recomputes full series from bars."""
     closes = [bar["close"] for bar in bars]
     latest = {}
-    series = {}
 
     for period in periods:
         if len(closes) < period:
             latest[str(period)] = None
-            series[str(period)] = []
             continue
-        line = []
-        running = sum(closes[:period])
-        line.append(running / period)
-        for index in range(period, len(closes)):
-            running += closes[index] - closes[index - period]
-            line.append(running / period)
-        padded = [None] * (period - 1) + line
-        series[str(period)] = [round(value, 4) if value else None for value in padded]
-        latest[str(period)] = round(line[-1], 4)
+        latest[str(period)] = round(sum(closes[-period:]) / period, 4)
 
-    return latest, series
+    return latest
 
 
 def swing_points(bars, window):
@@ -89,8 +79,6 @@ def compute_levels(bars, settings):
         out[label] = {
             "support": sorted(support, key=lambda level: -level["price"])[:3],
             "resistance": sorted(resistance, key=lambda level: level["price"])[:3],
-            "range_high": round(max(bar["high"] for bar in segment if bar["high"]), 4),
-            "range_low": round(min(bar["low"] for bar in segment if bar["low"]), 4),
         }
 
     return out
@@ -119,7 +107,7 @@ def proximity_flags(last_close, levels, threshold_pct):
 def summarise(bars, settings):
     """Everything the site needs for one instrument."""
     last_close = bars[-1]["close"]
-    ma_latest, ma_series = moving_averages(bars, settings["ma_periods"])
+    ma_latest = moving_averages(bars, settings["ma_periods"])
     levels = compute_levels(bars, settings)
 
     ytd_open = next(
@@ -134,7 +122,6 @@ def summarise(bars, settings):
         "change_pct": round((last_close / prior_close - 1) * 100, 2) if prior_close else None,
         "ytd_pct": round((last_close / ytd_open - 1) * 100, 2) if ytd_open else None,
         "ma": ma_latest,
-        "ma_series": ma_series,
         "vs_ma": {
             period: round((last_close / value - 1) * 100, 2)
             for period, value in ma_latest.items() if value
