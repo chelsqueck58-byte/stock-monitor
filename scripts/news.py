@@ -27,7 +27,8 @@ NEWS_OUT = ROOT / "data" / "news.json"
 EVENTS_OUT = ROOT / "data" / "events.json"
 X_DIGEST = Path.home() / "x-reader" / "digest.json"
 GMAIL_TOKEN = Path.home() / "bots" / "evening-brief" / "tokens" / "token_chelsfinnews.pkl"
-TG_SCRAPER = Path.home() / "telegram-reader" / "scrape_channel.py"
+TG_SCRAPER = Path.home() / "telegram-reader" / "scrape_incremental.py"
+TG_STATE = ROOT / "data" / "telegram-state.json"
 TG_CHANNELS = ["tradehaven", "Fin_Watch", "tech", "infinityhedge"]
 TELEGRAM_RAW_OUT = ROOT / "data" / "telegram-raw.txt"
 EARNINGS_SOON_DAYS = 10
@@ -75,10 +76,14 @@ def collect_gmail():
 
 
 def collect_telegram():
+    """Incremental: only posts newer than the last check (any run, morning or
+    evening) come back — state is a shared file keyed by channel -> last post
+    ID, also written to by the evening market-brief run so neither pass
+    reprocesses what the other already saw."""
     items = []
     for ch in TG_CHANNELS:
         try:
-            r = subprocess.run(["python3", str(TG_SCRAPER), ch, "1"],
+            r = subprocess.run(["python3", str(TG_SCRAPER), ch, str(TG_STATE), "2"],
                                capture_output=True, text=True, timeout=90)
             if r.returncode == 0 and r.stdout.strip():
                 items.append(f"[Telegram @{ch}] {r.stdout[:2500]}")
