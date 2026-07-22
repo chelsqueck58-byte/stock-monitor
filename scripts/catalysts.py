@@ -20,6 +20,8 @@ import datetime
 import subprocess
 from pathlib import Path
 
+import feed
+
 ROOT = Path(__file__).resolve().parent.parent
 CONFIG = ROOT / "config" / "universe.json"
 DATA_JSON = ROOT / "site" / "data.json"
@@ -107,25 +109,36 @@ def main(force=None):
 
     for i in range(0, len(targets), BATCH):
         batch = targets[i:i + BATCH]
-        listing = "\n".join(f"- {tid} ({label})" for tid, label in batch)
+        blocks = []
+        for tid, label in batch:
+            block = f"- {tid} ({label})"
+            excerpt = feed.relevant_excerpt(tid, label)
+            if excerpt:
+                block += "\n  TODAY'S FEED (Telegram/Gmail/X) mentioning this name:\n  " + excerpt.replace("\n", "\n  ")
+            blocks.append(block)
+        listing = "\n".join(blocks)
         prompt = (
-            "For EACH stock below, use web search to find its single most important NEAR-TERM "
-            "catalyst or storyline right now — over the next 1-3 months. This is NOT limited to "
-            "earnings: consider product launches, capital returns (buybacks/dividends), regulatory "
-            "or legal decisions, capacity/supply-chain moves, M&A, guidance changes, major analyst "
-            "calls, or competitive dynamics — whatever is genuinely the market's live focus for "
-            "that name. Prioritize sources from the last 7 days — older is only acceptable if it's "
-            "still the single most relevant near-term catalyst (e.g. a still-pending earnings date). "
-            "Beyond mainstream English-language outlets, also consider: official filings/IR pages "
-            "(sec.gov, company investor-relations sites) as most authoritative when available; "
-            "Chinese-language financial media (qq.com, stcn.com, aastocks.com, sina.com.cn, "
-            "toutiao.com, ainvest.com, futunn.com, news.cn) for China/HK-listed names; and "
-            "secondary outlets (biggo.com finance, moomoo, marketbeat.com) for others. "
-            "One line per stock, <=170 chars, grounded in a real source, ending with the source in "
-            "brackets e.g. [Reuters]. If nothing credible, omit that stock.\n\n"
+            "For EACH stock below, find its single most important NEAR-TERM catalyst or storyline "
+            "right now — over the next 1-3 months. This is NOT limited to earnings: consider product "
+            "launches, capital returns (buybacks/dividends), regulatory or legal decisions, capacity/"
+            "supply-chain moves, M&A, guidance changes, major analyst calls, or competitive dynamics — "
+            "whatever is genuinely the market's live focus for that name. Some stocks below have a "
+            "TODAY'S FEED excerpt (from Telegram channels, Gmail newsletters, or X posts already "
+            "collected today) — check it FIRST; if it already names a credible, current catalyst, use "
+            "it (still attribute a source/outlet if the excerpt names one). Only fall back to web "
+            "search where the feed is absent or doesn't answer the question. Prioritize sources from "
+            "the last 7 days — older is only acceptable if it's still the single most relevant "
+            "near-term catalyst (e.g. a still-pending earnings date). Beyond mainstream English-"
+            "language outlets, also consider: official filings/IR pages (sec.gov, company investor-"
+            "relations sites) as most authoritative when available; Chinese-language financial media "
+            "(qq.com, stcn.com, aastocks.com, sina.com.cn, toutiao.com, ainvest.com, futunn.com, "
+            "news.cn) for China/HK-listed names; and secondary outlets (biggo.com finance, moomoo, "
+            "marketbeat.com) for others. One line per stock, <=170 chars, grounded in a real source, "
+            "ending with the source in brackets e.g. [Reuters] or [Telegram] if from the feed. If "
+            "nothing credible from either the feed or a search, omit that stock.\n\n"
             f"STOCKS:\n{listing}\n\n"
-            "CRITICAL: after searching, your reply must be NOTHING but the JSON object — no "
-            "explanation before or after.\n"
+            "CRITICAL: after checking the feed / searching, your reply must be NOTHING but the JSON "
+            "object — no explanation before or after.\n"
             'Output ONLY: {"TICKER_ID": "line [src]"}'
         )
         raw = ask_claude(prompt)

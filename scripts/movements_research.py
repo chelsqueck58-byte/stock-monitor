@@ -6,6 +6,7 @@ Uses the session's default model (Sonnet) — no hardcoded Fable calls.
 
 Run:  .venv/bin/python scripts/movements_research.py
 """
+import datetime
 import os
 import re
 import json
@@ -14,10 +15,15 @@ import threading
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
+import feed
+
 ROOT = Path(__file__).resolve().parent.parent
 MOVES = ROOT / "data" / "moves.json"
 CHUNK = 12
 WORKERS = 6
+FEED_RELEVANT_DAYS = 2  # feed.py's excerpt is a single-day snapshot, not an
+# archive - only worth attaching for moves recent enough that today's feed
+# could plausibly have covered them; older moves stay web-search-only.
 _lock = threading.Lock()
 
 EXTRA_SOURCE_HINT = (
@@ -56,12 +62,27 @@ def parse_array(text):
 
 def research_chunk(item):
     tid, label, moves = item
+    today = datetime.date.today()
+    recent = any(
+        (today - datetime.date.fromisoformat(m["d"])).days <= FEED_RELEVANT_DAYS
+        for m in moves
+    )
+    feed_block = ""
+    if recent:
+        excerpt = feed.relevant_excerpt(tid, label)
+        if excerpt:
+            feed_block = (
+                f"\nTODAY'S FEED (Telegram/Gmail/X already collected today) mentioning {label}:\n"
+                f"{excerpt}\nCheck this first for any move dated within the last {FEED_RELEVANT_DAYS} "
+                "days before web-searching it.\n"
+            )
     prompt = (
         f"You research why {label} ({tid}) moved on specific days. For EACH dated move below, "
         f"use web search to find the SPECIFIC reason it moved that day.{EXTRA_SOURCE_HINT}\n"
         'RULES: the reason must be grounded in a real dated article. If no credible source, set '
         'reason to "". Never invent. reason <=140 chars. market_wide=true ONLY if it was a '
-        "sector/index-wide move (e.g. broad China selloff), not company-specific. source = outlet.\n\n"
+        "sector/index-wide move (e.g. broad China selloff), not company-specific. source = outlet.\n"
+        f"{feed_block}\n"
         "CRITICAL OUTPUT RULE: after you finish searching, your reply must contain NOTHING but the "
         "JSON array. No explanation, no markdown fencing, no summary before or after it — the reply "
         "IS the JSON array and nothing else.\n"

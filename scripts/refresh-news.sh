@@ -19,8 +19,12 @@ export PATH="/opt/homebrew/bin:/Users/chelsqueck/.local/bin:/usr/local/bin:/usr/
 # IV rank / implied move from IBKR (keeps last iv.json if Gateway is down).
 ~/stock-monitor/.venv/bin/python ~/stock-monitor/scripts/ivdata.py || true
 # News tags + dated events, one fetch + one Claude call (was two scripts).
+# Also writes data/feed-raw.txt (X+Gmail+Telegram combined) - the two scripts
+# below read it via scripts/feed.py, so this MUST run before them.
 ~/stock-monitor/.venv/bin/python ~/stock-monitor/scripts/news.py
-# Upcoming-earnings focus (batched, grounded, freshness-TTL'd).
+# Upcoming-earnings focus (batched, grounded, freshness-TTL'd). Checks
+# feed-raw.txt for this ticker before web-searching.
 ~/stock-monitor/.venv/bin/python ~/stock-monitor/scripts/earnings_research.py || true
-# Broader non-earnings catalysts for priority tickers (freshness-TTL'd).
+# Broader non-earnings catalysts for priority tickers (freshness-TTL'd). Same
+# feed-first check as earnings_research.py above.
 ~/stock-monitor/.venv/bin/python ~/stock-monitor/scripts/catalysts.py || true

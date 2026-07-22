@@ -31,6 +31,7 @@ TG_SCRAPER = Path.home() / "telegram-reader" / "scrape_incremental.py"
 TG_STATE = ROOT / "data" / "telegram-state.json"
 TG_CHANNELS = ["tradehaven", "Fin_Watch", "tech", "infinityhedge"]
 TELEGRAM_RAW_OUT = ROOT / "data" / "telegram-raw.txt"
+FEED_RAW_OUT = ROOT / "data" / "feed-raw.txt"
 EARNINGS_SOON_DAYS = 10
 
 
@@ -160,6 +161,12 @@ def main():
     # identical content — one scrape per day, shared across consumers.
     TELEGRAM_RAW_OUT.parent.mkdir(parents=True, exist_ok=True)
     TELEGRAM_RAW_OUT.write_text("\n\n".join(tg))
+
+    # Also persist the FULL combined feed (X+Gmail+Telegram) so catalysts.py /
+    # earnings_research.py / movements_research.py can check it for a ticker
+    # before spending a web search — one fetch, shared across every consumer
+    # that wants to know what today's feeds already said about a name.
+    FEED_RAW_OUT.write_text("\n\n".join(items))
 
     ticker_list = "\n".join(f"{tid} = {label}" for tid, label in tickers.items())
     priority = priority_tickers(tickers)

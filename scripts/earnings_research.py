@@ -20,6 +20,8 @@ import datetime
 import subprocess
 from pathlib import Path
 
+import feed
+
 ROOT = Path(__file__).resolve().parent.parent
 FUND = ROOT / "data" / "fundamentals.json"
 CONFIG = ROOT / "config" / "universe.json"
@@ -93,19 +95,30 @@ def main():
 
     for i in range(0, len(due), BATCH):
         batch = due[i:i + BATCH]
-        listing = "\n".join(f"- {tid} ({label}) reports {ne}" for tid, label, ne in batch)
+        blocks = []
+        for tid, label, ne in batch:
+            block = f"- {tid} ({label}) reports {ne}"
+            excerpt = feed.relevant_excerpt(tid, label)
+            if excerpt:
+                block += "\n  TODAY'S FEED (Telegram/Gmail/X) mentioning this name:\n  " + excerpt.replace("\n", "\n  ")
+            blocks.append(block)
+        listing = "\n".join(blocks)
         prompt = (
-            "For EACH stock below, use web search. In ONE line per stock (<=170 chars): what is "
-            "the market's KEY focus/expectation for its upcoming earnings print, and how has the "
-            "stock typically REACTED to its recent earnings (e.g. jumped/fell X%)? Prioritize sources "
-            "from the last 7 days for the focus half; the reaction history can cite older quarters "
-            "since that's inherently historical. Beyond mainstream English-language outlets, also "
+            "For EACH stock below, in ONE line per stock (<=170 chars): what is the market's KEY "
+            "focus/expectation for its upcoming earnings print, and how has the stock typically "
+            "REACTED to its recent earnings (e.g. jumped/fell X%)? Some stocks below have a TODAY'S "
+            "FEED excerpt (Telegram/Gmail/X already collected today) — check it FIRST for earnings-"
+            "preview chatter; use it if credible (still attribute a source/outlet if the excerpt "
+            "names one), otherwise use web search. Prioritize sources from the last 7 days for the "
+            "focus half; the reaction history can cite older quarters since that's inherently "
+            "historical. Beyond mainstream English-language outlets, also "
             "consider: official filings/IR pages (sec.gov, company investor-relations sites) as most "
             "authoritative when available; Chinese-language financial media (qq.com, stcn.com, "
             "aastocks.com, sina.com.cn, toutiao.com, ainvest.com, futunn.com, news.cn) for China/HK-"
             "listed names; and secondary outlets (biggo.com finance, moomoo, marketbeat.com) for "
-            "others. End each line with the source outlet in brackets, e.g. [Bloomberg]. If you "
-            "cannot find credible info for a stock, omit it entirely.\n\n"
+            "others. End each line with the source outlet in brackets, e.g. [Bloomberg] or [Telegram] "
+            "if from the feed. If you cannot find credible info for a stock from either the feed or "
+            "a search, omit it entirely.\n\n"
             f"STOCKS:\n{listing}\n\n"
             'Output ONLY JSON: {"TICKER_ID": "line [src]"}. No prose.'
         )
