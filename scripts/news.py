@@ -1,7 +1,17 @@
-"""Per-ticker news/catalyst tagging. Collects text from the available sources
-(X digest, later Gmail + Telegram), asks Claude (subscription CLI, no API bill)
-to map items to the universe tickers, and writes data/news.json which build.py
-merges onto each instrument. Fundamentals move slowly; run this a few times/day.
+"""Per-ticker news/catalyst tagging + upcoming dated events, in ONE pass.
+
+Efficiency: fetches X/Gmail/Telegram ONCE (previously news.py and events.py each
+fetched independently — double Gmail/Telegram calls for no reason) and makes ONE
+Claude call that both tags catalysts AND extracts dated events. Uses the session's
+default model (Sonnet) — no hardcoded Fable calls here.
+
+Also does TARGETED web search: only for "priority" tickers (an entry/take-profit
+idea, or earnings within 10 days, or IV rank >= 80) that the feeds didn't already
+cover. Searching all 50 tickers daily would burn credits for little gain; these
+are the names where a catalyst actually matters right now.
+
+Writes data/news.json {id: "line [src]"} and data/events.json {id: [{date,event}]}.
+Grounded only — never invented; omitted if unsupported.
 """
 import os
 import base64
@@ -12,11 +22,14 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 CONFIG = ROOT / "config" / "universe.json"
-OUT = ROOT / "data" / "news.json"
+DATA_JSON = ROOT / "site" / "data.json"
+NEWS_OUT = ROOT / "data" / "news.json"
+EVENTS_OUT = ROOT / "data" / "events.json"
 X_DIGEST = Path.home() / "x-reader" / "digest.json"
 GMAIL_TOKEN = Path.home() / "bots" / "evening-brief" / "tokens" / "token_chelsfinnews.pkl"
 TG_SCRAPER = Path.home() / "telegram-reader" / "scrape_channel.py"
 TG_CHANNELS = ["tradehaven", "Fin_Watch", "tech"]
+EARNINGS_SOON_DAYS = 10
 
 
 def collect_x():
@@ -73,12 +86,14 @@ def collect_telegram():
     return items
 
 
-def ask_claude(prompt):
+def ask_claude(prompt, web_search=False, timeout=300):
     env = os.environ.copy()
     env.pop("ANTHROPIC_API_KEY", None)
+    cmd = ["claude", "-p", prompt]
+    if web_search:
+        cmd += ["--allowedTools", "WebSearch"]
     try:
-        r = subprocess.run(["claude", "-p", prompt], capture_output=True,
-                           text=True, env=env, timeout=300)
+        r = subprocess.run(cmd, capture_output=True, text=True, env=env, timeout=timeout)
         return (r.stdout or "").strip() if r.returncode == 0 else ""
     except Exception:
         return ""
@@ -97,41 +112,81 @@ def parse_json(text):
         return {}
 
 
+def priority_tickers(tickers):
+    """Names worth an extra (costly) web search: an active idea, earnings soon,
+    or elevated IV. Keeps web search targeted instead of blind-searching all 50."""
+    if not DATA_JSON.exists():
+        return []
+    try:
+        data = json.loads(DATA_JSON.read_text())
+    except (json.JSONDecodeError, OSError):
+        return []
+    out = []
+    for inst in data.get("instruments", []):
+        if inst["id"] not in tickers:
+            continue
+        idea = inst.get("idea")
+        iv = inst.get("iv") or {}
+        if idea or iv.get("iv_rank", 0) >= 80:
+            out.append(inst["id"])
+    return out[:15]  # hard cap — bounds the cost regardless of how many qualify
+
+
 def main():
     config = json.loads(CONFIG.read_text())
     tickers = {m["id"]: m["label"] for g in config["groups"] for m in g["members"]}
     x, gm, tg = collect_x(), collect_gmail(), collect_telegram()
     items = x + gm + tg
     print(f"sources: X={len(x)} Gmail={len(gm)} Telegram={len(tg)}")
-    if not items:
-        OUT.write_text("{}")
-        print("no source items")
-        return
 
     ticker_list = "\n".join(f"{tid} = {label}" for tid, label in tickers.items())
+    priority = priority_tickers(tickers)
+    priority_list = ", ".join(f"{t} ({tickers[t]})" for t in priority) or "(none)"
+
     prompt = (
-        "You map market news to a fixed ticker list for a trading dashboard. Accuracy "
-        "is critical.\nTICKERS (id = company):\n"
-        f"{ticker_list}\n\n"
-        "RULES:\n"
-        "- Include a ticker ONLY if a NEWS ITEM below explicitly names it or its company. "
-        "No inference, no guessing.\n"
-        "- The line must be fully supported by the source text. Do NOT add numbers, dates, "
-        "prices or claims that are not in the source. Never fabricate.\n"
-        "- Keep the source tag in brackets exactly as given, e.g. [X @jukan05], [TG @tradehaven], [Email].\n"
-        "- One concise line per ticker, <=140 chars. If you are unsure a ticker is really "
-        "the subject, OMIT it.\n"
-        "Output ONLY JSON: {\"TICKER_ID\": \"line [src]\"}. No prose.\n\n"
+        "You produce two things for a trading dashboard from the news items below: "
+        "(1) per-ticker catalyst tags, (2) upcoming dated events. Accuracy is critical — "
+        "never fabricate.\n\nTICKERS (id = company):\n" + ticker_list + "\n\n"
+        "PART 1 — news tags:\n"
+        "Include a ticker ONLY if a NEWS ITEM explicitly names it or its company. No inference. "
+        "The line must be fully supported by the source text — no added numbers/dates/claims. "
+        "Keep the source tag in brackets, e.g. [X @jukan05], [TG @tradehaven], [Email]. "
+        "One line per ticker, <=140 chars.\n\n"
+        "PART 2 — dated events:\n"
+        "Extract UPCOMING, SPECIFICALLY-DATED catalysts (product launch, conference, investor day, "
+        "regulatory deadline) with a concrete future date in the news. SKIP earnings dates. Do not "
+        "invent dates.\n\n"
+        "PART 3 — targeted web search (use the WebSearch tool):\n"
+        f"For these PRIORITY tickers only: {priority_list}\n"
+        "If a priority ticker has NO news tag from Part 1, do ONE web search for its most recent "
+        "(<=48h) company-specific news and add a grounded tag if you find one. Do NOT search for "
+        "every ticker — only priority ones with no existing coverage. If nothing credible, skip it.\n\n"
+        'Output ONLY this JSON: {"news": {"TICKER_ID": "line [src]"}, '
+        '"events": {"TICKER_ID": [{"date":"YYYY-MM-DD","event":"short desc"}]}}. '
+        "Omit tickers with nothing to report in either part. No prose.\n\n"
         "NEWS ITEMS:\n" + "\n".join(items)
     )
-    result = parse_json(ask_claude(prompt))
-    clean = {k: v for k, v in result.items() if k in tickers and isinstance(v, str) and v.strip()}
+    result = parse_json(ask_claude(prompt, web_search=True, timeout=420))
 
-    OUT.parent.mkdir(parents=True, exist_ok=True)
-    OUT.write_text(json.dumps(clean, ensure_ascii=False, separators=(",", ":")))
-    print(f"news: tagged {len(clean)} tickers -> {OUT}")
-    for tid, line in clean.items():
+    news = result.get("news", {}) if isinstance(result.get("news"), dict) else {}
+    events = result.get("events", {}) if isinstance(result.get("events"), dict) else {}
+
+    clean_news = {k: v for k, v in news.items() if k in tickers and isinstance(v, str) and v.strip()}
+    clean_events = {}
+    for tid, evs in events.items():
+        if tid in tickers and isinstance(evs, list):
+            good = [e for e in evs if isinstance(e, dict) and e.get("date") and e.get("event")]
+            if good:
+                clean_events[tid] = good[:4]
+
+    NEWS_OUT.parent.mkdir(parents=True, exist_ok=True)
+    NEWS_OUT.write_text(json.dumps(clean_news, ensure_ascii=False, separators=(",", ":")))
+    EVENTS_OUT.write_text(json.dumps(clean_events, ensure_ascii=False, separators=(",", ":")))
+
+    print(f"news: {len(clean_news)} tickers tagged (priority searched: {priority}) -> {NEWS_OUT}")
+    for tid, line in clean_news.items():
         print(f"  {tid}: {line[:90]}")
+    print(f"events: {len(clean_events)} tickers with dated catalysts -> {EVENTS_OUT}")
 
 
 if __name__ == "__main__":

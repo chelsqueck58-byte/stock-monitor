@@ -1,7 +1,8 @@
-"""Fill the 'reason' for every >=5% move in data/moves.json using Fable + web
-search — grounded, blank if no source. Parallel + chunked: several stocks at once,
-a focused call per ~12 moves, so each move gets real research (not 79 rushed in one
+"""Fill the 'reason' for every >=5% move in data/moves.json using web search —
+grounded, blank if no source. Parallel + chunked: several stocks at once, a
+focused call per ~12 moves, so each move gets real research (not 79 rushed in one
 call). Writes moves.json incrementally under a lock, so progress is always saved.
+Uses the session's default model (Sonnet) — no hardcoded Fable calls.
 
 Run:  .venv/bin/python scripts/movements_research.py
 """
@@ -20,13 +21,12 @@ WORKERS = 6
 _lock = threading.Lock()
 
 
-def ask_fable(prompt):
+def ask_claude(prompt):
     env = os.environ.copy()
     env.pop("ANTHROPIC_API_KEY", None)
     try:
         r = subprocess.run(
-            ["claude", "-p", prompt, "--model", "claude-fable-5",
-             "--allowedTools", "WebSearch,WebFetch"],
+            ["claude", "-p", prompt, "--allowedTools", "WebSearch,WebFetch"],
             capture_output=True, text=True, env=env, timeout=700)
         return r.stdout.strip() if r.returncode == 0 else ""
     except Exception as exc:
@@ -57,7 +57,7 @@ def research_chunk(item):
         '[{"date":"YYYY-MM-DD","reason":"...","source":"...","market_wide":false}]\n\n'
         "MOVES:\n" + "\n".join(f"{m['d']} {m['pct']:+}%" for m in moves)
     )
-    researched = {r.get("date"): r for r in parse_array(ask_fable(prompt)) if isinstance(r, dict)}
+    researched = {r.get("date"): r for r in parse_array(ask_claude(prompt)) if isinstance(r, dict)}
     chunk_dates = {m["d"] for m in moves}
     with _lock:
         data = json.loads(MOVES.read_text())
@@ -92,11 +92,11 @@ def main(only=None):
 
     with ThreadPoolExecutor(max_workers=WORKERS) as ex:
         for tid, n in ex.map(research_chunk, items):
-            done = sum(1 for m in json.loads(MOVES.read_text())[tid]["moves"] if m.get("reason"))
             print(f"  {tid:7} chunk +{n}")
 
-    filled = sum(1 for v in json.loads(MOVES.read_text()).values() for m in v["moves"] if m.get("reason"))
-    total = sum(len(v["moves"]) for v in json.loads(MOVES.read_text()).values())
+    final = json.loads(MOVES.read_text()).values()
+    filled = sum(1 for v in final for m in v["moves"] if m.get("reason"))
+    total = sum(len(v["moves"]) for v in final)
     print(f"done: {filled}/{total} moves sourced")
 
 

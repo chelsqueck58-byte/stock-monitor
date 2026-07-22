@@ -15,9 +15,9 @@ fi
 
 SOURCE="${PRICE_SOURCE:-yahoo}"
 
-# Only alert on level-touch at 22:00 HKT (10pm). All other builds refresh data silently.
+# Alert on level-touch at 10:00 HKT (10am, Asia markets open) and 22:00 HKT (10pm, US opens).
 HOUR=$(date +%H)
-if [[ "$HOUR" == "22" ]]; then
+if [[ "$HOUR" == "10" ]] || [[ "$HOUR" == "22" ]]; then
   ALERT_FLAG=""
 else
   ALERT_FLAG="--no-alert"
