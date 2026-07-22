@@ -28,7 +28,8 @@ EVENTS_OUT = ROOT / "data" / "events.json"
 X_DIGEST = Path.home() / "x-reader" / "digest.json"
 GMAIL_TOKEN = Path.home() / "bots" / "evening-brief" / "tokens" / "token_chelsfinnews.pkl"
 TG_SCRAPER = Path.home() / "telegram-reader" / "scrape_channel.py"
-TG_CHANNELS = ["tradehaven", "Fin_Watch", "tech"]
+TG_CHANNELS = ["tradehaven", "Fin_Watch", "tech", "infinityhedge"]
+TELEGRAM_RAW_OUT = ROOT / "data" / "telegram-raw.txt"
 EARNINGS_SOON_DAYS = 10
 
 
@@ -148,6 +149,12 @@ def main():
     x, gm, tg = collect_x(), collect_gmail(), collect_telegram()
     items = x + gm + tg
     print(f"sources: X={len(x)} Gmail={len(gm)} Telegram={len(tg)}")
+
+    # Persist the raw Telegram scrape so the 09:00 market brief can reuse it
+    # instead of re-scraping the same 4 channels ~90 minutes later for near-
+    # identical content — one scrape per day, shared across consumers.
+    TELEGRAM_RAW_OUT.parent.mkdir(parents=True, exist_ok=True)
+    TELEGRAM_RAW_OUT.write_text("\n\n".join(tg))
 
     ticker_list = "\n".join(f"{tid} = {label}" for tid, label in tickers.items())
     priority = priority_tickers(tickers)
