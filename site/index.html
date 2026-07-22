@@ -344,7 +344,13 @@ function badges(inst) {
   let cta = "";
   if (inst.cta === "long") cta = `<span class="badge cta-long" title="trend-followers long — market believes in the uptrend">CTA↑</span>`;
   else if (inst.cta === "short") cta = `<span class="badge cta-short" title="trend-followers flipping short — storm risk rising">CTA↓</span>`;
-  return `<span class="badge ${t}" title="trend: price vs 50/200DMA">${tl}</span>${cta}`;
+  // Per-instrument stale flag: this one ticker's own fetch failed this build and
+  // it's showing the last successful fetch's bars, not necessarily today's close.
+  // (Separate from the page-wide "DATA STALE" banner, which only tracks the
+  // whole payload's age — a single failed ticker wouldn't trip that on its own.)
+  const staleBadge = inst.stale
+    ? `<span class="badge down" title="this ticker's fetch failed on the latest build — showing the last successful fetch, may not be today's close">⚠ STALE</span>` : "";
+  return `<span class="badge ${t}" title="trend: price vs 50/200DMA">${tl}</span>${cta}${staleBadge}`;
 }
 
 function drawChart(el, inst) {
