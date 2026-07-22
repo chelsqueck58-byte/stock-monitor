@@ -51,6 +51,7 @@
   .news { padding:5px 10px; font-size:11px; color:#9fd0ff; border-bottom:1px solid var(--border); }
   .cat { padding:5px 10px; font-size:11px; color:var(--text); border-top:1px solid var(--border); }
   .cat b.e { color:var(--down); }
+  .catline { padding:5px 10px; font-size:11px; color:#c9a5f0; border-top:1px solid var(--border); }
   .earn { padding:6px 10px; font-size:11px; border-top:1px solid var(--border); background:rgba(88,166,255,.05); }
   .earn .eh { color:var(--muted); }
   .earn .efocus { color:#9fd0ff; margin-top:3px; }
@@ -103,7 +104,7 @@
   <h1>stock-monitor</h1><span class="meta" id="meta">loading…</span>
   <span class="legend">
     <b class="ema">20SMA</b> · <b class="sma">50SMA</b> · <b class="vwap">200SMA</b> · S/R lines ·
-    ⬤ ENTER = pullback to 20/50DMA in a 50&gt;200 uptrend, RSI turning up · trim at 1m/3m resistance or RSI&gt;70 · CTA↑/↓ = trend-follower regime · click an idea to jump · chart = late-Apr → now
+    ⬤ ENTER = pullback to 20/50DMA in a 50&gt;200 uptrend, RSI turning up · trim at 1m/3m resistance or RSI&gt;70 · CTA↑/↓ = trend-follower regime · 🎯 = live catalyst (not just earnings) · 📅 = dated timeline · click an idea to jump · chart = late-Apr → now
   </span>
   <nav class="tabs"><button id="tab-monitor" class="active" onclick="showTab('monitor')">Monitor</button><button id="tab-history" onclick="showTab('history')">History (≥5% moves)</button></nav>
 </header>
@@ -321,6 +322,7 @@ function card(inst) {
     ${inst.news ? `<div class="news">📰 ${inst.news}</div>` : ""}
     <div class="remark ${rem.cls}">${rem.html}</div>
     <div class="chart" data-pending="1"></div>
+    ${inst.catalyst ? `<div class="catline">🎯 ${inst.catalyst}</div>` : ""}
     ${catalystTimeline(inst)}
     ${earningsBox(inst)}
     <textarea class="note" placeholder="notes — ${inst.id}"></textarea>`;
