@@ -24,6 +24,7 @@ NEWS = ROOT / "data" / "news.json"
 IV = ROOT / "data" / "iv.json"
 EARNINGS = ROOT / "data" / "earnings.json"
 EVENTS = ROOT / "data" / "events.json"
+CATALYSTS = ROOT / "data" / "catalysts.json"
 TELEGRAM = Path.home() / ".claude" / "skills" / "telegram-sender" / "send.sh"
 
 
@@ -130,15 +131,17 @@ def main():
         except (json.JSONDecodeError, OSError):
             pass
 
-    earnings, events = {}, {}
-    for path, target in ((EARNINGS, "earnings"), (EVENTS, "events")):
+    earnings, events, catalysts = {}, {}, {}
+    for path, target in ((EARNINGS, "earnings"), (EVENTS, "events"), (CATALYSTS, "catalysts")):
         if path.exists():
             try:
                 d = json.loads(path.read_text())
                 if target == "earnings":
                     earnings = d
-                else:
+                elif target == "events":
                     events = d
+                else:
+                    catalysts = d
             except (json.JSONDecodeError, OSError):
                 pass
 
@@ -168,6 +171,7 @@ def main():
                     "iv": iv.get(member["id"]),
                     "earn": earnings.get(member["id"]),
                     "events": events.get(member["id"]),
+                    "catalyst": catalysts.get(member["id"]),
                 })
                 if group["name"] == "Index ETF":
                     entry["idea"] = None  # market context, not a stock pick

@@ -52,12 +52,27 @@ def research_chunk(item):
         "use web search to find the SPECIFIC reason it moved that day.\n"
         'RULES: the reason must be grounded in a real dated article. If no credible source, set '
         'reason to "". Never invent. reason <=140 chars. market_wide=true ONLY if it was a '
-        "sector/index-wide move (e.g. broad China selloff), not company-specific. source = outlet.\n"
-        'Output ONLY a JSON array: '
-        '[{"date":"YYYY-MM-DD","reason":"...","source":"...","market_wide":false}]\n\n'
+        "sector/index-wide move (e.g. broad China selloff), not company-specific. source = outlet.\n\n"
+        "CRITICAL OUTPUT RULE: after you finish searching, your reply must contain NOTHING but the "
+        "JSON array. No explanation, no markdown fencing, no summary before or after it — the reply "
+        "IS the JSON array and nothing else.\n"
+        'Format: [{"date":"YYYY-MM-DD","reason":"...","source":"...","market_wide":false}]\n\n'
         "MOVES:\n" + "\n".join(f"{m['d']} {m['pct']:+}%" for m in moves)
     )
-    researched = {r.get("date"): r for r in parse_array(ask_claude(prompt)) if isinstance(r, dict)}
+    raw = ask_claude(prompt)
+    parsed = parse_array(raw)
+    if not parsed and raw.strip():
+        # Model narrated instead of returning pure JSON (observed with Sonnet under
+        # WebSearch tool use) — one retry with a blunt reformat instruction, reusing
+        # what it already found rather than re-searching from scratch.
+        fixup = (
+            "Extract ONLY the JSON array from this text, matching "
+            '[{"date":"YYYY-MM-DD","reason":"...","source":"...","market_wide":false}]. '
+            "If a date has no reason stated, use \"\". Reply with ONLY the JSON array, nothing else.\n\n"
+            + raw
+        )
+        parsed = parse_array(ask_claude(fixup))
+    researched = {r.get("date"): r for r in parsed if isinstance(r, dict)}
     chunk_dates = {m["d"] for m in moves}
     with _lock:
         data = json.loads(MOVES.read_text())
