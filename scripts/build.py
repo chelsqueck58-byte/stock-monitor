@@ -51,29 +51,46 @@ def _opens_with_earnings_ref(reason):
     return bool(re.search(r"\bq[1-4]\b", head)) or "earnings" in head
 
 
-def find_prev_earnings_reaction(moves):
-    """The ticker's most recent earnings REPORT DAY reaction — a cheap
+def find_prev_earnings_reactions(moves, limit=4):
+    """The ticker's last `limit` earnings REPORT DAY reactions — a cheap
     heuristic, not a search. Reuses what movements_research.py already
     grounded and sourced instead of asking an LLM to recall history it might
-    get wrong.
+    get wrong. Returns newest-first, fewer than `limit` if that's all we have.
 
     Among moves whose reason opens with an earnings reference (see
-    _opens_with_earnings_ref), picks the most recent one - and if two such
-    moves fall within 7 days of each other (the report day plus a smaller
+    _opens_with_earnings_ref), greedily clusters candidates within 7 days of
+    each other into one reporting cycle (the report day plus a smaller
     follow-on drift/analyst-note day that also happens to open with the same
     "Q_ earnings" phrasing, confirmed live on AVGO: 2026-06-04 -12.6% real
-    report day vs 2026-06-10 -5.1% follow-on), prefers the larger-magnitude
-    one, since the report day itself is reliably the decisive move.
+    report day vs 2026-06-10 -5.1% follow-on) and takes each cycle's larger-
+    magnitude move as that quarter's representative, since the report day
+    itself is reliably the decisive move.
     """
     candidates = [m for m in moves if m.get("reason") and _opens_with_earnings_ref(m["reason"])]
     if not candidates:
-        return None
+        return []
     candidates.sort(key=lambda x: x["d"], reverse=True)
-    anchor_date = datetime.strptime(candidates[0]["d"], "%Y-%m-%d")
-    cluster = [c for c in candidates
-               if abs((datetime.strptime(c["d"], "%Y-%m-%d") - anchor_date).days) <= 7]
-    m = max(cluster, key=lambda x: abs(x["pct"]))
-    return {"date": m["d"], "pct": m["pct"], "reason": m["reason"], "source": m.get("source")}
+
+    # Chain/single-linkage clustering, not fixed-anchor: a candidate joins a
+    # cluster if it's within 7 days of ANY existing member, not just the
+    # first one added. Fixed-anchor missed a real 3-date chain on SE (05-14,
+    # 05-12, 05-06 - all one Q1 2026 cycle) because 05-06 sits 8 days from
+    # 05-14 directly, even though it's only 6 days from 05-12 in between.
+    clusters = []
+    for c in candidates:
+        c_date = datetime.strptime(c["d"], "%Y-%m-%d")
+        for cluster in clusters:
+            if any(abs((c_date - datetime.strptime(m["d"], "%Y-%m-%d")).days) <= 7 for m in cluster):
+                cluster.append(c)
+                break
+        else:
+            clusters.append([c])
+
+    reactions = []
+    for cluster in clusters[:limit]:
+        m = max(cluster, key=lambda x: abs(x["pct"]))
+        reactions.append({"date": m["d"], "pct": m["pct"], "reason": m["reason"], "source": m.get("source")})
+    return reactions
 
 
 def find_prev_event_reaction(moves, event_desc):
@@ -317,7 +334,7 @@ def main():
                     "news": news.get(member["id"]),
                     "iv": iv.get(member["id"]),
                     "earn": earnings.get(member["id"]),
-                    "prev_earnings": find_prev_earnings_reaction(ticker_moves),
+                    "prev_earnings": find_prev_earnings_reactions(ticker_moves),
                     "events": ticker_events,
                     "catalyst": catalysts.get(member["id"]),
                     "tele": tele_research.get(member["id"]),
