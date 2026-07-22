@@ -97,9 +97,10 @@ def main():
         prompt = (
             "For EACH stock below, use web search. In ONE line per stock (<=170 chars): what is "
             "the market's KEY focus/expectation for its upcoming earnings print, and how has the "
-            "stock typically REACTED to its recent earnings (e.g. 'jumped/fell X%')? Ground it in "
-            "real, recent sources — end each line with the source outlet in brackets, e.g. "
-            "[Bloomberg]. If you cannot find credible info for a stock, omit it entirely.\n\n"
+            "stock typically REACTED to its recent earnings (e.g. jumped/fell X%)? Prioritize sources "
+            "from the last 7 days for the focus half; the reaction history can cite older quarters "
+            "since that's inherently historical. End each line with the source outlet in brackets, "
+            "e.g. [Bloomberg]. If you cannot find credible info for a stock, omit it entirely.\n\n"
             f"STOCKS:\n{listing}\n\n"
             'Output ONLY JSON: {"TICKER_ID": "line [src]"}. No prose.'
         )
