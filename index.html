@@ -104,7 +104,9 @@
   <h1>stock-monitor</h1><span class="meta" id="meta">loading…</span>
   <span class="legend">
     <b class="ema">20SMA</b> · <b class="sma">50SMA</b> · <b class="vwap">200SMA</b> · S/R lines ·
-    ⬤ ENTER = pullback to 20/50DMA in a 50&gt;200 uptrend, RSI turning up · trim at 1m/3m resistance or RSI&gt;70 · CTA↑/↓ = trend-follower regime · 🎯 = live catalyst (not just earnings) · 📅 = dated timeline · click an idea to jump · chart = late-Apr → now
+    ⬤ ENTER types: High-conviction · Breakout · Oversold dip · Pullback bounce · Divergence (see card for which fired) ·
+    ▲ EXIT on: close&lt;50MA · 63d-low break · 63d-high tag · RSI&gt;70 · weak-volume 20d-high break ·
+    CTA↑/↓ = trend-follower regime · 🎯 = live catalyst (not just earnings) · 📅 = dated timeline · click an idea to jump · chart = late-Apr → now
   </span>
   <nav class="tabs"><button id="tab-monitor" class="active" onclick="showTab('monitor')">Monitor</button><button id="tab-history" onclick="showTab('history')">History (≥5% moves)</button></nav>
 </header>
@@ -167,13 +169,15 @@ function ideaBox(inst) {
   const i = inst.idea, f = inst.fund;
   const val = f ? [f.fwd_pe != null ? `fwd P/E ${f.fwd_pe.toFixed(1)}` : "", f.peg != null ? `PEG ${f.peg.toFixed(2)}` : ""].filter(Boolean).join(" · ") : "";
   const er = f && f.next_earnings ? earnTag(f.next_earnings) : "";
-  const fmt = n => n.toLocaleString(undefined, { maximumFractionDigits: 2 });
-  const tgt = i.t1 ? `Target ${fmt(i.t1)} (+${i.reward_pct}%)` : "no overhead resistance (running)";
+  const types = i.types.join(" + ");
+  const exitList = (inst.exit_triggers || []).length
+    ? `<div class="ir">watch for: ${inst.exit_triggers.join(" · ")}</div>` : "";
   return `<div class="ideabox" onclick="goTo('${inst.id}')">
     <div class="ih"><b>${inst.label}</b> <span class="id">${inst.id}</span> · ${val}</div>
-    <div class="ir">${i.reason}${er ? " · " + er : ""}</div>
-    <div class="il">Entry ${fmt(i.entry[0])}–${fmt(i.entry[1])} → ${tgt}</div>
+    <div class="ir"><b>${types}</b>${er ? " · " + er : ""} · RSI ${inst.rsi ?? "–"}${inst.weekly_rsi != null ? ` (wk ${inst.weekly_rsi})` : ""}</div>
+    ${exitList}
     ${inst.iv && inst.iv.iv_rank >= 80 ? `<div class="nw" style="color:var(--down)">⚠ event risk — IV rank ${inst.iv.iv_rank}%, options pricing ±${inst.iv.move_1m}%/mo</div>` : ""}
+    ${inst.catalyst ? `<div class="catline">🎯 ${inst.catalyst}</div>` : ""}
     ${inst.news ? `<div class="nw">📰 ${inst.news}</div>` : ""}
   </div>`;
 }
@@ -188,8 +192,8 @@ function renderIdeas() {
     html += `<div class="ideas-row">${enters.map(ideaBox).join("")}</div>`;
   }
   if (tps.length) {
-    html += `<div class="ideas-head tp">Take profit / trim</div>`;
-    html += `<div class="ideas-row">${tps.map(i => `<span class="tpchip" onclick="goTo('${i.id}')"><b>${i.id}</b> ${i.idea.reason}</span>`).join("")}</div>`;
+    html += `<div class="ideas-head tp">Exit signal (profit-take OR stop-type — see trigger)</div>`;
+    html += `<div class="ideas-row">${tps.map(i => `<span class="tpchip" onclick="goTo('${i.id}')"><b>${i.id}</b> ${i.idea.types.join(" · ")}</span>`).join("")}</div>`;
   }
   el.innerHTML = html || `<div class="ideas-head">No confirmed entries right now — cash is a position.</div>`;
 }
@@ -216,8 +220,8 @@ function keyRemark(inst) {
 
   const i = inst.idea;
   let tag = "", cls = "muted";
-  if (i && i.kind === "enter") { tag = `⬤ ENTER — ${i.reason}`; cls = "enter"; }
-  else if (i && i.kind === "take_profit") { tag = `▲ trim — ${i.reason}`; cls = "exit"; }
+  if (i && i.kind === "enter") { tag = `⬤ ENTER — ${i.types.join(" + ")}`; cls = "enter"; }
+  else if (i && i.kind === "take_profit") { tag = `▲ EXIT — ${i.types.join(" + ")}`; cls = "exit"; }
   else if (inst.trend === "down") { tag = "downtrend — not a long"; cls = "muted"; }
   const rsiStr = inst.rsi != null ? ` <span class="muted">RSI ${inst.rsi}</span>` : "";
   return { html: (tag ? `<b>${tag}</b>` : "") + (items.length ? " · " + items.join(" · ") : "") + rsiStr, cls };
