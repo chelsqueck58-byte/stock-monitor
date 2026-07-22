@@ -337,6 +337,7 @@ function card(inst) {
       ${badges(inst)}
       <span class="px">${inst.last_close.toLocaleString(undefined, { maximumFractionDigits: 2 })}</span>
       ${fmtPct(inst.change_pct)} ${fmtPct(inst.ytd_pct)}
+      <span class="muted" style="font-size:10px" title="the trading day this price/technicals reflect">as of ${inst.last_date}</span>
     </div>
     ${fl ? `<div class="fund">${fl}</div>` : ""}
     ${inst.news ? `<div class="news">📰 ${inst.news}</div>` : ""}
