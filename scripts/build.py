@@ -94,21 +94,62 @@ def fresh_flags(entries, now):
     HKT = timezone(timedelta(hours=8))
     today = now.astimezone(HKT).date().isoformat()
     state = load_alert_state()
-    lines = []
+    triggered = []
     for entry in entries:
         for flag in entry["flags"]:
             key = f"{entry['id']}|{flag['window']}|{flag['kind']}"
             if state.get(key) == today:
                 continue
             state[key] = today
-            lines.append(
-                f"{entry['label']} {flag['kind'][:3].upper()} {flag['price']:,.2f} "
-                f"({flag['window']}, {flag['distance_pct']:+.1f}%)"
-            )
+            triggered.append({
+                "id": entry["id"], "label": entry["label"], "kind": flag["kind"],
+                "window": flag["window"], "price": flag["price"],
+                "distance_pct": flag["distance_pct"],
+            })
     # Same-day dedup means anything not from today is dead weight.
     state = {k: v for k, v in state.items() if v == today}
     save_alert_state(state)
-    return lines
+    return triggered
+
+
+def format_levels_message(triggered):
+    """Split into Support / Resistance sections, and consolidate a ticker that
+    touched the same kind of level in both the 1m and 3m windows into ONE
+    line instead of two - a ticker used to appear twice in a row (once per
+    window) with the same name and often the same price, reading as a typo
+    or duplicate rather than two genuinely distinct windows agreeing."""
+    grouped = {}
+    for t in triggered:
+        key = (t["id"], t["kind"])
+        grouped.setdefault(key, {"label": t["label"], "hits": []})
+        grouped[key]["hits"].append((t["window"], t["price"], t["distance_pct"]))
+
+    def section(kind, icon, title):
+        rows = [(tid, g) for (tid, k), g in grouped.items() if k == kind]
+        if not rows:
+            return ""
+        # No silent cap - send.sh already chunks over-long Telegram messages,
+        # so there's no reason to drop real levels here (a low hardcoded cap
+        # silently dropped 5 genuine touches on an entirely ordinary day).
+        lines = []
+        for tid, g in rows:
+            hits = g["hits"]
+            distinct_prices = {round(p, 2) for _, p, _ in hits}
+            if len(hits) > 1 and len(distinct_prices) == 1:
+                # same price across windows - one line, windows joined
+                windows = " & ".join(w for w, _, _ in hits)
+                _, price, dist = hits[0]
+                lines.append(f"• {g['label']} {price:,.2f} ({windows}, {dist:+.1f}%)")
+            else:
+                # genuinely different prices per window - keep them distinct
+                sub = ", ".join(f"{w} {p:,.2f} ({d:+.1f}%)" for w, p, d in hits)
+                lines.append(f"• {g['label']} — {sub}")
+        return f"\n{icon} <b>{title}</b>\n" + "\n".join(lines)
+
+    parts = [f"<b>Levels touched</b> ({len(triggered)})"]
+    parts.append(section("support", "🟢", "Support"))
+    parts.append(section("resistance", "🔴", "Resistance"))
+    return "\n".join(p for p in parts if p)
 
 
 def main():
@@ -243,8 +284,7 @@ def main():
 
     triggered = fresh_flags(entries, datetime.now(timezone.utc))
     if triggered:
-        head = f"<b>Levels touched</b> ({len(triggered)})\n"
-        notify(head + "\n".join(f"• {line}" for line in triggered[:20]))
+        notify(format_levels_message(triggered))
     if failures:
         notify(f"⚠ <b>Data gap</b>: {len(failures)} dropped — {', '.join(failures[:10])}")
     if reused:

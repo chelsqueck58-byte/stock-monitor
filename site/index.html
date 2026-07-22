@@ -17,7 +17,11 @@
     background:var(--bg); z-index:5; }
   header h1 { margin:0 0 3px; font-size:15px; font-weight:600; letter-spacing:.3px; display:inline; }
   header .meta { color:var(--muted); font-size:12px; margin-left:10px; }
-  header .legend { color:var(--muted); font-size:11px; display:block; margin-top:4px; }
+  header .legend { color:var(--muted); font-size:11px; display:flex; flex-direction:column;
+    gap:3px; margin-top:6px; }
+  header .legend .lg-row { display:flex; flex-wrap:wrap; gap:4px 0; }
+  header .legend .lg-cat { color:var(--text); font-weight:600; margin-right:6px; white-space:nowrap; }
+  header .legend .lg-hint { font-style:italic; opacity:.8; margin-top:2px; }
   header .legend b.ema { color:var(--ema); } header .legend b.sma { color:var(--sma); }
   header .legend b.vwap { color:var(--vwap); }
   #stale { display:none; background:var(--down); color:#fff; padding:10px 16px; font-weight:600; text-align:center; }
@@ -87,6 +91,7 @@
   .ideabox .il { font-variant-numeric:tabular-nums; }
   .tpchip { border:1px solid var(--down); border-radius:6px; padding:4px 8px; font-size:11px;
     color:var(--down); background:rgba(248,81,73,.06); }
+  .tpchip .id { color:var(--muted); font-size:10px; font-weight:400; }
   .card.enter-idea { border-color:#f5c518; box-shadow:inset 0 0 0 2px #f5c518; }
   .er-soon { color:var(--down); font-weight:600; }
   .ideabox, .tpchip { cursor:pointer; }
@@ -118,12 +123,13 @@
 <div id="stale"></div>
 <header>
   <h1>stock-monitor</h1><span class="meta" id="meta">loading…</span>
-  <span class="legend">
-    <b class="ema">20SMA</b> · <b class="sma">50SMA</b> · <b class="vwap">200SMA</b> · S/R lines ·
-    ⬤ ENTER types: High-conviction · Breakout · Oversold dip · Pullback bounce · Divergence (see card for which fired) ·
-    ▲ EXIT on: close&lt;50MA · 63d-low break · 63d-high tag · RSI&gt;70 · weak-volume 20d-high break ·
-    CTA↑/↓ = trend-follower regime · 🎯 = auto-researched catalyst · 📅 = dated timeline · 🔒 = your own research (sent via Telegram) · click an idea to jump · chart = late-Apr → now
-  </span>
+  <div class="legend">
+    <div class="lg-row"><span class="lg-cat">Chart</span><b class="ema">20SMA</b>&nbsp;·&nbsp;<b class="sma">50SMA</b>&nbsp;·&nbsp;<b class="vwap">200SMA</b>&nbsp;·&nbsp;S/R lines</div>
+    <div class="lg-row"><span class="lg-cat">⬤ ENTER</span>High-conviction · Breakout · Oversold dip · Pullback bounce · Divergence <i>(see card for which fired)</i></div>
+    <div class="lg-row"><span class="lg-cat">▲ EXIT</span>close&lt;50MA · 63d-low break · 63d-high tag · RSI&gt;70 · weak-volume 20d-high break</div>
+    <div class="lg-row"><span class="lg-cat">Icons</span>CTA↑/↓ = trend-follower regime · 🎯 = auto-researched catalyst · 📅 = dated timeline · 🔒 = your own research (sent via Telegram)</div>
+    <div class="lg-row lg-hint">Click an idea to jump · chart shows late-Apr → now</div>
+  </div>
   <nav class="tabs"><button id="tab-monitor" class="active" onclick="showTab('monitor')">Monitor</button><button id="tab-history" onclick="showTab('history')">History (≥5% moves)</button></nav>
 </header>
 <div id="monitor"><div id="ideas"></div><div id="catalysts30"></div><main id="grid"></main></div>
@@ -210,7 +216,7 @@ function renderIdeas() {
   }
   if (tps.length) {
     html += `<div class="ideas-head tp">Exit signal (profit-take OR stop-type — see trigger)</div>`;
-    html += `<div class="ideas-row">${tps.map(i => `<span class="tpchip" onclick="goTo('${i.id}')"><b>${i.id}</b> ${i.idea.types.join(" · ")}</span>`).join("")}</div>`;
+    html += `<div class="ideas-row">${tps.map(i => `<span class="tpchip" onclick="goTo('${i.id}')"><b>${i.label}</b> <span class="id">${i.id}</span> ${i.idea.types.join(" · ")}</span>`).join("")}</div>`;
   }
   el.innerHTML = html || `<div class="ideas-head">No confirmed entries right now — cash is a position.</div>`;
 }
