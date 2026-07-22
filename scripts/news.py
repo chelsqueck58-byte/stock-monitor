@@ -121,13 +121,23 @@ def priority_tickers(tickers):
         data = json.loads(DATA_JSON.read_text())
     except (json.JSONDecodeError, OSError):
         return []
+    import datetime
+    today = datetime.date.today()
     out = []
     for inst in data.get("instruments", []):
         if inst["id"] not in tickers:
             continue
         idea = inst.get("idea")
         iv = inst.get("iv") or {}
-        if idea or iv.get("iv_rank", 0) >= 80:
+        earn_soon = False
+        next_earn = (inst.get("fund") or {}).get("next_earnings")
+        if next_earn:
+            try:
+                days = (datetime.date.fromisoformat(next_earn) - today).days
+                earn_soon = 0 <= days <= EARNINGS_SOON_DAYS
+            except ValueError:
+                pass
+        if idea or iv.get("iv_rank", 0) >= 80 or earn_soon:
             out.append(inst["id"])
     return out[:15]  # hard cap — bounds the cost regardless of how many qualify
 

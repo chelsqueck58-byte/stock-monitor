@@ -6,12 +6,17 @@ M&A — whatever is actually the market's live focus for that name right now.
 
 Scoped to priority tickers (active idea, earnings soon, or IV rank >=80) to keep
 cost bounded — same targeting logic as news.py's web-search gap-fill. Writes
-data/catalysts.json {id: "line [src]"}; build.py merges it as inst.catalyst.
-Grounded only — omitted if no credible source.
+data/catalysts.json {id: {"line": "... [src]", "fetched": "YYYY-MM-DD"}};
+build.py unwraps to a plain string as inst.catalyst. Grounded only — omitted if
+no credible source.
+
+FRESHNESS TTL: a ticker researched within FRESH_DAYS is skipped, not re-searched
+— a priority name that hasn't changed doesn't need daily re-spend.
 """
 import os
 import re
 import json
+import datetime
 import subprocess
 from pathlib import Path
 
@@ -20,6 +25,7 @@ CONFIG = ROOT / "config" / "universe.json"
 DATA_JSON = ROOT / "site" / "data.json"
 OUT = ROOT / "data" / "catalysts.json"
 BATCH = 6
+FRESH_DAYS = 4
 
 
 def priority_tickers(labels):
@@ -29,6 +35,7 @@ def priority_tickers(labels):
         data = json.loads(DATA_JSON.read_text())
     except (json.JSONDecodeError, OSError):
         return []
+    today = datetime.date.today()
     out = []
     for inst in data.get("instruments", []):
         if inst["id"] not in labels:
@@ -39,8 +46,7 @@ def priority_tickers(labels):
         earn_soon = False
         if f.get("next_earnings"):
             try:
-                import datetime
-                days = (datetime.date.fromisoformat(f["next_earnings"]) - datetime.date.today()).days
+                days = (datetime.date.fromisoformat(f["next_earnings"]) - today).days
                 earn_soon = 0 <= days <= 21
             except ValueError:
                 pass
@@ -75,21 +81,30 @@ def parse_json(text):
 def main(force=None):
     config = json.loads(CONFIG.read_text())
     labels = {m["id"]: m["label"] for g in config["groups"] for m in g["members"]}
-    targets = priority_tickers(labels)
+    candidates = priority_tickers(labels)
     if force:
-        have = {t[0] for t in targets}
-        targets += [(t, labels[t]) for t in force if t in labels and t not in have]
-    print(f"{len(targets)} tickers: {[t[0] for t in targets]}")
+        have = {t[0] for t in candidates}
+        candidates += [(t, labels[t]) for t in force if t in labels and t not in have]
 
-    # MERGE into whatever's already there — a run that doesn't touch a ticker
-    # must never erase its previously-found catalyst (this used to overwrite
-    # from empty every run and silently discarded prior results).
     out = {}
     if OUT.exists():
         try:
             out = json.loads(OUT.read_text())
         except (json.JSONDecodeError, OSError):
             pass
+
+    today = datetime.date.today()
+    targets, skipped_fresh = [], 0
+    for tid, label in candidates:
+        cached = out.get(tid)
+        if cached and cached.get("fetched") and not (force and tid in force):
+            age = (today - datetime.date.fromisoformat(cached["fetched"])).days
+            if age < FRESH_DAYS:
+                skipped_fresh += 1
+                continue
+        targets.append((tid, label))
+    print(f"{len(targets)} tickers due (skipped {skipped_fresh} still-fresh): {[t[0] for t in targets]}")
+
     for i in range(0, len(targets), BATCH):
         batch = targets[i:i + BATCH]
         listing = "\n".join(f"- {tid} ({label})" for tid, label in batch)
@@ -115,11 +130,12 @@ def main(force=None):
         for tid, _ in batch:
             line = result.get(tid)
             if isinstance(line, str) and line.strip() and "[" in line:
-                out[tid] = " ".join(line.split())[:220]
-                print(f"  {tid}: {out[tid][:90]}")
+                clean = " ".join(line.split())[:220]
+                out[tid] = {"line": clean, "fetched": today.isoformat()}
+                print(f"  {tid}: {clean[:90]}")
         OUT.write_text(json.dumps(out, ensure_ascii=False, separators=(",", ":")))
 
-    print(f"catalysts: {len(out)}/{len(targets)} names -> {OUT}")
+    print(f"catalysts: {len(out)} names total -> {OUT}")
 
 
 if __name__ == "__main__":

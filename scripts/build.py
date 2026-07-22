@@ -131,19 +131,19 @@ def main():
         except (json.JSONDecodeError, OSError):
             pass
 
-    earnings, events, catalysts = {}, {}, {}
-    for path, target in ((EARNINGS, "earnings"), (EVENTS, "events"), (CATALYSTS, "catalysts")):
-        if path.exists():
-            try:
-                d = json.loads(path.read_text())
-                if target == "earnings":
-                    earnings = d
-                elif target == "events":
-                    events = d
-                else:
-                    catalysts = d
-            except (json.JSONDecodeError, OSError):
-                pass
+    def load_json(path):
+        if not path.exists():
+            return {}
+        try:
+            return json.loads(path.read_text())
+        except (json.JSONDecodeError, OSError):
+            return {}
+
+    events = load_json(EVENTS)
+    # earnings.json / catalysts.json store {"line":..., "fetched":...} (freshness
+    # tracking for the research scripts) — unwrap to the plain line for the site.
+    earnings = {k: v.get("line") for k, v in load_json(EARNINGS).items() if isinstance(v, dict)}
+    catalysts = {k: v.get("line") for k, v in load_json(CATALYSTS).items() if isinstance(v, dict)}
 
     entries = []
     failures = []

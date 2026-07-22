@@ -78,10 +78,12 @@ def crossed_below_ma(closes, period):
     return closes[-2] >= yday_ma and closes[-1] < today_ma
 
 
-def prior_extreme(bars, period, field, agg):
-    """Highest/lowest `field` over the `period` bars strictly BEFORE the given
-    end (used to test a cross against a level that existed before today)."""
-    window = bars[-period - 1:-1]
+def prior_extreme(bars, period, field, agg, offset=0):
+    """Highest/lowest `field` over the `period` bars strictly before `offset`
+    bars from the end (used to test a cross against a level that existed
+    before today, without copying the bars list)."""
+    end = len(bars) - offset
+    window = bars[end - period - 1:end - 1]
     vals = [b[field] for b in window if b.get(field) is not None]
     return agg(vals) if vals else None
 
@@ -92,7 +94,7 @@ def crossed_above_prior_high(bars, period, field="close"):
     if len(bars) < period + 2:
         return False
     today_hi = prior_extreme(bars, period, "high", max)
-    yday_hi = prior_extreme(bars[:-1], period, "high", max)
+    yday_hi = prior_extreme(bars, period, "high", max, offset=1)
     if today_hi is None or yday_hi is None:
         return False
     return bars[-2][field] <= yday_hi and bars[-1][field] > today_hi
@@ -128,11 +130,10 @@ def volume_ratio(bars):
     return vols[-1] / avg20 if avg20 else None
 
 
-def bullish_divergence(bars, closes, rsis, window=63, pivot=5):
+def bullish_divergence(bars, rsis, window=63, pivot=5):
     """Classic bullish divergence: the two most recent swing lows in `window`
     bars show price making a LOWER low while RSI makes a HIGHER low."""
     segment = bars[-window:]
-    seg_closes = closes[-window:]
     seg_rsi = rsis[-window:]
     lows = []
     for i in range(pivot, len(segment) - pivot):
@@ -185,7 +186,6 @@ def entry_exit_signal(bars, settings, sma20, sma50, above50):
     """The user's rule table, implemented literally. Returns which entry TYPES
     fired (a stock can match several at once) and which exit CONDITIONS fired."""
     closes = [bar["close"] for bar in bars]
-    last = closes[-1]
     rsis = rsi_series(closes)
     rsi_val = rsis[-1] if rsis else None
     wk_rsi = weekly_rsi(bars)
@@ -206,7 +206,7 @@ def entry_exit_signal(bars, settings, sma20, sma50, above50):
     if (above50 and rsi_val is not None and 40 <= rsi_val <= 55
             and crossed_above_ma(closes, 20)):
         entries.append("pullback_bounce")
-    if at_or_below_rolling_low(bars, 63, near_pct) and bullish_divergence(bars, closes, rsis):
+    if near_3m_support and bullish_divergence(bars, rsis):
         entries.append("divergence")
 
     exits = []

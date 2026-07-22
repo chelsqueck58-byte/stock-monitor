@@ -1,11 +1,17 @@
 """For names with earnings within ~35 days, research (web search, grounded): the
 market's focus for the upcoming print and how the stock typically reacts.
-Writes data/earnings.json {id: "line [src]"} which build.py merges as inst.earn.
-Grounded only — blank if no source.
+Writes data/earnings.json {id: {"line": "... [src]", "fetched": "YYYY-MM-DD"}};
+build.py unwraps to a plain string as inst.earn. Grounded only — blank if no
+source.
 
-Efficiency: batches multiple tickers into ONE Claude call (previously one full CLI
-subprocess per ticker — ~20-30 separate processes for one refresh). Uses the
-session's default model (Sonnet), not a hardcoded Fable call.
+Efficiency:
+- Batches multiple tickers into ONE Claude call (was one full CLI subprocess per
+  ticker — ~20-30 separate processes for one refresh).
+- MERGES into existing earnings.json instead of overwriting from empty (used to
+  silently discard prior results every run).
+- FRESHNESS TTL: a ticker already researched within FRESH_DAYS is skipped, not
+  re-searched. This is the daily-refresh script that was re-spending tokens on
+  the same ~20-30 tickers every single day for no reason — this is the fix.
 """
 import os
 import re
@@ -20,6 +26,7 @@ CONFIG = ROOT / "config" / "universe.json"
 OUT = ROOT / "data" / "earnings.json"
 WINDOW = 35
 BATCH = 8
+FRESH_DAYS = 4
 
 
 def ask_claude(prompt, timeout=500):
@@ -55,7 +62,15 @@ def main():
     labels = {m["id"]: m["label"] for g in json.loads(CONFIG.read_text())["groups"] for m in g["members"]}
     today = datetime.date.today()
 
+    out = {}
+    if OUT.exists():
+        try:
+            out = json.loads(OUT.read_text())
+        except (json.JSONDecodeError, OSError):
+            pass
+
     due = []
+    skipped_fresh = 0
     for tid, f in fund.items():
         ne = f.get("next_earnings")
         if not ne:
@@ -64,10 +79,18 @@ def main():
             days = (datetime.date.fromisoformat(ne) - today).days
         except ValueError:
             continue
-        if 0 <= days <= WINDOW:
-            due.append((tid, labels.get(tid, tid), ne))
+        if not (0 <= days <= WINDOW):
+            continue
+        cached = out.get(tid)
+        if cached and cached.get("fetched"):
+            age = (today - datetime.date.fromisoformat(cached["fetched"])).days
+            if age < FRESH_DAYS:
+                skipped_fresh += 1
+                continue
+        due.append((tid, labels.get(tid, tid), ne))
 
-    out = {}
+    print(f"{len(due)} tickers due (skipped {skipped_fresh} still-fresh)")
+
     for i in range(0, len(due), BATCH):
         batch = due[i:i + BATCH]
         listing = "\n".join(f"- {tid} ({label}) reports {ne}" for tid, label, ne in batch)
@@ -86,11 +109,31 @@ def main():
             if isinstance(line, str) and line.strip():
                 line = clean_line(" ".join(line.split()))
                 if line and "[" in line:
-                    out[tid] = line[:200]
+                    out[tid] = {"line": line[:200], "fetched": today.isoformat()}
                     print(f"  {tid}: {line[:90]}")
         OUT.write_text(json.dumps(out, ensure_ascii=False, separators=(",", ":")))
 
-    print(f"earnings focus: {len(out)}/{len(due)} names -> {OUT}")
+    # Prune entries for tickers whose earnings date has passed or moved outside
+    # the window — otherwise a stale "upcoming" focus line lingers forever.
+    still_due = set()
+    for tid, f in fund.items():
+        ne = f.get("next_earnings")
+        if not ne:
+            continue
+        try:
+            days = (datetime.date.fromisoformat(ne) - today).days
+        except ValueError:
+            continue
+        if 0 <= days <= WINDOW:
+            still_due.add(tid)
+    dropped = [tid for tid in out if tid not in still_due]
+    for tid in dropped:
+        del out[tid]
+    if dropped:
+        OUT.write_text(json.dumps(out, ensure_ascii=False, separators=(",", ":")))
+        print(f"pruned {len(dropped)} stale entries: {dropped}")
+
+    print(f"earnings focus: {len(out)} names total -> {OUT}")
 
 
 if __name__ == "__main__":

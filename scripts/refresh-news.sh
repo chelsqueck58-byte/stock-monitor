@@ -9,5 +9,7 @@ export PATH="/opt/homebrew/bin:/Users/chelsqueck/.local/bin:/usr/local/bin:/usr/
 ~/stock-monitor/.venv/bin/python ~/stock-monitor/scripts/ivdata.py || true
 # News tags + dated events, one fetch + one Claude call (was two scripts).
 ~/stock-monitor/.venv/bin/python ~/stock-monitor/scripts/news.py
-# Upcoming-earnings focus (batched, grounded).
+# Upcoming-earnings focus (batched, grounded, freshness-TTL'd).
 ~/stock-monitor/.venv/bin/python ~/stock-monitor/scripts/earnings_research.py || true
+# Broader non-earnings catalysts for priority tickers (freshness-TTL'd).
+~/stock-monitor/.venv/bin/python ~/stock-monitor/scripts/catalysts.py || true
