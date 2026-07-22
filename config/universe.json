@@ -573,7 +573,6 @@
     "proximity_alert_pct": 1.5,
     "stale_after_hours": 30,
     "min_bars": 210,
-    "alert_cooldown_hours": 18,
     "donchian_period": 20
   }
 }

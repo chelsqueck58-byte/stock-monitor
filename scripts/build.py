@@ -80,29 +80,33 @@ def save_alert_state(state):
     ALERT_STATE.write_text(json.dumps(state, separators=(",", ":")))
 
 
-def fresh_flags(entries, cooldown_hours, now):
-    """Return flag lines not already alerted within the cooldown window.
+def fresh_flags(entries, now):
+    """One alert per level per HKT calendar day - not a rolling-hour cooldown.
 
-    Keyed by (instrument, window, kind, rounded price) so the same level sitting
-    in play across the day's runs fires once, not on every run.
+    Keyed by (instrument, window, kind) WITHOUT the exact price. The old key
+    included the rounded price, but S/R prices recompute slightly build to
+    build as the rolling swing-cluster window shifts (e.g. SINGTEL resistance
+    4.48 -> 4.49 twelve hours apart) - that made the same level look like a
+    brand-new touch and fire a second alert same-day for what a human would
+    call one touch. Dropping price from the key fixes that at the cost of
+    only ever alerting once per level per day even if it's genuinely retested.
     """
+    HKT = timezone(timedelta(hours=8))
+    today = now.astimezone(HKT).date().isoformat()
     state = load_alert_state()
-    cutoff = now - timedelta(hours=cooldown_hours)
     lines = []
     for entry in entries:
         for flag in entry["flags"]:
-            key = f"{entry['id']}|{flag['window']}|{flag['kind']}|{flag['price']:.2f}"
-            last = state.get(key)
-            if last and datetime.fromisoformat(last) > cutoff:
+            key = f"{entry['id']}|{flag['window']}|{flag['kind']}"
+            if state.get(key) == today:
                 continue
-            state[key] = now.isoformat()
+            state[key] = today
             lines.append(
                 f"{entry['label']} {flag['kind'][:3].upper()} {flag['price']:,.2f} "
                 f"({flag['window']}, {flag['distance_pct']:+.1f}%)"
             )
-    # Drop keys not seen for well beyond the cooldown so the file can't grow forever.
-    stale = now - timedelta(hours=cooldown_hours * 8)
-    state = {k: v for k, v in state.items() if datetime.fromisoformat(v) > stale}
+    # Same-day dedup means anything not from today is dead weight.
+    state = {k: v for k, v in state.items() if v == today}
     save_alert_state(state)
     return lines
 
@@ -237,8 +241,7 @@ def main():
     if args.no_alert:
         return
 
-    cooldown = settings.get("alert_cooldown_hours", 18)
-    triggered = fresh_flags(entries, cooldown, datetime.now(timezone.utc))
+    triggered = fresh_flags(entries, datetime.now(timezone.utc))
     if triggered:
         head = f"<b>Levels touched</b> ({len(triggered)})\n"
         notify(head + "\n".join(f"• {line}" for line in triggered[:20]))

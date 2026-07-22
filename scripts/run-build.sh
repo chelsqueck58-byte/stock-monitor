@@ -1,5 +1,5 @@
 #!/bin/zsh
-# stock-monitor build runner — invoked by launchd 4x/day (see com.chels.stockmonitor.plist).
+# stock-monitor build runner — invoked by launchd 2x/day, 10:00 & 22:00 HKT (see com.chels.stockmonitor.plist).
 # Source defaults to yahoo; set PRICE_SOURCE=ibkr in the plist once IB Gateway is verified.
 set -e
 
