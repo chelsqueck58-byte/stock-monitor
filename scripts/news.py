@@ -15,6 +15,7 @@ Grounded only — never invented; omitted if unsupported.
 """
 import os
 import base64
+import datetime
 import json
 import pickle
 import subprocess
@@ -128,7 +129,6 @@ def priority_tickers(tickers):
         data = json.loads(DATA_JSON.read_text())
     except (json.JSONDecodeError, OSError):
         return []
-    import datetime
     today = datetime.date.today()
     out = []
     for inst in data.get("instruments", []):
@@ -200,13 +200,37 @@ def main():
     news = result.get("news", {}) if isinstance(result.get("news"), dict) else {}
     events = result.get("events", {}) if isinstance(result.get("events"), dict) else {}
 
+    # news.json is intentionally NOT merged - it's "what's notable today", and
+    # a stale old tag lingering forever would be worse than resetting daily.
     clean_news = {k: v for k, v in news.items() if k in tickers and isinstance(v, str) and v.strip()}
+
+    # events.json IS merged. A dated event only ever gets extracted from
+    # whatever's in today's narrow feed window (X 24h / Gmail 1d / Telegram
+    # incremental-since-last-check) - since Telegram no longer re-shows a post
+    # once it's been seen, an event mentioned once would otherwise vanish from
+    # this file the very next day even though it's still weeks away. Keep any
+    # previously-found event whose date hasn't passed yet; add newly-found ones.
+    today_iso = datetime.date.today().isoformat()
+    existing_events = {}
+    if EVENTS_OUT.exists():
+        try:
+            existing_events = json.loads(EVENTS_OUT.read_text())
+        except (json.JSONDecodeError, OSError):
+            pass
+
     clean_events = {}
-    for tid, evs in events.items():
-        if tid in tickers and isinstance(evs, list):
-            good = [e for e in evs if isinstance(e, dict) and e.get("date") and e.get("event")]
-            if good:
-                clean_events[tid] = good[:4]
+    for tid in tickers:
+        found = events.get(tid)
+        new_evs = [e for e in found if isinstance(e, dict) and e.get("date") and e.get("event")] if isinstance(found, list) else []
+        old_evs = [e for e in existing_events.get(tid, []) if e.get("date", "") >= today_iso]
+        seen, combined = set(), []
+        for e in old_evs + new_evs:
+            key = (e.get("date"), e.get("event"))
+            if key not in seen:
+                seen.add(key)
+                combined.append(e)
+        if combined:
+            clean_events[tid] = combined[:4]
 
     NEWS_OUT.parent.mkdir(parents=True, exist_ok=True)
     NEWS_OUT.write_text(json.dumps(clean_news, ensure_ascii=False, separators=(",", ":")))
