@@ -26,14 +26,7 @@ FEED_RELEVANT_DAYS = 2  # feed.py's excerpt is a single-day snapshot, not an
 # could plausibly have covered them; older moves stay web-search-only.
 _lock = threading.Lock()
 
-EXTRA_SOURCE_HINT = (
-    " Beyond mainstream English-language outlets, also consider: official filings/IR pages "
-    "(sec.gov 8-K/10-Q, company investor-relations sites) as the most authoritative when "
-    "available; Chinese-language financial media (qq.com, stcn.com, aastocks.com, sina.com.cn, "
-    "toutiao.com, ainvest.com, futunn.com, news.cn) for China/HK-listed names; and secondary "
-    "outlets (biggo.com finance, moomoo, marketbeat.com) for others — weight official filings "
-    "and established outlets above single-author blogs when accounts differ."
-)
+EXTRA_SOURCE_HINT = feed.SOURCE_HINT
 
 
 def ask_claude(prompt):

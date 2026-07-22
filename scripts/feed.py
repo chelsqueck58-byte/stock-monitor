@@ -13,6 +13,22 @@ ROOT = Path(__file__).resolve().parent.parent
 FEED_RAW = ROOT / "data" / "feed-raw.txt"
 MAX_CHARS = 1500
 
+# Shared across catalysts.py / earnings_research.py / movements_research.py so
+# all three suggest the same source pool without three copies drifting apart.
+SOURCE_HINT = (
+    " Beyond mainstream English-language outlets, also consider: official filings/IR pages "
+    "(sec.gov 8-K/10-Q, company investor-relations sites) as the most authoritative when "
+    "available; Chinese-language financial media (qq.com, stcn.com, aastocks.com, sina.com.cn, "
+    "toutiao.com, ainvest.com, futunn.com, news.cn, 10jqka.com, 163.com, eastmoney.com, "
+    "stockstar.com) for China/HK-listed names; major wire/financial media (reuters.com, "
+    "bloomberg.com, wsj.com, marketwatch.com, nasdaq.com, scmp.com for HK/China regional); "
+    "analyst/data aggregators (tipranks.com, marketscreener.com, seekingalpha.com, "
+    "investing.com, benzinga.com, zacks.com, fool.com, 247wallst.com); and sector-specific "
+    "outlets (techcrunch.com, electrek.co for EV/tech) or secondary sites (biggo.com finance, "
+    "moomoo, marketbeat.com, quiverquant.com, tradingkey.com) where relevant — weight official "
+    "filings and established outlets above single-author blogs when accounts differ."
+)
+
 
 @lru_cache(maxsize=1)
 def _feed_lines():
