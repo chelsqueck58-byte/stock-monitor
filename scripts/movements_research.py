@@ -58,11 +58,17 @@ def research_chunk(item):
         "MOVES:\n" + "\n".join(f"{m['d']} {m['pct']:+}%" for m in moves)
     )
     researched = {r.get("date"): r for r in parse_array(ask_fable(prompt)) if isinstance(r, dict)}
+    chunk_dates = {m["d"] for m in moves}
     with _lock:
         data = json.loads(MOVES.read_text())
         for m in data[tid]["moves"]:
+            if m["d"] not in chunk_dates:
+                continue
             r = researched.get(m["d"])
-            if r and not m.get("reason"):
+            # Mark checked regardless of outcome — an unsourced move stays blank
+            # but is never re-searched (re-searching a dead end wastes credits).
+            m["checked"] = True
+            if r:
                 m["reason"] = (r.get("reason") or "").strip() or None
                 m["source"] = (r.get("source") or "").strip() or None
                 if isinstance(r.get("market_wide"), bool):
@@ -79,7 +85,7 @@ def main(only=None):
         entry = data.get(tid)
         if not entry:
             continue
-        todo = [m for m in entry["moves"] if not m.get("reason")]
+        todo = [m for m in entry["moves"] if not m.get("checked")]
         for i in range(0, len(todo), CHUNK):
             items.append((tid, entry["label"], todo[i:i + CHUNK]))
     print(f"{len(items)} chunks across {len(ids)} names, {WORKERS} in parallel")
