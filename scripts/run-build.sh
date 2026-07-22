@@ -14,5 +14,14 @@ if [[ ! -x "$DIR/.venv/bin/python" ]]; then
 fi
 
 SOURCE="${PRICE_SOURCE:-yahoo}"
-"$DIR/.venv/bin/python" "$DIR/scripts/build.py" --source "$SOURCE"
+
+# Only alert on level-touch at 22:00 HKT (10pm). All other builds refresh data silently.
+HOUR=$(date +%H)
+if [[ "$HOUR" == "22" ]]; then
+  ALERT_FLAG=""
+else
+  ALERT_FLAG="--no-alert"
+fi
+
+"$DIR/.venv/bin/python" "$DIR/scripts/build.py" --source "$SOURCE" $ALERT_FLAG
 "$DIR/scripts/deploy-pages.sh" || echo "[warn] pages deploy failed"

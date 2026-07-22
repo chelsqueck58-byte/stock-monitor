@@ -4,6 +4,7 @@ build.py. Fundamentals move slowly — refresh daily, not every price build.
 
 Run:  .venv/bin/python scripts/fundamentals.py
 """
+import datetime
 import json
 import time
 from pathlib import Path
@@ -59,7 +60,19 @@ def fetch(session, crumb, symbol):
     cal = d.get("calendarEvents", {})
     ce = cal.get("earnings", {})
     dates = ce.get("earningsDate") or []
-    next_earn = dates[0].get("fmt") if dates and isinstance(dates[0], dict) else None
+    # Yahoo's calendar field sometimes lags a quarter and still shows a date
+    # that's already passed. Never surface a stale "upcoming" earnings date.
+    today = datetime.date.today()
+    next_earn = None
+    for entry in dates:
+        if not isinstance(entry, dict) or not entry.get("fmt"):
+            continue
+        try:
+            if datetime.date.fromisoformat(entry["fmt"]) >= today:
+                next_earn = entry["fmt"]
+                break
+        except ValueError:
+            continue
 
     # Last 4 quarters beat/miss.
     hist = []
