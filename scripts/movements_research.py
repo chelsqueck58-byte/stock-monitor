@@ -16,9 +16,20 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 MOVES = ROOT / "data" / "moves.json"
+CONFIG = ROOT / "config" / "universe.json"
 CHUNK = 12
 WORKERS = 6
 _lock = threading.Lock()
+
+CN_GROUPS = {"China internet", "China EV"}
+
+
+def china_tickers():
+    try:
+        config = json.loads(CONFIG.read_text())
+    except (json.JSONDecodeError, OSError):
+        return set()
+    return {m["id"] for g in config["groups"] if g["name"] in CN_GROUPS for m in g["members"]}
 
 
 def ask_claude(prompt):
@@ -46,10 +57,16 @@ def parse_array(text):
 
 
 def research_chunk(item):
-    tid, label, moves = item
+    tid, label, moves, is_china = item
+    cn_hint = (
+        " For this China-listed name, also consider Chinese-language financial media "
+        "(qq.com, stcn.com, aastocks.com, sina.com.cn, toutiao.com, ainvest.com, futunn.com) "
+        "alongside English-language sources — they often carry more granular, timely coverage."
+        if is_china else ""
+    )
     prompt = (
         f"You research why {label} ({tid}) moved on specific days. For EACH dated move below, "
-        "use web search to find the SPECIFIC reason it moved that day.\n"
+        f"use web search to find the SPECIFIC reason it moved that day.{cn_hint}\n"
         'RULES: the reason must be grounded in a real dated article. If no credible source, set '
         'reason to "". Never invent. reason <=140 chars. market_wide=true ONLY if it was a '
         "sector/index-wide move (e.g. broad China selloff), not company-specific. source = outlet.\n\n"
@@ -95,6 +112,7 @@ def research_chunk(item):
 def main(only=None):
     data = json.loads(MOVES.read_text())
     ids = only if only else list(data.keys())
+    cn_ids = china_tickers()
     items = []
     for tid in ids:
         entry = data.get(tid)
@@ -102,7 +120,7 @@ def main(only=None):
             continue
         todo = [m for m in entry["moves"] if not m.get("checked")]
         for i in range(0, len(todo), CHUNK):
-            items.append((tid, entry["label"], todo[i:i + CHUNK]))
+            items.append((tid, entry["label"], todo[i:i + CHUNK], tid in cn_ids))
     print(f"{len(items)} chunks across {len(ids)} names, {WORKERS} in parallel")
 
     with ThreadPoolExecutor(max_workers=WORKERS) as ex:

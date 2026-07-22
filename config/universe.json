@@ -3,91 +3,571 @@
     {
       "name": "Index ETF",
       "members": [
-        {"id": "SPY", "label": "S&P 500 ETF", "yahoo": "SPY", "ibkr": {"symbol": "SPY", "sec_type": "STK", "exchange": "SMART", "currency": "USD"}},
-        {"id": "QQQ", "label": "Nasdaq 100 ETF", "yahoo": "QQQ", "ibkr": {"symbol": "QQQ", "sec_type": "STK", "exchange": "SMART", "currency": "USD"}}
+        {
+          "id": "SPY",
+          "label": "S&P 500 ETF",
+          "yahoo": "SPY",
+          "ibkr": {
+            "symbol": "SPY",
+            "sec_type": "STK",
+            "exchange": "SMART",
+            "currency": "USD"
+          }
+        },
+        {
+          "id": "QQQ",
+          "label": "Nasdaq 100 ETF",
+          "yahoo": "QQQ",
+          "ibkr": {
+            "symbol": "QQQ",
+            "sec_type": "STK",
+            "exchange": "SMART",
+            "currency": "USD"
+          }
+        }
       ]
     },
     {
       "name": "China internet",
       "members": [
-        {"id": "PDD", "label": "PDD Holdings", "yahoo": "PDD", "ibkr": {"symbol": "PDD", "sec_type": "STK"}},
-        {"id": "9988", "label": "Alibaba", "yahoo": "9988.HK", "ibkr": {"symbol": "9988", "sec_type": "STK", "exchange": "SEHK", "currency": "HKD"}},
-        {"id": "0700", "label": "Tencent", "yahoo": "0700.HK", "ibkr": {"symbol": "700", "sec_type": "STK", "exchange": "SEHK", "currency": "HKD"}},
-        {"id": "9618", "label": "JD.com", "yahoo": "9618.HK", "ibkr": {"symbol": "9618", "sec_type": "STK", "exchange": "SEHK", "currency": "HKD"}},
-        {"id": "3690", "label": "Meituan", "yahoo": "3690.HK", "ibkr": {"symbol": "3690", "sec_type": "STK", "exchange": "SEHK", "currency": "HKD"}},
-        {"id": "1810", "label": "Xiaomi", "yahoo": "1810.HK", "ibkr": {"symbol": "1810", "sec_type": "STK", "exchange": "SEHK", "currency": "HKD"}},
-        {"id": "9888", "label": "Baidu", "yahoo": "9888.HK", "ibkr": {"symbol": "9888", "sec_type": "STK", "exchange": "SEHK", "currency": "HKD"}}
+        {
+          "id": "PDD",
+          "label": "PDD Holdings",
+          "yahoo": "PDD",
+          "ibkr": {
+            "symbol": "PDD",
+            "sec_type": "STK"
+          }
+        },
+        {
+          "id": "9988",
+          "label": "Alibaba",
+          "yahoo": "9988.HK",
+          "ibkr": {
+            "symbol": "9988",
+            "sec_type": "STK",
+            "exchange": "SEHK",
+            "currency": "HKD"
+          }
+        },
+        {
+          "id": "0700",
+          "label": "Tencent",
+          "yahoo": "0700.HK",
+          "ibkr": {
+            "symbol": "700",
+            "sec_type": "STK",
+            "exchange": "SEHK",
+            "currency": "HKD"
+          }
+        },
+        {
+          "id": "9618",
+          "label": "JD.com",
+          "yahoo": "9618.HK",
+          "ibkr": {
+            "symbol": "9618",
+            "sec_type": "STK",
+            "exchange": "SEHK",
+            "currency": "HKD"
+          }
+        },
+        {
+          "id": "3690",
+          "label": "Meituan",
+          "yahoo": "3690.HK",
+          "ibkr": {
+            "symbol": "3690",
+            "sec_type": "STK",
+            "exchange": "SEHK",
+            "currency": "HKD"
+          }
+        },
+        {
+          "id": "1810",
+          "label": "Xiaomi",
+          "yahoo": "1810.HK",
+          "ibkr": {
+            "symbol": "1810",
+            "sec_type": "STK",
+            "exchange": "SEHK",
+            "currency": "HKD"
+          }
+        },
+        {
+          "id": "9888",
+          "label": "Baidu",
+          "yahoo": "9888.HK",
+          "ibkr": {
+            "symbol": "9888",
+            "sec_type": "STK",
+            "exchange": "SEHK",
+            "currency": "HKD"
+          }
+        }
       ]
     },
     {
       "name": "AI & big tech",
       "members": [
-        {"id": "AMZN", "label": "Amazon", "yahoo": "AMZN", "ibkr": {"symbol": "AMZN", "sec_type": "STK"}},
-        {"id": "NVDA", "label": "Nvidia", "yahoo": "NVDA", "ibkr": {"symbol": "NVDA", "sec_type": "STK"}},
-        {"id": "AAPL", "label": "Apple", "yahoo": "AAPL", "ibkr": {"symbol": "AAPL", "sec_type": "STK"}},
-        {"id": "MSFT", "label": "Microsoft", "yahoo": "MSFT", "ibkr": {"symbol": "MSFT", "sec_type": "STK"}},
-        {"id": "META", "label": "Meta Platforms", "yahoo": "META", "ibkr": {"symbol": "META", "sec_type": "STK"}},
-        {"id": "GOOGL", "label": "Alphabet A", "yahoo": "GOOGL", "ibkr": {"symbol": "GOOGL", "sec_type": "STK"}},
-        {"id": "TSLA", "label": "Tesla", "yahoo": "TSLA", "ibkr": {"symbol": "TSLA", "sec_type": "STK"}},
-        {"id": "TSM", "label": "TSMC ADR", "yahoo": "TSM", "ibkr": {"symbol": "TSM", "sec_type": "STK"}},
-        {"id": "000660", "label": "SK Hynix", "yahoo": "000660.KS", "ibkr": {"symbol": "000660", "sec_type": "STK", "exchange": "KRX", "currency": "KRW"}},
-        {"id": "005930", "label": "Samsung Elec", "yahoo": "005930.KS", "ibkr": {"symbol": "005930", "sec_type": "STK", "exchange": "KRX", "currency": "KRW"}},
-        {"id": "MU", "label": "Micron", "yahoo": "MU", "ibkr": {"symbol": "MU", "sec_type": "STK"}}
+        {
+          "id": "AMZN",
+          "label": "Amazon",
+          "yahoo": "AMZN",
+          "ibkr": {
+            "symbol": "AMZN",
+            "sec_type": "STK"
+          }
+        },
+        {
+          "id": "NVDA",
+          "label": "Nvidia",
+          "yahoo": "NVDA",
+          "ibkr": {
+            "symbol": "NVDA",
+            "sec_type": "STK"
+          }
+        },
+        {
+          "id": "AAPL",
+          "label": "Apple",
+          "yahoo": "AAPL",
+          "ibkr": {
+            "symbol": "AAPL",
+            "sec_type": "STK"
+          }
+        },
+        {
+          "id": "MSFT",
+          "label": "Microsoft",
+          "yahoo": "MSFT",
+          "ibkr": {
+            "symbol": "MSFT",
+            "sec_type": "STK"
+          }
+        },
+        {
+          "id": "META",
+          "label": "Meta Platforms",
+          "yahoo": "META",
+          "ibkr": {
+            "symbol": "META",
+            "sec_type": "STK"
+          }
+        },
+        {
+          "id": "GOOGL",
+          "label": "Alphabet A",
+          "yahoo": "GOOGL",
+          "ibkr": {
+            "symbol": "GOOGL",
+            "sec_type": "STK"
+          }
+        },
+        {
+          "id": "TSLA",
+          "label": "Tesla",
+          "yahoo": "TSLA",
+          "ibkr": {
+            "symbol": "TSLA",
+            "sec_type": "STK"
+          }
+        },
+        {
+          "id": "TSM",
+          "label": "TSMC ADR",
+          "yahoo": "TSM",
+          "ibkr": {
+            "symbol": "TSM",
+            "sec_type": "STK"
+          }
+        },
+        {
+          "id": "000660",
+          "label": "SK Hynix",
+          "yahoo": "000660.KS",
+          "ibkr": {
+            "symbol": "000660",
+            "sec_type": "STK",
+            "exchange": "KRX",
+            "currency": "KRW"
+          }
+        },
+        {
+          "id": "005930",
+          "label": "Samsung Elec",
+          "yahoo": "005930.KS",
+          "ibkr": {
+            "symbol": "005930",
+            "sec_type": "STK",
+            "exchange": "KRX",
+            "currency": "KRW"
+          }
+        },
+        {
+          "id": "MU",
+          "label": "Micron",
+          "yahoo": "MU",
+          "ibkr": {
+            "symbol": "MU",
+            "sec_type": "STK"
+          }
+        }
       ]
     },
     {
       "name": "Semis",
       "members": [
-        {"id": "AMD", "label": "Advanced Micro Devices", "yahoo": "AMD", "ibkr": {"symbol": "AMD", "sec_type": "STK"}},
-        {"id": "ASML", "label": "ASML Holding", "yahoo": "ASML", "ibkr": {"symbol": "ASML", "sec_type": "STK"}},
-        {"id": "INTC", "label": "Intel", "yahoo": "INTC", "ibkr": {"symbol": "INTC", "sec_type": "STK"}},
-        {"id": "AVGO", "label": "Broadcom", "yahoo": "AVGO", "ibkr": {"symbol": "AVGO", "sec_type": "STK"}},
-        {"id": "SMCI", "label": "Super Micro Computer", "yahoo": "SMCI", "ibkr": {"symbol": "SMCI", "sec_type": "STK"}}
+        {
+          "id": "AMD",
+          "label": "Advanced Micro Devices",
+          "yahoo": "AMD",
+          "ibkr": {
+            "symbol": "AMD",
+            "sec_type": "STK"
+          }
+        },
+        {
+          "id": "ASML",
+          "label": "ASML Holding",
+          "yahoo": "ASML",
+          "ibkr": {
+            "symbol": "ASML",
+            "sec_type": "STK"
+          }
+        },
+        {
+          "id": "INTC",
+          "label": "Intel",
+          "yahoo": "INTC",
+          "ibkr": {
+            "symbol": "INTC",
+            "sec_type": "STK"
+          }
+        },
+        {
+          "id": "AVGO",
+          "label": "Broadcom",
+          "yahoo": "AVGO",
+          "ibkr": {
+            "symbol": "AVGO",
+            "sec_type": "STK"
+          }
+        },
+        {
+          "id": "SMCI",
+          "label": "Super Micro Computer",
+          "yahoo": "SMCI",
+          "ibkr": {
+            "symbol": "SMCI",
+            "sec_type": "STK"
+          }
+        }
       ]
     },
     {
       "name": "China EV",
       "members": [
-        {"id": "0175", "label": "Geely", "yahoo": "0175.HK", "ibkr": {"symbol": "175", "sec_type": "STK", "exchange": "SEHK", "currency": "HKD"}},
-        {"id": "1211", "label": "BYD", "yahoo": "1211.HK", "ibkr": {"symbol": "1211", "sec_type": "STK", "exchange": "SEHK", "currency": "HKD"}},
-        {"id": "2015", "label": "Li Auto", "yahoo": "2015.HK", "ibkr": {"symbol": "2015", "sec_type": "STK", "exchange": "SEHK", "currency": "HKD"}},
-        {"id": "9868", "label": "XPeng", "yahoo": "9868.HK", "ibkr": {"symbol": "9868", "sec_type": "STK", "exchange": "SEHK", "currency": "HKD"}},
-        {"id": "9866", "label": "NIO", "yahoo": "9866.HK", "ibkr": {"symbol": "9866", "sec_type": "STK", "exchange": "SEHK", "currency": "HKD"}},
-        {"id": "3750", "label": "CATL", "yahoo": "3750.HK", "ibkr": {"symbol": "3750", "sec_type": "STK", "exchange": "SEHK", "currency": "HKD"}},
-        {"id": "9863", "label": "Leapmotor", "yahoo": "9863.HK", "ibkr": {"symbol": "9863", "sec_type": "STK", "exchange": "SEHK", "currency": "HKD"}}
+        {
+          "id": "0175",
+          "label": "Geely",
+          "yahoo": "0175.HK",
+          "ibkr": {
+            "symbol": "175",
+            "sec_type": "STK",
+            "exchange": "SEHK",
+            "currency": "HKD"
+          }
+        },
+        {
+          "id": "1211",
+          "label": "BYD",
+          "yahoo": "1211.HK",
+          "ibkr": {
+            "symbol": "1211",
+            "sec_type": "STK",
+            "exchange": "SEHK",
+            "currency": "HKD"
+          }
+        },
+        {
+          "id": "2015",
+          "label": "Li Auto",
+          "yahoo": "2015.HK",
+          "ibkr": {
+            "symbol": "2015",
+            "sec_type": "STK",
+            "exchange": "SEHK",
+            "currency": "HKD"
+          }
+        },
+        {
+          "id": "9868",
+          "label": "XPeng",
+          "yahoo": "9868.HK",
+          "ibkr": {
+            "symbol": "9868",
+            "sec_type": "STK",
+            "exchange": "SEHK",
+            "currency": "HKD"
+          }
+        },
+        {
+          "id": "9866",
+          "label": "NIO",
+          "yahoo": "9866.HK",
+          "ibkr": {
+            "symbol": "9866",
+            "sec_type": "STK",
+            "exchange": "SEHK",
+            "currency": "HKD"
+          }
+        },
+        {
+          "id": "3750",
+          "label": "CATL",
+          "yahoo": "3750.HK",
+          "ibkr": {
+            "symbol": "3750",
+            "sec_type": "STK",
+            "exchange": "SEHK",
+            "currency": "HKD"
+          }
+        },
+        {
+          "id": "9863",
+          "label": "Leapmotor",
+          "yahoo": "9863.HK",
+          "ibkr": {
+            "symbol": "9863",
+            "sec_type": "STK",
+            "exchange": "SEHK",
+            "currency": "HKD"
+          }
+        }
       ]
     },
     {
       "name": "Singapore",
       "members": [
-        {"id": "UOB", "label": "UOB", "yahoo": "U11.SI", "ibkr": {"symbol": "U11", "sec_type": "STK", "exchange": "SGX", "currency": "SGD"}},
-        {"id": "KEPPEL", "label": "Keppel", "yahoo": "BN4.SI", "ibkr": {"symbol": "BN4", "sec_type": "STK", "exchange": "SGX", "currency": "SGD"}},
-        {"id": "DBS", "label": "DBS Group", "yahoo": "D05.SI", "ibkr": {"symbol": "D05", "sec_type": "STK", "exchange": "SGX", "currency": "SGD"}},
-        {"id": "OCBC", "label": "OCBC", "yahoo": "O39.SI", "ibkr": {"symbol": "O39", "sec_type": "STK", "exchange": "SGX", "currency": "SGD"}},
-        {"id": "SINGTEL", "label": "Singtel", "yahoo": "Z74.SI", "ibkr": {"symbol": "Z74", "sec_type": "STK", "exchange": "SGX", "currency": "SGD"}},
-        {"id": "STENG", "label": "ST Engineering", "yahoo": "S63.SI", "ibkr": {"symbol": "S63", "sec_type": "STK", "exchange": "SGX", "currency": "SGD"}},
-        {"id": "SGX", "label": "SGX Ltd", "yahoo": "S68.SI", "ibkr": {"symbol": "S68", "sec_type": "STK", "exchange": "SGX", "currency": "SGD"}},
-        {"id": "CAPLAND", "label": "CapitaLand Investment", "yahoo": "9CI.SI", "ibkr": {"symbol": "9CI", "sec_type": "STK", "exchange": "SGX", "currency": "SGD"}}
+        {
+          "id": "UOB",
+          "label": "UOB",
+          "yahoo": "U11.SI",
+          "ibkr": {
+            "symbol": "U11",
+            "sec_type": "STK",
+            "exchange": "SGX",
+            "currency": "SGD"
+          }
+        },
+        {
+          "id": "KEPPEL",
+          "label": "Keppel",
+          "yahoo": "BN4.SI",
+          "ibkr": {
+            "symbol": "BN4",
+            "sec_type": "STK",
+            "exchange": "SGX",
+            "currency": "SGD"
+          }
+        },
+        {
+          "id": "DBS",
+          "label": "DBS Group",
+          "yahoo": "D05.SI",
+          "ibkr": {
+            "symbol": "D05",
+            "sec_type": "STK",
+            "exchange": "SGX",
+            "currency": "SGD"
+          }
+        },
+        {
+          "id": "OCBC",
+          "label": "OCBC",
+          "yahoo": "O39.SI",
+          "ibkr": {
+            "symbol": "O39",
+            "sec_type": "STK",
+            "exchange": "SGX",
+            "currency": "SGD"
+          }
+        },
+        {
+          "id": "SINGTEL",
+          "label": "Singtel",
+          "yahoo": "Z74.SI",
+          "ibkr": {
+            "symbol": "Z74",
+            "sec_type": "STK",
+            "exchange": "SGX",
+            "currency": "SGD"
+          }
+        },
+        {
+          "id": "STENG",
+          "label": "ST Engineering",
+          "yahoo": "S63.SI",
+          "ibkr": {
+            "symbol": "S63",
+            "sec_type": "STK",
+            "exchange": "SGX",
+            "currency": "SGD"
+          }
+        },
+        {
+          "id": "SGX",
+          "label": "SGX Ltd",
+          "yahoo": "S68.SI",
+          "ibkr": {
+            "symbol": "S68",
+            "sec_type": "STK",
+            "exchange": "SGX",
+            "currency": "SGD"
+          }
+        },
+        {
+          "id": "CAPLAND",
+          "label": "CapitaLand Investment",
+          "yahoo": "9CI.SI",
+          "ibkr": {
+            "symbol": "9CI",
+            "sec_type": "STK",
+            "exchange": "SGX",
+            "currency": "SGD"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Southeast Asia tech",
+      "members": [
+        {
+          "id": "SE",
+          "label": "Sea Limited",
+          "yahoo": "SE",
+          "ibkr": {
+            "symbol": "SE",
+            "sec_type": "STK",
+            "exchange": "SMART",
+            "currency": "USD"
+          }
+        },
+        {
+          "id": "GRAB",
+          "label": "Grab Holdings",
+          "yahoo": "GRAB",
+          "ibkr": {
+            "symbol": "GRAB",
+            "sec_type": "STK",
+            "exchange": "SMART",
+            "currency": "USD"
+          }
+        }
       ]
     },
     {
       "name": "Consumer",
       "members": [
-        {"id": "MCD", "label": "McDonald's", "yahoo": "MCD", "ibkr": {"symbol": "MCD", "sec_type": "STK"}},
-        {"id": "SBUX", "label": "Starbucks", "yahoo": "SBUX", "ibkr": {"symbol": "SBUX", "sec_type": "STK"}},
-        {"id": "PEP", "label": "PepsiCo", "yahoo": "PEP", "ibkr": {"symbol": "PEP", "sec_type": "STK"}},
-        {"id": "WMT", "label": "Walmart", "yahoo": "WMT", "ibkr": {"symbol": "WMT", "sec_type": "STK"}},
-        {"id": "COST", "label": "Costco", "yahoo": "COST", "ibkr": {"symbol": "COST", "sec_type": "STK"}},
-        {"id": "PG", "label": "Procter & Gamble", "yahoo": "PG", "ibkr": {"symbol": "PG", "sec_type": "STK"}},
-        {"id": "KO", "label": "Coca-Cola", "yahoo": "KO", "ibkr": {"symbol": "KO", "sec_type": "STK"}},
-        {"id": "NKE", "label": "Nike", "yahoo": "NKE", "ibkr": {"symbol": "NKE", "sec_type": "STK"}},
-        {"id": "DPZ", "label": "Domino's Pizza", "yahoo": "DPZ", "ibkr": {"symbol": "DPZ", "sec_type": "STK"}},
-        {"id": "GRMN", "label": "Garmin", "yahoo": "GRMN", "ibkr": {"symbol": "GRMN", "sec_type": "STK"}}
+        {
+          "id": "MCD",
+          "label": "McDonald's",
+          "yahoo": "MCD",
+          "ibkr": {
+            "symbol": "MCD",
+            "sec_type": "STK"
+          }
+        },
+        {
+          "id": "SBUX",
+          "label": "Starbucks",
+          "yahoo": "SBUX",
+          "ibkr": {
+            "symbol": "SBUX",
+            "sec_type": "STK"
+          }
+        },
+        {
+          "id": "PEP",
+          "label": "PepsiCo",
+          "yahoo": "PEP",
+          "ibkr": {
+            "symbol": "PEP",
+            "sec_type": "STK"
+          }
+        },
+        {
+          "id": "WMT",
+          "label": "Walmart",
+          "yahoo": "WMT",
+          "ibkr": {
+            "symbol": "WMT",
+            "sec_type": "STK"
+          }
+        },
+        {
+          "id": "COST",
+          "label": "Costco",
+          "yahoo": "COST",
+          "ibkr": {
+            "symbol": "COST",
+            "sec_type": "STK"
+          }
+        },
+        {
+          "id": "PG",
+          "label": "Procter & Gamble",
+          "yahoo": "PG",
+          "ibkr": {
+            "symbol": "PG",
+            "sec_type": "STK"
+          }
+        },
+        {
+          "id": "KO",
+          "label": "Coca-Cola",
+          "yahoo": "KO",
+          "ibkr": {
+            "symbol": "KO",
+            "sec_type": "STK"
+          }
+        },
+        {
+          "id": "NKE",
+          "label": "Nike",
+          "yahoo": "NKE",
+          "ibkr": {
+            "symbol": "NKE",
+            "sec_type": "STK"
+          }
+        },
+        {
+          "id": "DPZ",
+          "label": "Domino's Pizza",
+          "yahoo": "DPZ",
+          "ibkr": {
+            "symbol": "DPZ",
+            "sec_type": "STK"
+          }
+        },
+        {
+          "id": "GRMN",
+          "label": "Garmin",
+          "yahoo": "GRMN",
+          "ibkr": {
+            "symbol": "GRMN",
+            "sec_type": "STK"
+          }
+        }
       ]
     }
   ],
   "settings": {
-    "lookbacks": {"1m": 21, "3m": 63},
+    "lookbacks": {
+      "1m": 21,
+      "3m": 63
+    },
     "swing_window": 5,
     "level_cluster_pct": 1.5,
     "proximity_alert_pct": 1.5,
