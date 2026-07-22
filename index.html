@@ -504,12 +504,16 @@ async function loadHistory() {
   h.innerHTML = "";
   for (const inst of DATA.instruments) {
     const m = MOVES[inst.id];
-    if (!m || !m.moves.length) continue;
-    const rows = m.moves.map(mv => {
+    if (!m) continue;
+    // Only show moves that actually have a researched reason - unresearched
+    // ones (checked but nothing found, or the 2026-07-23 detection-window fix
+    // surfaced ~1400 older ones not being researched) used to render as a
+    // bare "—" placeholder row; she doesn't want that clutter on the site.
+    const researched = m.moves.filter(mv => mv.reason);
+    if (!researched.length) continue;
+    const rows = researched.map(mv => {
       const cls = mv.pct >= 0 ? "u" : "d";
-      const reason = mv.reason
-        ? (mv.market_wide ? `<span class="mw">${mv.reason} <i>(market-wide)</i></span>` : `<b>${mv.reason}</b>`)
-        : `<span class="mw">—</span>`;
+      const reason = mv.market_wide ? `<span class="mw">${mv.reason} <i>(market-wide)</i></span>` : `<b>${mv.reason}</b>`;
       const src = mv.source ? ` <span class="msrc">[${mv.source}]</span>` : "";
       return `<div class="mv"><span class="md">${mv.d}</span><span class="mp ${cls}">${mv.pct >= 0 ? "+" : ""}${mv.pct}%</span><span class="mr">${reason}${src}</span></div>`;
     }).join("");
