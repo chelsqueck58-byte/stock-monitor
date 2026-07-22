@@ -120,7 +120,6 @@ def load_tele_research():
     """Parse catalysts.md/fundamentals.md/historicals.md (your own Telegram
     research, curated by tele-memory.py) into {ticker: {catalysts, fundamentals,
     historicals}} so it can be merged onto each instrument for the website."""
-    import re
     out = {}
     for name, key in (("catalysts.md", "catalysts"), ("fundamentals.md", "fundamentals"),
                        ("historicals.md", "historicals")):
