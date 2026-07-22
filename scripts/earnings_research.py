@@ -99,8 +99,13 @@ def main():
             "the market's KEY focus/expectation for its upcoming earnings print, and how has the "
             "stock typically REACTED to its recent earnings (e.g. jumped/fell X%)? Prioritize sources "
             "from the last 7 days for the focus half; the reaction history can cite older quarters "
-            "since that's inherently historical. End each line with the source outlet in brackets, "
-            "e.g. [Bloomberg]. If you cannot find credible info for a stock, omit it entirely.\n\n"
+            "since that's inherently historical. Beyond mainstream English-language outlets, also "
+            "consider: official filings/IR pages (sec.gov, company investor-relations sites) as most "
+            "authoritative when available; Chinese-language financial media (qq.com, stcn.com, "
+            "aastocks.com, sina.com.cn, toutiao.com, ainvest.com, futunn.com, news.cn) for China/HK-"
+            "listed names; and secondary outlets (biggo.com finance, moomoo, marketbeat.com) for "
+            "others. End each line with the source outlet in brackets, e.g. [Bloomberg]. If you "
+            "cannot find credible info for a stock, omit it entirely.\n\n"
             f"STOCKS:\n{listing}\n\n"
             'Output ONLY JSON: {"TICKER_ID": "line [src]"}. No prose.'
         )
