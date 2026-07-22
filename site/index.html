@@ -144,6 +144,20 @@
 const TREND_ORDER = { up: 0, flat: 1, down: 2 };
 let DATA = null, STALE = false, OBSERVER = null;
 
+// HTML-escape freeform text (LLM/web-search/Telegram-sourced) before it goes
+// into a template literal that gets assigned to innerHTML. None of it was
+// ever exploitable (no literal "<" ever showed up in a live scan), but raw
+// ">"/"&" in text like "revenue >50%" is still technically unescaped HTML -
+// this is the correct fix, not a per-string patch. Uses the browser's own
+// textContent -> innerHTML round-trip rather than a hand-rolled regex, so it
+// can't miss a character the way a manual replace(/</g,...) list could.
+function esc(s) {
+  if (s == null) return "";
+  const div = document.createElement("div");
+  div.textContent = String(s);
+  return div.innerHTML;
+}
+
 function smaSeries(closes, period) {
   const out = []; let sum = 0;
   for (let i = 0; i < closes.length; i++) {
@@ -202,8 +216,8 @@ function ideaBox(inst) {
     <div class="ir"><b>${types}</b>${er ? " · " + er : ""} · RSI ${inst.rsi ?? "–"}${inst.weekly_rsi != null ? ` (wk ${inst.weekly_rsi})` : ""}</div>
     ${exitList}
     ${inst.iv && inst.iv.iv_rank >= 80 ? `<div class="nw" style="color:var(--down)">⚠ event risk — IV rank ${inst.iv.iv_rank}%, options pricing ±${inst.iv.move_1m}%/mo</div>` : ""}
-    ${inst.catalyst ? `<div class="catline">🎯 ${inst.catalyst}</div>` : ""}
-    ${inst.news ? `<div class="nw">📰 ${inst.news}</div>` : ""}
+    ${inst.catalyst ? `<div class="catline">🎯 ${esc(inst.catalyst)}</div>` : ""}
+    ${inst.news ? `<div class="nw">📰 ${esc(inst.news)}</div>` : ""}
     ${teleResearch(inst)}
   </div>`;
 }
@@ -236,8 +250,8 @@ function prevPerfBlock(prev, label) {
   if (!list.length) return "";
   const line = (p, prefix) => {
     const cls = p.pct >= 0 ? "u" : "d";
-    const src = p.source ? ` <span class="msrc">[${p.source}]</span>` : "";
-    return `<div class="ct-prev">↩ ${prefix} (${p.date}, <span class="pct ${cls}">${p.pct >= 0 ? "+" : ""}${p.pct}%</span>): ${p.reason}${src}</div>`;
+    const src = p.source ? ` <span class="msrc">[${esc(p.source)}]</span>` : "";
+    return `<div class="ct-prev">↩ ${prefix} (${p.date}, <span class="pct ${cls}">${p.pct >= 0 ? "+" : ""}${p.pct}%</span>): ${esc(p.reason)}${src}</div>`;
   };
   if (list.length === 1) return line(list[0], label);
   return list.map((p, i) => line(p, i === 0 ? label : `Earnings -${i + 1}`)).join("");
@@ -286,8 +300,8 @@ function renderCatalystsTable() {
     <td class="ct-tk"><b>${r.id}</b> <span class="muted">${r.label}</span></td>
     <td class="ct-dt">${r.date ? `${r.date} <span class="muted">(${r.days}d)</span>` : '<span class="muted">—</span>'}</td>
     <td class="ct-tx">
-      <div class="ct-event">${r.earn ? `<b class="e">${r.event}</b>` : r.event}</div>
-      ${r.focus ? `<div class="ct-focus">🎯 ${r.focus}</div>` : ""}
+      <div class="ct-event">${r.earn ? `<b class="e">${esc(r.event)}</b>` : esc(r.event)}</div>
+      ${r.focus ? `<div class="ct-focus">🎯 ${esc(r.focus)}</div>` : ""}
       ${prevPerfBlock(r.prev, r.prevLabel)}
     </td>
   </tr>`).join("");
@@ -344,9 +358,9 @@ function teleResearch(inst) {
   const t = inst.tele;
   if (!t) return "";
   const rows = [];
-  if (t.catalysts) rows.push(`<div class="tb">🗓 ${t.catalysts.replace(/\*\*/g, "")}</div>`);
-  if (t.fundamentals) rows.push(`<div class="tb">📊 ${t.fundamentals.replace(/\*\*/g, "")}</div>`);
-  if (t.historicals) rows.push(`<div class="tb">📈 ${t.historicals.replace(/\*\*/g, "")}</div>`);
+  if (t.catalysts) rows.push(`<div class="tb">🗓 ${esc(t.catalysts.replace(/\*\*/g, ""))}</div>`);
+  if (t.fundamentals) rows.push(`<div class="tb">📊 ${esc(t.fundamentals.replace(/\*\*/g, ""))}</div>`);
+  if (t.historicals) rows.push(`<div class="tb">📈 ${esc(t.historicals.replace(/\*\*/g, ""))}</div>`);
   if (!rows.length) return "";
   return `<div class="teleblock"><div class="th">🔒 Your research (via Telegram)</div>${rows.join("")}</div>`;
 }
@@ -363,7 +377,7 @@ function catalystTimeline(inst) {
   (inst.events || []).forEach(e => { const dd = daysTo(e.date); if (dd != null && dd >= 0 && dd <= 30) items.push({ d: e.date, days: dd, label: e.event, earn: false }); });
   if (!items.length) return "";
   items.sort((a, b) => a.days - b.days);
-  return `<div class="cat">📅 ${items.map(i => i.earn ? `<b class="e">${i.label} ${i.d} (${i.days}d)</b>` : `${i.label} ${i.d} (${i.days}d)`).join(" · ")}</div>`;
+  return `<div class="cat">📅 ${items.map(i => i.earn ? `<b class="e">${esc(i.label)} ${i.d} (${i.days}d)</b>` : `${esc(i.label)} ${i.d} (${i.days}d)`).join(" · ")}</div>`;
 }
 function earningsBox(inst) {
   const f = inst.fund;
@@ -377,7 +391,7 @@ function earningsBox(inst) {
     return `<span class="pct ${s >= 0 ? "u" : "d"}">${(q.q || "").slice(0, 7)} ${s >= 0 ? "beat" : "miss"} ${num}</span>`;
   }).filter(Boolean).join(" ");
   const focusText = inst.earn ? inst.earn.split(/\s*Sources?:/i)[0].replace(/\((https?:[^)]+)\)/g, "").trim() : "";
-  const focus = focusText ? `<div class="efocus">🎯 ${focusText}</div>` : "";
+  const focus = focusText ? `<div class="efocus">🎯 ${esc(focusText)}</div>` : "";
   const prevBlock = prevPerfBlock(inst.prev_earnings, "Last earnings");
   return `<div class="earn"><b>⏰ Earnings ${f.next_earnings} (${days}d)</b>${f.curr_est ? ` · est $${f.curr_est.toFixed(2)}` : ""}<br><span class="eh">Last 4Q:</span> ${beats || "—"}${focus}${prevBlock}</div>`;
 }
@@ -452,10 +466,10 @@ function card(inst) {
       <span class="muted" style="font-size:10px" title="the trading day this price/technicals reflect">as of ${inst.last_date}</span>
     </div>
     ${fl ? `<div class="fund">${fl}</div>` : ""}
-    ${inst.news ? `<div class="news">📰 ${inst.news}</div>` : ""}
+    ${inst.news ? `<div class="news">📰 ${esc(inst.news)}</div>` : ""}
     <div class="remark ${rem.cls}">${rem.html}</div>
     <div class="chart" data-pending="1"></div>
-    ${inst.catalyst ? `<div class="catline">🎯 ${inst.catalyst}</div>` : ""}
+    ${inst.catalyst ? `<div class="catline">🎯 ${esc(inst.catalyst)}</div>` : ""}
     ${catalystTimeline(inst)}
     ${earningsBox(inst)}
     ${teleResearch(inst)}
@@ -519,8 +533,8 @@ async function loadHistory() {
     if (!researched.length) continue;
     const rows = researched.map(mv => {
       const cls = mv.pct >= 0 ? "u" : "d";
-      const reason = mv.market_wide ? `<span class="mw">${mv.reason} <i>(market-wide)</i></span>` : `<b>${mv.reason}</b>`;
-      const src = mv.source ? ` <span class="msrc">[${mv.source}]</span>` : "";
+      const reason = mv.market_wide ? `<span class="mw">${esc(mv.reason)} <i>(market-wide)</i></span>` : `<b>${esc(mv.reason)}</b>`;
+      const src = mv.source ? ` <span class="msrc">[${esc(mv.source)}]</span>` : "";
       return `<div class="mv"><span class="md">${mv.d}</span><span class="mp ${cls}">${mv.pct >= 0 ? "+" : ""}${mv.pct}%</span><span class="mr">${reason}${src}</span></div>`;
     }).join("");
     const el = document.createElement("div");
