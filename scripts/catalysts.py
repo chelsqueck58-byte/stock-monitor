@@ -81,7 +81,15 @@ def main(force=None):
         targets += [(t, labels[t]) for t in force if t in labels and t not in have]
     print(f"{len(targets)} tickers: {[t[0] for t in targets]}")
 
+    # MERGE into whatever's already there — a run that doesn't touch a ticker
+    # must never erase its previously-found catalyst (this used to overwrite
+    # from empty every run and silently discarded prior results).
     out = {}
+    if OUT.exists():
+        try:
+            out = json.loads(OUT.read_text())
+        except (json.JSONDecodeError, OSError):
+            pass
     for i in range(0, len(targets), BATCH):
         batch = targets[i:i + BATCH]
         listing = "\n".join(f"- {tid} ({label})" for tid, label in batch)
