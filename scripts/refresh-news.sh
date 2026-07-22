@@ -1,7 +1,18 @@
 #!/bin/zsh
-# Daily intel refresh: X/Gmail/Telegram -> per-ticker news + events + earnings
-# focus + IV. The 09:30/22:30 price builds then pick up the fresh data.
+# Daily intel refresh (07:30 HKT, one run/day): X/Gmail/Telegram -> per-ticker
+# news + events + earnings focus + IV + your own Telegram-sent research. The
+# 10:00/22:00 price builds then pick up the fresh data.
 export PATH="/opt/homebrew/bin:/Users/chelsqueck/.local/bin:/usr/local/bin:/usr/bin:/bin"
+
+# --- Your Telegram research pipeline (synced to this one daily run, not
+# continuous polling — nothing downstream reads it more than once a day). ---
+# 1. Pull any new messages since last run.
+/usr/bin/python3 ~/.claude/scripts/tele-receiver.py || true
+# 2. Download + extract text from any attached documents.
+~/.claude/scripts/.venv/bin/python ~/.claude/scripts/tele-doc-processor.py || true
+# 3. Parse new material into catalysts.md/fundamentals.md/historicals.md (the
+#    only token-spending tele step; tracks merged IDs, never re-parses).
+~/.claude/scripts/.venv/bin/python ~/.claude/scripts/tele-memory.py || true
 
 # Refresh the X digest (writes ~/x-reader/digest.json). Non-fatal if it fails.
 ~/x-reader/.venv/bin/python ~/x-reader/x_scrape.py >/dev/null 2>&1 || true
