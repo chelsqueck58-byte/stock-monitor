@@ -71,14 +71,18 @@ def research_chunk(item):
     return tid, sum(1 for v in researched.values() if (v.get("reason") or "").strip())
 
 
-def main():
+def main(only=None):
     data = json.loads(MOVES.read_text())
+    ids = only if only else list(data.keys())
     items = []
-    for tid, entry in data.items():
+    for tid in ids:
+        entry = data.get(tid)
+        if not entry:
+            continue
         todo = [m for m in entry["moves"] if not m.get("reason")]
         for i in range(0, len(todo), CHUNK):
             items.append((tid, entry["label"], todo[i:i + CHUNK]))
-    print(f"{len(items)} chunks across {len(data)} names, {WORKERS} in parallel")
+    print(f"{len(items)} chunks across {len(ids)} names, {WORKERS} in parallel")
 
     with ThreadPoolExecutor(max_workers=WORKERS) as ex:
         for tid, n in ex.map(research_chunk, items):
@@ -91,4 +95,6 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    import sys
+    scope = sys.argv[1].split(",") if len(sys.argv) > 1 else None
+    main(scope)
