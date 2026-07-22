@@ -278,7 +278,11 @@ def main():
     # earnings.json / catalysts.json store {"focus"/"line":..., "fetched":...}
     # (freshness tracking for the research scripts) — unwrap to the plain
     # string for the site.
-    earnings = {k: v.get("focus") for k, v in load_json(EARNINGS).items() if isinstance(v, dict)}
+    # .get("focus") is the current key; .get("line") is a fallback for entries
+    # written before the 2026-07-23 schema rename that haven't been re-
+    # researched since (FRESH_DAYS TTL means most won't be for days) - without
+    # this fallback every ticker's investor-focus line went silently blank.
+    earnings = {k: (v.get("focus") or v.get("line")) for k, v in load_json(EARNINGS).items() if isinstance(v, dict)}
     catalysts = {k: v.get("line") for k, v in load_json(CATALYSTS).items() if isinstance(v, dict)}
     tele_research = load_tele_research()
     moves_data = load_json(MOVES)
