@@ -303,6 +303,31 @@ def main():
     tele_research = load_tele_research()
     moves_data = load_json(MOVES)
 
+    def build_metadata(tid):
+        """Everything that doesn't depend on fresh bars — fundamentals, news,
+        IV, catalysts, earnings focus/history, events. Shared by both the
+        success path and the stale-price fallback below: a cached entry used
+        to freeze ALL of this along with the price when a fetch failed, not
+        just the price, so a ticker with one bad Yahoo request would show
+        yesterday's catalysts/earnings-focus/events too. This runs regardless
+        of whether bars came back, so only price/levels/technicals actually
+        stay frozen on a fallback - everything else refreshes every run."""
+        ticker_moves = moves_data.get(tid, {}).get("moves", [])
+        ticker_events = events.get(tid)
+        if ticker_events:
+            for ev in ticker_events:
+                ev["prev_reaction"] = find_prev_event_reaction(ticker_moves, ev.get("event", ""))
+        return {
+            "fund": fundamentals.get(tid),
+            "news": news.get(tid),
+            "iv": iv.get(tid),
+            "earn": earnings.get(tid),
+            "prev_earnings": find_prev_earnings_reactions(ticker_moves),
+            "events": ticker_events,
+            "catalyst": catalysts.get(tid),
+            "tele": tele_research.get(tid),
+        }
+
     entries = []
     failures = []
     reused = []
@@ -318,26 +343,14 @@ def main():
                         f"for a valid 200DMA - check the symbol"
                     )
                 entry = summarise(bars, settings)
-                ticker_moves = moves_data.get(member["id"], {}).get("moves", [])
-                ticker_events = events.get(member["id"])
-                if ticker_events:
-                    for ev in ticker_events:
-                        ev["prev_reaction"] = find_prev_event_reaction(ticker_moves, ev.get("event", ""))
                 entry.update({
                     "id": member["id"],
                     "label": member["label"],
                     "group": group["name"],
                     "currency": meta.get("currency"),
                     "stale": False,
-                    "fund": fundamentals.get(member["id"]),
-                    "news": news.get(member["id"]),
-                    "iv": iv.get(member["id"]),
-                    "earn": earnings.get(member["id"]),
-                    "prev_earnings": find_prev_earnings_reactions(ticker_moves),
-                    "events": ticker_events,
-                    "catalyst": catalysts.get(member["id"]),
-                    "tele": tele_research.get(member["id"]),
                 })
+                entry.update(build_metadata(member["id"]))
                 if group["name"] == "Index ETF":
                     entry["idea"] = None  # market context, not a stock pick
                 entries.append(entry)
@@ -347,9 +360,10 @@ def main():
                 cached = prev.get(member["id"])
                 if cached:
                     cached["stale"] = True
+                    cached.update(build_metadata(member["id"]))
                     entries.append(cached)
                     reused.append(member["id"])
-                    print(f"  STALE {member['id']:<8} reused last-good ({exc})")
+                    print(f"  STALE {member['id']:<8} reused last-good price, metadata refreshed ({exc})")
                 else:
                     failures.append(member["id"])
                     print(f"  FAIL {member['id']:<8} {exc}")
