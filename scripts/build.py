@@ -25,7 +25,27 @@ IV = ROOT / "data" / "iv.json"
 EARNINGS = ROOT / "data" / "earnings.json"
 EVENTS = ROOT / "data" / "events.json"
 CATALYSTS = ROOT / "data" / "catalysts.json"
+TELE_DOCS = Path.home() / ".claude" / "tele-docs"
 TELEGRAM = Path.home() / ".claude" / "skills" / "telegram-sender" / "send.sh"
+
+
+def load_tele_research():
+    """Parse catalysts.md/fundamentals.md/historicals.md (your own Telegram
+    research, curated by tele-memory.py) into {ticker: {catalysts, fundamentals,
+    historicals}} so it can be merged onto each instrument for the website."""
+    import re
+    out = {}
+    for name, key in (("catalysts.md", "catalysts"), ("fundamentals.md", "fundamentals"),
+                       ("historicals.md", "historicals")):
+        p = TELE_DOCS / name
+        if not p.exists():
+            continue
+        text = p.read_text()
+        for m in re.finditer(r"^## (.+?)\n(.*?)(?=\n## |\Z)", text, re.DOTALL | re.MULTILINE):
+            ticker, body = m.group(1).strip(), m.group(2).strip()
+            if body:
+                out.setdefault(ticker, {})[key] = body
+    return out
 
 
 def load_config():
@@ -144,6 +164,7 @@ def main():
     # tracking for the research scripts) — unwrap to the plain line for the site.
     earnings = {k: v.get("line") for k, v in load_json(EARNINGS).items() if isinstance(v, dict)}
     catalysts = {k: v.get("line") for k, v in load_json(CATALYSTS).items() if isinstance(v, dict)}
+    tele_research = load_tele_research()
 
     entries = []
     failures = []
@@ -172,6 +193,7 @@ def main():
                     "earn": earnings.get(member["id"]),
                     "events": events.get(member["id"]),
                     "catalyst": catalysts.get(member["id"]),
+                    "tele": tele_research.get(member["id"]),
                 })
                 if group["name"] == "Index ETF":
                     entry["idea"] = None  # market context, not a stock pick

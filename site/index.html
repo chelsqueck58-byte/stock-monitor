@@ -52,6 +52,10 @@
   .cat { padding:5px 10px; font-size:11px; color:var(--text); border-top:1px solid var(--border); }
   .cat b.e { color:var(--down); }
   .catline { padding:5px 10px; font-size:11px; color:#c9a5f0; border-top:1px solid var(--border); }
+  .teleblock { padding:6px 10px; font-size:11px; border-top:1px solid var(--border); background:rgba(240,180,41,.05); }
+  .teleblock .th { color:#f0b429; font-weight:600; margin-bottom:2px; }
+  .teleblock .tb { color:var(--text); margin:2px 0; white-space:pre-line; }
+  .teleblock .tb:last-child { margin-bottom:0; }
   .earn { padding:6px 10px; font-size:11px; border-top:1px solid var(--border); background:rgba(88,166,255,.05); }
   .earn .eh { color:var(--muted); }
   .earn .efocus { color:#9fd0ff; margin-top:3px; }
@@ -106,7 +110,7 @@
     <b class="ema">20SMA</b> · <b class="sma">50SMA</b> · <b class="vwap">200SMA</b> · S/R lines ·
     ⬤ ENTER types: High-conviction · Breakout · Oversold dip · Pullback bounce · Divergence (see card for which fired) ·
     ▲ EXIT on: close&lt;50MA · 63d-low break · 63d-high tag · RSI&gt;70 · weak-volume 20d-high break ·
-    CTA↑/↓ = trend-follower regime · 🎯 = live catalyst (not just earnings) · 📅 = dated timeline · click an idea to jump · chart = late-Apr → now
+    CTA↑/↓ = trend-follower regime · 🎯 = auto-researched catalyst · 📅 = dated timeline · 🔒 = your own research (sent via Telegram) · click an idea to jump · chart = late-Apr → now
   </span>
   <nav class="tabs"><button id="tab-monitor" class="active" onclick="showTab('monitor')">Monitor</button><button id="tab-history" onclick="showTab('history')">History (≥5% moves)</button></nav>
 </header>
@@ -179,6 +183,7 @@ function ideaBox(inst) {
     ${inst.iv && inst.iv.iv_rank >= 80 ? `<div class="nw" style="color:var(--down)">⚠ event risk — IV rank ${inst.iv.iv_rank}%, options pricing ±${inst.iv.move_1m}%/mo</div>` : ""}
     ${inst.catalyst ? `<div class="catline">🎯 ${inst.catalyst}</div>` : ""}
     ${inst.news ? `<div class="nw">📰 ${inst.news}</div>` : ""}
+    ${teleResearch(inst)}
   </div>`;
 }
 function renderIdeas() {
@@ -230,6 +235,17 @@ function keyRemark(inst) {
 function daysTo(ds) {
   return ds ? Math.round((new Date(ds + "T00:00:00") - Date.now()) / 8.64e7) : null;
 }
+function teleResearch(inst) {
+  const t = inst.tele;
+  if (!t) return "";
+  const rows = [];
+  if (t.catalysts) rows.push(`<div class="tb">🗓 ${t.catalysts.replace(/\*\*/g, "")}</div>`);
+  if (t.fundamentals) rows.push(`<div class="tb">📊 ${t.fundamentals.replace(/\*\*/g, "")}</div>`);
+  if (t.historicals) rows.push(`<div class="tb">📈 ${t.historicals.replace(/\*\*/g, "")}</div>`);
+  if (!rows.length) return "";
+  return `<div class="teleblock"><div class="th">🔒 Your research (via Telegram)</div>${rows.join("")}</div>`;
+}
+
 function catalystTimeline(inst) {
   const f = inst.fund;
   const items = [];
@@ -329,6 +345,7 @@ function card(inst) {
     ${inst.catalyst ? `<div class="catline">🎯 ${inst.catalyst}</div>` : ""}
     ${catalystTimeline(inst)}
     ${earningsBox(inst)}
+    ${teleResearch(inst)}
     <textarea class="note" placeholder="notes — ${inst.id}"></textarea>`;
   const ta = el.querySelector(".note");
   ta.value = localStorage.getItem(noteKey(inst.id)) || "";
