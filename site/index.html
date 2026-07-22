@@ -63,6 +63,18 @@
   .chart { height:300px; }
   /* Top ideas section */
   #ideas { padding:10px 12px; border-bottom:1px solid var(--border); background:#12161c; }
+  #catalysts30 { padding:10px 12px; border-bottom:1px solid var(--border); background:#12161c; }
+  .ct-head { font-size:11px; font-weight:700; letter-spacing:.5px; text-transform:uppercase;
+    color:#9fd0ff; margin:2px 0 6px; }
+  .ct-table { width:100%; border-collapse:collapse; font-size:12px; }
+  .ct-table th { text-align:left; color:var(--muted); font-weight:600; font-size:10px;
+    text-transform:uppercase; letter-spacing:.4px; padding:4px 8px; border-bottom:1px solid var(--border); }
+  .ct-table td { padding:5px 8px; border-bottom:1px solid #1b2027; vertical-align:top; }
+  .ct-table tr { cursor:pointer; }
+  .ct-table tr:hover td { background:rgba(88,166,255,.06); }
+  .ct-tk { white-space:nowrap; }
+  .ct-dt { white-space:nowrap; font-variant-numeric:tabular-nums; color:var(--text); }
+  .ct-tx b.e { color:#9fd0ff; }
   .ideas-head { font-size:11px; font-weight:700; letter-spacing:.5px; text-transform:uppercase;
     color:#f5c518; margin:2px 0 6px; }
   .ideas-head.tp { color:var(--down); margin-top:10px; }
@@ -114,7 +126,7 @@
   </span>
   <nav class="tabs"><button id="tab-monitor" class="active" onclick="showTab('monitor')">Monitor</button><button id="tab-history" onclick="showTab('history')">History (≥5% moves)</button></nav>
 </header>
-<div id="monitor"><div id="ideas"></div><main id="grid"></main></div>
+<div id="monitor"><div id="ideas"></div><div id="catalysts30"></div><main id="grid"></main></div>
 <div id="history" style="display:none"></div>
 
 <script src="./vendor/lightweight-charts.standalone.production.js"></script>
@@ -201,6 +213,56 @@ function renderIdeas() {
     html += `<div class="ideas-row">${tps.map(i => `<span class="tpchip" onclick="goTo('${i.id}')"><b>${i.id}</b> ${i.idea.types.join(" · ")}</span>`).join("")}</div>`;
   }
   el.innerHTML = html || `<div class="ideas-head">No confirmed entries right now — cash is a position.</div>`;
+}
+
+// Consolidated ticker-by-ticker catalyst table for the next 30 days — reuses
+// fields already on each instrument (fund.next_earnings/ex_div, events, catalyst)
+// so this costs nothing extra to pull; it's purely a different view of data.json.
+function catalystRows() {
+  const rows = [];
+  for (const inst of DATA.instruments) {
+    const f = inst.fund || {};
+    if (f.next_earnings) {
+      const d = daysTo(f.next_earnings);
+      if (d != null && d >= 0 && d <= 30) {
+        const focus = inst.earn ? inst.earn.split(/\s*Sources?:/i)[0].replace(/\((https?:[^)]+)\)/g, "").trim() : "";
+        rows.push({ id: inst.id, label: inst.label, date: f.next_earnings, days: d,
+          text: "Earnings" + (focus ? " — " + focus : ""), earn: true });
+      }
+    }
+    if (f.ex_div) {
+      const d = daysTo(f.ex_div);
+      if (d != null && d >= 0 && d <= 30) {
+        rows.push({ id: inst.id, label: inst.label, date: f.ex_div, days: d, text: "Ex-dividend", earn: false });
+      }
+    }
+    (inst.events || []).forEach(e => {
+      const d = daysTo(e.date);
+      if (d != null && d >= 0 && d <= 30) {
+        rows.push({ id: inst.id, label: inst.label, date: e.date, days: d, text: e.event, earn: false });
+      }
+    });
+    // Undated "single most important near-term catalyst" line — no specific day
+    // count, sorted after every dated item for that ticker.
+    if (inst.catalyst) {
+      rows.push({ id: inst.id, label: inst.label, date: null, days: 999, text: inst.catalyst, earn: false });
+    }
+  }
+  rows.sort((a, b) => a.days - b.days || a.id.localeCompare(b.id));
+  return rows;
+}
+function renderCatalystsTable() {
+  const el = document.getElementById("catalysts30");
+  if (STALE) { el.innerHTML = ""; return; }
+  const rows = catalystRows();
+  if (!rows.length) { el.innerHTML = ""; return; }
+  const trs = rows.map(r => `<tr onclick="goTo('${r.id}')">
+    <td class="ct-tk"><b>${r.id}</b> <span class="muted">${r.label}</span></td>
+    <td class="ct-dt">${r.date ? `${r.date} <span class="muted">(${r.days}d)</span>` : '<span class="muted">—</span>'}</td>
+    <td class="ct-tx">${r.earn ? `<b class="e">${r.text}</b>` : r.text}</td>
+  </tr>`).join("");
+  el.innerHTML = `<div class="ct-head">📅 Catalysts — next 30 days</div>
+    <table class="ct-table"><thead><tr><th>Ticker</th><th>Date</th><th>Catalyst</th></tr></thead><tbody>${trs}</tbody></table>`;
 }
 
 window.goTo = function (id) {
@@ -439,6 +501,7 @@ async function load() {
   document.getElementById("meta").textContent =
     `${DATA.instruments.length} names · ${ideas} enter ideas · ${DATA.source} · ${new Date(DATA.generated_at).toLocaleString()}`;
   renderIdeas();
+  renderCatalystsTable();
   render();
 }
 load();
