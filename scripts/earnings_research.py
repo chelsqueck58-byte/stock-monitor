@@ -90,7 +90,13 @@ def main():
         if not (0 <= days <= WINDOW):
             continue
         cached = out.get(tid)
-        if cached and cached.get("fetched"):
+        # A cached entry still holding the pre-2026-07-23 "line" key was
+        # researched under the OLD prompt (forward focus blended with past-
+        # earnings reaction) - force a re-research under the new forward-only
+        # prompt regardless of freshness, or the stale blended content would
+        # otherwise sit there for up to FRESH_DAYS more, unchanged.
+        stale_schema = cached and "line" in cached and "focus" not in cached
+        if cached and cached.get("fetched") and not stale_schema:
             age = (today - datetime.date.fromisoformat(cached["fetched"])).days
             if age < FRESH_DAYS:
                 skipped_fresh += 1
