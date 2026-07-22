@@ -5,6 +5,7 @@ Usage: build.py [--source yahoo|ibkr] [--no-alert]
 import argparse
 import json
 import os
+import re
 import subprocess
 import sys
 from datetime import datetime, timedelta, timezone
@@ -25,8 +26,77 @@ IV = ROOT / "data" / "iv.json"
 EARNINGS = ROOT / "data" / "earnings.json"
 EVENTS = ROOT / "data" / "events.json"
 CATALYSTS = ROOT / "data" / "catalysts.json"
+MOVES = ROOT / "data" / "moves.json"
 TELE_DOCS = Path.home() / ".claude" / "tele-docs"
 TELEGRAM = Path.home() / ".claude" / "skills" / "telegram-sender" / "send.sh"
+
+EARNINGS_KEYWORDS = ("earnings", "eps", "revenue", "quarter", "guidance", "results",
+                     " q1", " q2", " q3", " q4", "profit", "loss")
+STOPWORDS = {"the", "a", "an", "and", "or", "for", "to", "of", "in", "on", "at", "with",
+             "its", "new", "this", "day", "event"}
+
+
+def _opens_with_earnings_ref(reason):
+    """True if a quarter reference (Q1-Q4) or "earnings" appears within the
+    reason's first 3 words - the real signal for "this reason IS about that
+    report", found by testing against real data. A fixed character-count
+    cutoff was tried first and proved fragile: it's pushed around by variable-
+    length verb/adjective openers real entries actually use ("Blowout Q4...",
+    "Fiscal Q3...", "Beat Q1...", "Missed Q1..." all put the quarter at word
+    2, not a fixed character offset). A false match like "Investor re-rating
+    on Q1 results" puts Q1 at word 4 - reliably later, since it's referencing
+    a report in passing rather than describing it."""
+    words = re.findall(r"[a-zA-Z0-9]+", reason)[:3]
+    head = " ".join(words).lower()
+    return bool(re.search(r"\bq[1-4]\b", head)) or "earnings" in head
+
+
+def find_prev_earnings_reaction(moves):
+    """The ticker's most recent earnings REPORT DAY reaction — a cheap
+    heuristic, not a search. Reuses what movements_research.py already
+    grounded and sourced instead of asking an LLM to recall history it might
+    get wrong.
+
+    Among moves whose reason opens with an earnings reference (see
+    _opens_with_earnings_ref), picks the most recent one - and if two such
+    moves fall within 7 days of each other (the report day plus a smaller
+    follow-on drift/analyst-note day that also happens to open with the same
+    "Q_ earnings" phrasing, confirmed live on AVGO: 2026-06-04 -12.6% real
+    report day vs 2026-06-10 -5.1% follow-on), prefers the larger-magnitude
+    one, since the report day itself is reliably the decisive move.
+    """
+    candidates = [m for m in moves if m.get("reason") and _opens_with_earnings_ref(m["reason"])]
+    if not candidates:
+        return None
+    candidates.sort(key=lambda x: x["d"], reverse=True)
+    anchor_date = datetime.strptime(candidates[0]["d"], "%Y-%m-%d")
+    cluster = [c for c in candidates
+               if abs((datetime.strptime(c["d"], "%Y-%m-%d") - anchor_date).days) <= 7]
+    m = max(cluster, key=lambda x: abs(x["pct"]))
+    return {"date": m["d"], "pct": m["pct"], "reason": m["reason"], "source": m.get("source")}
+
+
+def find_prev_event_reaction(moves, event_desc):
+    """Best keyword-overlap match between an upcoming event's description and
+    past researched move reasons for the same ticker — e.g. an upcoming
+    'Advancing AI 2026' event matches a past move reasoned around 'Advancing
+    AI'. Heuristic and approximate by design (chosen over a fresh search per
+    event); returns nothing rather than a low-confidence guess."""
+    words = {w.lower() for w in re.findall(r"[a-zA-Z]+", event_desc)
+             if w.lower() not in STOPWORDS and len(w) > 2}
+    if not words:
+        return None
+    best, best_score = None, 0
+    for m in moves:
+        if not m.get("reason"):
+            continue
+        reason_words = {w.lower() for w in re.findall(r"[a-zA-Z]+", m["reason"])}
+        score = len(words & reason_words)
+        if score > best_score:
+            best_score, best = score, m
+    if best_score >= 1:
+        return {"date": best["d"], "pct": best["pct"], "reason": best["reason"], "source": best.get("source")}
+    return None
 
 
 def load_tele_research():
@@ -205,11 +275,13 @@ def main():
             return {}
 
     events = load_json(EVENTS)
-    # earnings.json / catalysts.json store {"line":..., "fetched":...} (freshness
-    # tracking for the research scripts) — unwrap to the plain line for the site.
-    earnings = {k: v.get("line") for k, v in load_json(EARNINGS).items() if isinstance(v, dict)}
+    # earnings.json / catalysts.json store {"focus"/"line":..., "fetched":...}
+    # (freshness tracking for the research scripts) — unwrap to the plain
+    # string for the site.
+    earnings = {k: v.get("focus") for k, v in load_json(EARNINGS).items() if isinstance(v, dict)}
     catalysts = {k: v.get("line") for k, v in load_json(CATALYSTS).items() if isinstance(v, dict)}
     tele_research = load_tele_research()
+    moves_data = load_json(MOVES)
 
     entries = []
     failures = []
@@ -226,6 +298,11 @@ def main():
                         f"for a valid 200DMA - check the symbol"
                     )
                 entry = summarise(bars, settings)
+                ticker_moves = moves_data.get(member["id"], {}).get("moves", [])
+                ticker_events = events.get(member["id"])
+                if ticker_events:
+                    for ev in ticker_events:
+                        ev["prev_reaction"] = find_prev_event_reaction(ticker_moves, ev.get("event", ""))
                 entry.update({
                     "id": member["id"],
                     "label": member["label"],
@@ -236,7 +313,8 @@ def main():
                     "news": news.get(member["id"]),
                     "iv": iv.get(member["id"]),
                     "earn": earnings.get(member["id"]),
-                    "events": events.get(member["id"]),
+                    "prev_earnings": find_prev_earnings_reaction(ticker_moves),
+                    "events": ticker_events,
                     "catalyst": catalysts.get(member["id"]),
                     "tele": tele_research.get(member["id"]),
                 })

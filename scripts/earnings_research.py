@@ -1,8 +1,14 @@
-"""For names with earnings within ~35 days, research (web search, grounded): the
-market's focus for the upcoming print and how the stock typically reacts.
-Writes data/earnings.json {id: {"line": "... [src]", "fetched": "YYYY-MM-DD"}};
-build.py unwraps to a plain string as inst.earn. Grounded only — blank if no
-source.
+"""For names with earnings within ~35 days, research (web search, grounded):
+the market's focus for the upcoming print — forward-looking ONLY.
+Writes data/earnings.json {id: {"focus": "... [src]", "fetched": "YYYY-MM-DD"}};
+build.py unwraps to inst.earn. Grounded only — blank if no source.
+
+Previously this ALSO asked the model to recall "how has the stock typically
+reacted to recent earnings" — dropped 2026-07-23. That's now computed for
+free in build.py by looking up the ticker's own researched move history in
+data/moves.json (real dated moves with grounded reasons, not an LLM's recall
+of history) instead of spending a web search on something we usually already
+have a better, dated, sourced answer for.
 
 Efficiency:
 - Batches multiple tickers into ONE Claude call (was one full CLI subprocess per
@@ -104,14 +110,13 @@ def main():
             blocks.append(block)
         listing = "\n".join(blocks)
         prompt = (
-            "For EACH stock below, in ONE line per stock (<=170 chars): what is the market's KEY "
-            "focus/expectation for its upcoming earnings print, and how has the stock typically "
-            "REACTED to its recent earnings (e.g. jumped/fell X%)? Some stocks below have a TODAY'S "
-            "FEED excerpt (Telegram/Gmail/X already collected today) — check it FIRST for earnings-"
-            "preview chatter; use it if credible (still attribute a source/outlet if the excerpt "
-            "names one), otherwise use web search. Prioritize sources from the last 7 days for the "
-            "focus half; the reaction history can cite older quarters since that's inherently "
-            f"historical.{feed.SOURCE_HINT} "
+            "For EACH stock below, in ONE line (<=170 chars): what is the market's KEY focus/"
+            "expectation for its UPCOMING earnings print — what specifically will investors be "
+            "watching for? Forward-looking only, do not discuss past quarters. Some stocks below "
+            "have a TODAY'S FEED excerpt (Telegram/Gmail/X already collected today) — check it "
+            "FIRST for earnings-preview chatter; use it if credible (still attribute a source/"
+            "outlet if the excerpt names one), otherwise use web search. Prioritize sources from "
+            f"the last 7 days.{feed.SOURCE_HINT} "
             "End each line with the source outlet in brackets, e.g. [Bloomberg] or [Telegram] "
             "if from the feed. If you cannot find credible info for a stock from either the feed or "
             "a search, omit it entirely.\n\n"
@@ -124,7 +129,7 @@ def main():
             if isinstance(line, str) and line.strip():
                 line = clean_line(" ".join(line.split()))
                 if line and "[" in line:
-                    out[tid] = {"line": line[:200], "fetched": today.isoformat()}
+                    out[tid] = {"focus": line[:200], "fetched": today.isoformat()}
                     print(f"  {tid}: {line[:90]}")
         OUT.write_text(json.dumps(out, ensure_ascii=False, separators=(",", ":")))
 

@@ -63,6 +63,9 @@
   .earn { padding:6px 10px; font-size:11px; border-top:1px solid var(--border); background:rgba(88,166,255,.05); }
   .earn .eh { color:var(--muted); }
   .earn .efocus { color:#9fd0ff; margin-top:3px; }
+  .ct-prev { color:#c9a5f0; margin-top:3px; }
+  .ct-event { font-weight:600; }
+  .ct-focus { color:#9fd0ff; margin-top:2px; }
   .ideabox .nw { color:#9fd0ff; font-size:11px; margin-top:3px; }
   .chart { height:300px; }
   /* Top ideas section */
@@ -224,6 +227,15 @@ function renderIdeas() {
 // Consolidated ticker-by-ticker catalyst table for the next 30 days — reuses
 // fields already on each instrument (fund.next_earnings/ex_div, events, catalyst)
 // so this costs nothing extra to pull; it's purely a different view of data.json.
+function prevPerfBlock(prev, label) {
+  // prev = {date, pct, reason, source} from build.py's moves.json lookup
+  // (zero-cost - reused from our own researched move history, not a fresh
+  // search). label distinguishes "Last earnings" vs "Last time" for events.
+  if (!prev) return "";
+  const cls = prev.pct >= 0 ? "u" : "d";
+  const src = prev.source ? ` <span class="msrc">[${prev.source}]</span>` : "";
+  return `<div class="ct-prev">↩ ${label} (${prev.date}, <span class="pct ${cls}">${prev.pct >= 0 ? "+" : ""}${prev.pct}%</span>): ${prev.reason}${src}</div>`;
+}
 function catalystRows() {
   const rows = [];
   for (const inst of DATA.instruments) {
@@ -233,19 +245,21 @@ function catalystRows() {
       if (d != null && d >= 0 && d <= 30) {
         const focus = inst.earn ? inst.earn.split(/\s*Sources?:/i)[0].replace(/\((https?:[^)]+)\)/g, "").trim() : "";
         rows.push({ id: inst.id, label: inst.label, date: f.next_earnings, days: d,
-          text: "Earnings" + (focus ? " — " + focus : ""), earn: true });
+          event: "Earnings", focus, prev: inst.prev_earnings, prevLabel: "Last earnings", earn: true });
       }
     }
     if (f.ex_div) {
       const d = daysTo(f.ex_div);
       if (d != null && d >= 0 && d <= 30) {
-        rows.push({ id: inst.id, label: inst.label, date: f.ex_div, days: d, text: "Ex-dividend", earn: false });
+        rows.push({ id: inst.id, label: inst.label, date: f.ex_div, days: d,
+          event: "Ex-dividend", focus: "", prev: null, prevLabel: "", earn: false });
       }
     }
     (inst.events || []).forEach(e => {
       const d = daysTo(e.date);
       if (d != null && d >= 0 && d <= 30) {
-        rows.push({ id: inst.id, label: inst.label, date: e.date, days: d, text: e.event, earn: false });
+        rows.push({ id: inst.id, label: inst.label, date: e.date, days: d,
+          event: e.event, focus: "", prev: e.prev_reaction, prevLabel: "Last time", earn: false });
       }
     });
     // inst.catalyst (from catalysts.json) is deliberately NOT included here —
@@ -265,10 +279,14 @@ function renderCatalystsTable() {
   const trs = rows.map(r => `<tr onclick="goTo('${r.id}')">
     <td class="ct-tk"><b>${r.id}</b> <span class="muted">${r.label}</span></td>
     <td class="ct-dt">${r.date ? `${r.date} <span class="muted">(${r.days}d)</span>` : '<span class="muted">—</span>'}</td>
-    <td class="ct-tx">${r.earn ? `<b class="e">${r.text}</b>` : r.text}</td>
+    <td class="ct-tx">
+      <div class="ct-event">${r.earn ? `<b class="e">${r.event}</b>` : r.event}</div>
+      ${r.focus ? `<div class="ct-focus">🎯 ${r.focus}</div>` : ""}
+      ${prevPerfBlock(r.prev, r.prevLabel)}
+    </td>
   </tr>`).join("");
-  el.innerHTML = `<div class="ct-head">📅 Catalysts — next 30 days</div>
-    <table class="ct-table"><thead><tr><th>Ticker</th><th>Date</th><th>Catalyst</th></tr></thead><tbody>${trs}</tbody></table>`;
+  el.innerHTML = `<div class="ct-head">📅 Catalysts — next 30 days (event · investor focus · prev performance & why)</div>
+    <table class="ct-table"><thead><tr><th>Ticker</th><th>Date</th><th>Event / Focus / Prev Performance</th></tr></thead><tbody>${trs}</tbody></table>`;
 }
 
 window.goTo = function (id) {
@@ -353,8 +371,9 @@ function earningsBox(inst) {
     return `<span class="pct ${s >= 0 ? "u" : "d"}">${(q.q || "").slice(0, 7)} ${s >= 0 ? "beat" : "miss"} ${num}</span>`;
   }).filter(Boolean).join(" ");
   const focusText = inst.earn ? inst.earn.split(/\s*Sources?:/i)[0].replace(/\((https?:[^)]+)\)/g, "").trim() : "";
-  const focus = focusText ? `<div class="efocus">${focusText}</div>` : "";
-  return `<div class="earn"><b>⏰ Earnings ${f.next_earnings} (${days}d)</b>${f.curr_est ? ` · est $${f.curr_est.toFixed(2)}` : ""}<br><span class="eh">Last 4Q:</span> ${beats || "—"}${focus}</div>`;
+  const focus = focusText ? `<div class="efocus">🎯 ${focusText}</div>` : "";
+  const prevBlock = prevPerfBlock(inst.prev_earnings, "Last earnings");
+  return `<div class="earn"><b>⏰ Earnings ${f.next_earnings} (${days}d)</b>${f.curr_est ? ` · est $${f.curr_est.toFixed(2)}` : ""}<br><span class="eh">Last 4Q:</span> ${beats || "—"}${focus}${prevBlock}</div>`;
 }
 
 function badges(inst) {
