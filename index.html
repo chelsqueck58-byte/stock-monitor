@@ -228,13 +228,19 @@ function renderIdeas() {
 // fields already on each instrument (fund.next_earnings/ex_div, events, catalyst)
 // so this costs nothing extra to pull; it's purely a different view of data.json.
 function prevPerfBlock(prev, label) {
-  // prev = {date, pct, reason, source} from build.py's moves.json lookup
-  // (zero-cost - reused from our own researched move history, not a fresh
-  // search). label distinguishes "Last earnings" vs "Last time" for events.
-  if (!prev) return "";
-  const cls = prev.pct >= 0 ? "u" : "d";
-  const src = prev.source ? ` <span class="msrc">[${prev.source}]</span>` : "";
-  return `<div class="ct-prev">↩ ${label} (${prev.date}, <span class="pct ${cls}">${prev.pct >= 0 ? "+" : ""}${prev.pct}%</span>): ${prev.reason}${src}</div>`;
+  // prev = {date, pct, reason, source} OR a list of up to 4 of those, from
+  // build.py's moves.json lookup (zero-cost - reused from our own researched
+  // move history, not a fresh search). label distinguishes "Last earnings"
+  // (list, up to 4 quarters) vs "Last time" (events, single entry).
+  const list = Array.isArray(prev) ? prev : (prev ? [prev] : []);
+  if (!list.length) return "";
+  const line = (p, prefix) => {
+    const cls = p.pct >= 0 ? "u" : "d";
+    const src = p.source ? ` <span class="msrc">[${p.source}]</span>` : "";
+    return `<div class="ct-prev">↩ ${prefix} (${p.date}, <span class="pct ${cls}">${p.pct >= 0 ? "+" : ""}${p.pct}%</span>): ${p.reason}${src}</div>`;
+  };
+  if (list.length === 1) return line(list[0], label);
+  return list.map((p, i) => line(p, i === 0 ? label : `Earnings -${i + 1}`)).join("");
 }
 function catalystRows() {
   const rows = [];
