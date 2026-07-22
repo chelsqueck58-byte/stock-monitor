@@ -102,7 +102,19 @@ def fetch(session, crumb, symbol):
 def main():
     config = json.loads(CONFIG.read_text())
     session, crumb = session_with_crumb()
-    out, ok, missing = {}, 0, []
+
+    # Merge into whatever's already there — a transient Yahoo failure for one
+    # ticker used to wipe its entry (P/E, next earnings, everything) until the
+    # next successful run, since `out` started empty every time. Fall back to
+    # the last-known-good snapshot instead, same pattern as build.py's price fetch.
+    out = {}
+    if OUT.exists():
+        try:
+            out = json.loads(OUT.read_text())
+        except (json.JSONDecodeError, OSError):
+            pass
+
+    ok, missing, stale = 0, [], []
     for group in config["groups"]:
         for member in group["members"]:
             symbol = member.get("yahoo")
@@ -113,13 +125,17 @@ def main():
             if snap and any(v is not None for v in snap.values()):
                 out[member["id"]] = snap
                 ok += 1
+            elif member["id"] in out:
+                stale.append(member["id"])  # kept last-known-good
             else:
-                missing.append(member["id"])
+                missing.append(member["id"])  # never fetched successfully at all
             time.sleep(0.4)
 
     OUT.parent.mkdir(parents=True, exist_ok=True)
     OUT.write_text(json.dumps(out, separators=(",", ":")))
-    print(f"fundamentals: {ok} ok, {len(missing)} missing -> {OUT}")
+    print(f"fundamentals: {ok} ok, {len(stale)} reused last-good, {len(missing)} never fetched -> {OUT}")
+    if stale:
+        print("  stale (kept prior):", ", ".join(stale))
     if missing:
         print("  missing:", ", ".join(missing))
 

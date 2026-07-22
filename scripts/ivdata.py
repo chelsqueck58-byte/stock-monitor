@@ -32,7 +32,19 @@ def main():
         print(f"IB Gateway not reachable ({exc}); keeping existing iv.json")
         return
 
+    # Merge into what's already there — Gateway being fully unreachable was
+    # already handled above (early return, old file untouched), but a PARTIAL
+    # failure (Gateway up, one contract fails to qualify or has no IV data this
+    # run) used to silently drop that ticker from the file forever, since `out`
+    # started empty and got written whenever ANY ticker succeeded.
     out = {}
+    if OUT.exists():
+        try:
+            out = json.loads(OUT.read_text())
+        except (json.JSONDecodeError, OSError):
+            pass
+
+    ok, stale = 0, []
     for group in config["groups"]:
         for member in group["members"]:
             spec = member.get("ibkr", {})
@@ -43,10 +55,14 @@ def main():
             try:
                 ib.qualifyContracts(contract)
             except Exception:
+                if member["id"] in out:
+                    stale.append(member["id"])
                 continue
             iv = series(ib, contract, "OPTION_IMPLIED_VOLATILITY", "1 Y")
             hv = series(ib, contract, "HISTORICAL_VOLATILITY", "30 D")
             if not iv:
+                if member["id"] in out:
+                    stale.append(member["id"])
                 continue
             cur, lo, hi = iv[-1], min(iv), max(iv)
             out[member["id"]] = {
@@ -55,13 +71,16 @@ def main():
                 "realized": round(hv[-1] * 100, 1) if hv else None,
                 "move_1m": round(cur * math.sqrt(21 / 252) * 100, 1),
             }
+            ok += 1
             ib.sleep(0.3)
 
     ib.disconnect()
     if out:
         OUT.parent.mkdir(parents=True, exist_ok=True)
         OUT.write_text(json.dumps(out, separators=(",", ":")))
-        print(f"iv: {len(out)} names -> {OUT}")
+        print(f"iv: {ok} refreshed, {len(stale)} reused last-good -> {OUT}")
+        if stale:
+            print("  stale (kept prior):", ", ".join(stale))
     else:
         print("no IV returned; keeping existing iv.json")
 
