@@ -161,8 +161,8 @@ function noteKey(id) { return `stockmon.note.${id}`; }
 
 function earnTag(dateStr) {
   if (!dateStr) return "";
-  const days = Math.round((new Date(dateStr + "T00:00:00") - Date.now()) / 8.64e7);
-  if (days < 0) return "";  // stale/past date from the data source — don't show
+  const days = daysTo(dateStr);
+  if (days == null || days < 0) return "";  // stale/past date from the data source — don't show
   if (days <= 30) return `<span class="er-soon">ER ${dateStr} (${days}d)</span>`;
   return `ER ${dateStr}`;
 }
@@ -295,7 +295,20 @@ function keyRemark(inst) {
 }
 
 function daysTo(ds) {
-  return ds ? Math.round((new Date(ds + "T00:00:00") - Date.now()) / 8.64e7) : null;
+  // Pure UTC calendar-day difference — NOT `new Date(ds + "T00:00:00") - Date.now()`.
+  // That form parses the date-only string as the VIEWER's local midnight (per the
+  // JS date-time-string spec, a "T..." suffix with no offset means local time),
+  // which in HKT (UTC+8) is 8 hours before true UTC midnight for that date. That
+  // shift, combined with how far into the day "now" already is, was enough to
+  // tip a same-day (or even tomorrow's) date to a negative day-count and drop it
+  // from every dated list on the site (confirmed: GOOGL/TSLA earnings dated
+  // "today" were vanishing entirely; INTC dated "tomorrow" mislabeled as "0d").
+  if (!ds) return null;
+  const [y, m, d] = ds.split("-").map(Number);
+  const target = Date.UTC(y, m - 1, d);
+  const now = new Date();
+  const today = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate());
+  return Math.round((target - today) / 8.64e7);
 }
 function teleResearch(inst) {
   const t = inst.tele;
