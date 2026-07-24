@@ -520,7 +520,7 @@ window.showTab = function (t) {
 };
 async function loadHistory() {
   const h = document.getElementById("history");
-  try { MOVES = await (await fetch("./moves.json", { cache: "no-store" })).json(); }
+  try { MOVES = await (await fetch("./moves.json?v=" + Math.floor(Date.now() / 60000), { cache: "no-store" })).json(); }
   catch (e) { h.innerHTML = '<div style="padding:16px;color:var(--muted)">move history not available yet</div>'; return; }
   h.innerHTML = "";
   for (const inst of DATA.instruments) {
