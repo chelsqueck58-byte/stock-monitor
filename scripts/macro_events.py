@@ -83,7 +83,19 @@ def main():
         'Output ONLY a JSON array: [{"date":"YYYY-MM-DD","event":"short label","source":"outlet"}]. '
         "No prose."
     )
-    result = parse_json(ask_claude(prompt))
+    raw = ask_claude(prompt)
+    result = parse_json(raw)
+    if not result and raw.strip():
+        # Model narrated instead of returning pure JSON (observed elsewhere in
+        # this pipeline under WebSearch tool use) - one retry with a blunt
+        # reformat instruction, reusing what it already found.
+        fixup = (
+            'Extract ONLY the JSON array from this text, matching '
+            '[{"date":"YYYY-MM-DD","event":"...","source":"..."}]. '
+            "Reply with ONLY the JSON array, nothing else.\n\n" + raw
+        )
+        result = parse_json(ask_claude(fixup))
+
     events = []
     for e in result:
         if not (isinstance(e, dict) and e.get("date") and e.get("event")):
@@ -96,6 +108,17 @@ def main():
             events.append({"date": e["date"], "event": str(e["event"])[:120], "source": str(e.get("source", ""))[:60]})
 
     events.sort(key=lambda ev: ev["date"])
+
+    # A 30-day US/global macro window is essentially never genuinely empty -
+    # zero results is a signal the call failed, not that nothing's scheduled.
+    # Keep the prior (still-useful) events and DON'T advance `fetched`, so the
+    # next run retries instead of the freshness TTL silently hiding a blank
+    # calendar for a week. Only overwrite when this run actually found something.
+    if not events and state.get("events"):
+        print(f"got 0 events this run (prior data had {len(state['events'])}) - "
+              "keeping prior data, not marking fresh so this retries next run")
+        return
+
     OUT.write_text(json.dumps({"events": events, "fetched": today.isoformat()},
                                ensure_ascii=False, separators=(",", ":")))
     print(f"macro events: {len(events)} found -> {OUT}")
