@@ -80,6 +80,8 @@
   .ct-table td { padding:5px 8px; border-bottom:1px solid #1b2027; vertical-align:top; }
   .ct-table tr { cursor:pointer; }
   .ct-table tr:hover td { background:rgba(88,166,255,.06); }
+  .ct-table tr:has(.ct-macro) { cursor:default; }
+  .ct-macro { color:#f0b429; font-weight:600; font-size:11px; letter-spacing:.3px; }
   .ct-tk { white-space:nowrap; }
   .ct-dt { white-space:nowrap; font-variant-numeric:tabular-nums; color:var(--text); }
   .ct-tx b.e { color:#9fd0ff; }
@@ -289,7 +291,19 @@ function catalystRows() {
     // are unreliable to parse and would show as blank/wrong in the Date column).
     // It still shows on each ticker's card (🎯 line) elsewhere on the site.
   }
-  rows.sort((a, b) => a.days - b.days || a.id.localeCompare(b.id));
+  // Macro/market-wide events (Fed, CPI, NFP, PMI...) - not tied to any ticker,
+  // added 2026-07-28 after a real miss (an earlier catalyst pass omitted the
+  // FOMC meeting entirely). Merged into the same table rather than a separate
+  // section, sorted in by date like everything else - a pseudo-row with no
+  // ticker id (click is a no-op, nothing to scroll to).
+  (DATA.macro_events || []).forEach(m => {
+    const d = daysTo(m.date);
+    if (d != null && d >= 0 && d <= 30) {
+      rows.push({ id: null, label: "", date: m.date, days: d,
+        event: m.event, focus: "", prev: null, prevLabel: "", earn: false, macro: true, source: m.source });
+    }
+  });
+  rows.sort((a, b) => a.days - b.days || (a.id || "").localeCompare(b.id || ""));
   return rows;
 }
 function renderCatalystsTable() {
@@ -297,11 +311,11 @@ function renderCatalystsTable() {
   if (STALE) { el.innerHTML = ""; return; }
   const rows = catalystRows();
   if (!rows.length) { el.innerHTML = ""; return; }
-  const trs = rows.map(r => `<tr onclick="goTo('${r.id}')">
-    <td class="ct-tk"><b>${r.id}</b> <span class="muted">${r.label}</span></td>
+  const trs = rows.map(r => `<tr ${r.macro ? "" : `onclick="goTo('${r.id}')"`}>
+    <td class="ct-tk">${r.macro ? '<span class="ct-macro">🌐 MACRO</span>' : `<b>${r.id}</b> <span class="muted">${r.label}</span>`}</td>
     <td class="ct-dt">${r.date ? `${r.date} <span class="muted">(${r.days}d)</span>` : '<span class="muted">—</span>'}</td>
     <td class="ct-tx">
-      <div class="ct-event">${r.earn ? `<b class="e">${esc(r.event)}</b>` : esc(r.event)}</div>
+      <div class="ct-event">${r.earn ? `<b class="e">${esc(r.event)}</b>` : esc(r.event)}${r.macro && r.source ? ` <span class="msrc">[${esc(r.source)}]</span>` : ""}</div>
       ${r.focus ? `<div class="ct-focus">🎯 ${esc(r.focus)}</div>` : ""}
       ${prevPerfBlock(r.prev, r.prevLabel)}
     </td>

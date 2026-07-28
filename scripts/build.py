@@ -27,6 +27,7 @@ EARNINGS = ROOT / "data" / "earnings.json"
 EVENTS = ROOT / "data" / "events.json"
 CATALYSTS = ROOT / "data" / "catalysts.json"
 MOVES = ROOT / "data" / "moves.json"
+MACRO_EVENTS = ROOT / "data" / "macro-events.json"
 TELE_DOCS = Path.home() / ".claude" / "tele-docs"
 TELEGRAM = Path.home() / ".claude" / "skills" / "telegram-sender" / "send.sh"
 
@@ -302,6 +303,9 @@ def main():
     catalysts = {k: v.get("line") for k, v in load_json(CATALYSTS).items() if isinstance(v, dict)}
     tele_research = load_tele_research()
     moves_data = load_json(MOVES)
+    # Macro/market-wide events (Fed, CPI, NFP, PMI...) - not tied to any single
+    # ticker, so they live at the payload level rather than per-instrument.
+    macro_events = load_json(MACRO_EVENTS).get("events", [])
 
     def build_metadata(tid):
         """Everything that doesn't depend on fresh bars — fundamentals, news,
@@ -377,6 +381,7 @@ def main():
         "stale_after_hours": settings["stale_after_hours"],
         "failures": failures,
         "instruments": entries,
+        "macro_events": macro_events,
     }
 
     OUTPUT.parent.mkdir(parents=True, exist_ok=True)

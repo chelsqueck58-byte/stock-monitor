@@ -28,3 +28,6 @@ export PATH="/opt/homebrew/bin:/Users/chelsqueck/.local/bin:/usr/local/bin:/usr/
 # Broader non-earnings catalysts for priority tickers (freshness-TTL'd). Same
 # feed-first check as earnings_research.py above.
 ~/stock-monitor/.venv/bin/python ~/stock-monitor/scripts/catalysts.py || true
+# Macro calendar (Fed/CPI/NFP/PMI) - market-wide, not tied to any ticker.
+# Freshness-TTL'd weekly, dates don't move day to day.
+~/stock-monitor/.venv/bin/python ~/stock-monitor/scripts/macro_events.py || true
