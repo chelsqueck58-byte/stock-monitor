@@ -27,6 +27,7 @@
   #stale { display:none; background:var(--down); color:#fff; padding:10px 16px; font-weight:600; text-align:center; }
   #stale.show { display:block; }
   main { padding:12px; display:grid; gap:10px; grid-template-columns:repeat(auto-fill,minmax(460px,1fr)); }
+  .monitor-grid { padding:12px; display:grid; gap:10px; grid-template-columns:repeat(auto-fill,minmax(460px,1fr)); }
   .section { grid-column:1/-1; font-size:12px; font-weight:600; color:var(--muted);
     text-transform:uppercase; letter-spacing:.5px; padding:8px 2px 2px; border-bottom:1px solid var(--border); }
   .card { background:var(--panel); border:1px solid var(--border); border-radius:8px; overflow:hidden; }
@@ -71,6 +72,7 @@
   /* Top ideas section */
   #ideas { padding:10px 12px; border-bottom:1px solid var(--border); background:#12161c; }
   #catalysts30 { padding:10px 12px; border-bottom:1px solid var(--border); background:#12161c; }
+  #pastCatalysts { padding:10px 12px; border-bottom:1px solid var(--border); background:#12161c; }
   .ct-head { font-size:11px; font-weight:700; letter-spacing:.5px; text-transform:uppercase;
     color:#9fd0ff; margin:2px 0 6px; }
   .ct-table { width:100%; border-collapse:collapse; font-size:12px; }
@@ -101,10 +103,11 @@
   .ideabox:hover, .tpchip:hover { filter:brightness(1.25); }
   .card.flash { animation:flash 1.2s ease-out; }
   @keyframes flash { 0% { box-shadow:inset 0 0 0 2px #58a6ff; } 100% { box-shadow:none; } }
-  .tabs { display:flex; gap:4px; margin-top:6px; }
+  .tabs { display:flex; gap:4px; margin-top:6px; flex-wrap:wrap; }
   .tabs button { background:transparent; border:1px solid var(--border); border-bottom:none;
-    color:var(--muted); padding:5px 14px; border-radius:6px 6px 0 0; cursor:pointer; font-size:13px; }
+    color:var(--muted); padding:5px 14px; border-radius:6px 6px 0 0; cursor:pointer; font-size:13px; font-family:inherit; }
   .tabs button.active { background:var(--panel); color:var(--text); }
+  #monitor-tabs { display:flex !important; visibility:visible !important; opacity:1 !important; }
   #history { padding:12px; display:grid; gap:12px; grid-template-columns:repeat(auto-fill,minmax(470px,1fr)); }
   .hcard { background:var(--panel); border:1px solid var(--border); border-radius:8px; overflow:hidden; }
   .hcard .htop { padding:8px 10px; font-weight:600; border-bottom:1px solid var(--border); }
@@ -135,14 +138,29 @@
   </div>
   <nav class="tabs"><button id="tab-monitor" class="active" onclick="showTab('monitor')">Monitor</button><button id="tab-history" onclick="showTab('history')">History (≥5% moves)</button></nav>
 </header>
-<div id="monitor"><div id="ideas"></div><div id="catalysts30"></div><main id="grid"></main></div>
+<div id="monitor">
+  <div id="ideas"></div>
+  <div id="catalysts30"></div>
+  <div id="pastCatalysts"></div>
+  <nav class="tabs" id="monitor-tabs" style="margin:10px 12px 0">
+    <button id="tab-china-internet" class="active" onclick="showMonitorTab('china-internet')">China Internet</button>
+    <button id="tab-ai-tech" onclick="showMonitorTab('ai-tech')">AI & Big Tech</button>
+    <button id="tab-others" onclick="showMonitorTab('others')">All Others</button>
+  </nav>
+  <main id="grid-china-internet" class="monitor-grid"></main>
+  <main id="grid-ai-tech" class="monitor-grid" style="display:none"></main>
+  <main id="grid-others" class="monitor-grid" style="display:none"></main>
+</div>
 <div id="history" style="display:none"></div>
 
 <script src="./vendor/lightweight-charts.standalone.production.js"></script>
 <script>
+console.log("=== SCRIPT STARTED ===");
 "use strict";
 const TREND_ORDER = { up: 0, flat: 1, down: 2 };
+console.log("TREND_ORDER defined");
 let DATA = null, STALE = false, OBSERVER = null;
+console.log("DATA, STALE, OBSERVER declared");
 
 // HTML-escape freeform text (LLM/web-search/Telegram-sourced) before it goes
 // into a template literal that gets assigned to innerHTML. None of it was
@@ -221,14 +239,30 @@ function ideaBox(inst) {
     ${teleResearch(inst)}
   </div>`;
 }
-function renderIdeas() {
+const CATEGORY_TICKERS = {
+  "china-internet": new Set(["PDD", "9988", "0700", "9618", "3690", "1810", "9888"]),
+  "ai-tech": new Set(["AMZN", "NVDA", "AAPL", "MSFT", "META", "GOOGL", "TSLA", "TSM", "000660", "005930", "MU"]),
+};
+
+function filterByCategory(instruments, category) {
+  if (!category) return instruments;
+  if (category === "others") {
+    const inCats = new Set([...CATEGORY_TICKERS["china-internet"], ...CATEGORY_TICKERS["ai-tech"]]);
+    return instruments.filter(i => !inCats.has(i.id));
+  }
+  const tickers = CATEGORY_TICKERS[category];
+  return tickers ? instruments.filter(i => tickers.has(i.id)) : instruments;
+}
+
+function renderIdeas(category) {
   const el = document.getElementById("ideas");
   if (STALE) { el.innerHTML = ""; return; }
-  const enters = DATA.instruments.filter(i => i.idea && i.idea.kind === "enter");
-  const tps = DATA.instruments.filter(i => i.idea && i.idea.kind === "take_profit");
+  const insts = category ? filterByCategory(DATA.instruments, category) : DATA.instruments;
+  const enters = insts.filter(i => i.idea && i.idea.kind === "enter");
+  const tps = insts.filter(i => i.idea && i.idea.kind === "take_profit");
   let html = "";
   if (enters.length) {
-    html += `<div class="ideas-head">⬤ Enter now (1-month) — dig fundamentals, then execute · stop is yours</div>`;
+    html += `<div class="ideas-head">⬤ Enter now (1-month) — dig fundamentals, then execute</div>`;
     html += `<div class="ideas-row">${enters.map(ideaBox).join("")}</div>`;
   }
   if (tps.length) {
@@ -256,9 +290,10 @@ function prevPerfBlock(prev, label) {
   if (list.length === 1) return line(list[0], label);
   return list.map((p, i) => line(p, i === 0 ? label : `Earnings -${i + 1}`)).join("");
 }
-function catalystRows() {
+function catalystRows(category) {
   const rows = [];
-  for (const inst of DATA.instruments) {
+  const insts = category ? filterByCategory(DATA.instruments, category) : DATA.instruments;
+  for (const inst of insts) {
     const f = inst.fund || {};
     if (f.next_earnings) {
       const d = daysTo(f.next_earnings);
@@ -291,10 +326,10 @@ function catalystRows() {
   rows.sort((a, b) => a.days - b.days || a.id.localeCompare(b.id));
   return rows;
 }
-function renderCatalystsTable() {
+function renderCatalystsTable(category) {
   const el = document.getElementById("catalysts30");
   if (STALE) { el.innerHTML = ""; return; }
-  const rows = catalystRows();
+  const rows = catalystRows(category);
   if (!rows.length) { el.innerHTML = ""; return; }
   const trs = rows.map(r => `<tr onclick="goTo('${r.id}')">
     <td class="ct-tk"><b>${r.id}</b> <span class="muted">${r.label}</span></td>
@@ -307,6 +342,20 @@ function renderCatalystsTable() {
   </tr>`).join("");
   el.innerHTML = `<div class="ct-head">📅 Catalysts — next 30 days (event · investor focus · prev performance & why)</div>
     <table class="ct-table"><thead><tr><th>Ticker</th><th>Date</th><th>Event / Focus / Prev Performance</th></tr></thead><tbody>${trs}</tbody></table>`;
+}
+
+function renderPastCatalysts(category) {
+  const el = document.getElementById("pastCatalysts");
+  if (STALE) { el.innerHTML = ""; return; }
+  const rows = pastEventRows(category);
+  if (!rows.length) { el.innerHTML = ""; return; }
+  const trs = rows.map(r => `<tr onclick="goTo('${r.id}')">
+    <td class="ct-tk"><b>${r.id}</b> <span class="muted">${r.label}</span></td>
+    <td class="ct-dt">${r.date ? r.date : '<span class="muted">—</span>'}</td>
+    <td class="ct-tx">${esc(r.event)}</td>
+  </tr>`).join("");
+  el.innerHTML = `<div class="ct-head">📅 Past Catalysts — last 30 days (event only)</div>
+    <table class="ct-table"><thead><tr><th>Ticker</th><th>Date</th><th>Event</th></tr></thead><tbody>${trs}</tbody></table>`;
 }
 
 window.goTo = function (id) {
@@ -487,15 +536,35 @@ function sortFn(a, b) {
   return (TREND_ORDER[a.trend] ?? 3) - (TREND_ORDER[b.trend] ?? 3);
 }
 
+function getCategory(inst) {
+  if (CATEGORY_TICKERS["china-internet"].has(inst.id)) return "china-internet";
+  if (CATEGORY_TICKERS["ai-tech"].has(inst.id)) return "ai-tech";
+  return "others";
+}
+
 function render() {
-  const grid = document.getElementById("grid");
-  grid.innerHTML = "";
-  const groups = [...new Set(DATA.instruments.map(i => i.group))];
-  for (const g of groups) {
-    const h = document.createElement("div"); h.className = "section"; h.textContent = g;
-    grid.appendChild(h);
-    DATA.instruments.filter(i => i.group === g).sort(sortFn).forEach(i => grid.appendChild(card(i)));
+  const categories = { "china-internet": {}, "ai-tech": {}, "others": {} };
+  for (const inst of DATA.instruments) {
+    const cat = getCategory(inst);
+    if (!categories[cat][inst.group]) categories[cat][inst.group] = [];
+    categories[cat][inst.group].push(inst);
   }
+
+  for (const [catKey, catData] of Object.entries(categories)) {
+    const grid = document.getElementById("grid-" + catKey);
+    if (!grid) {
+      console.error(`[render] missing grid element: grid-${catKey}`);
+      continue;
+    }
+    grid.innerHTML = "";
+    const groups = Object.keys(catData).sort();
+    for (const g of groups) {
+      const h = document.createElement("div"); h.className = "section"; h.textContent = g;
+      grid.appendChild(h);
+      catData[g].sort(sortFn).forEach(i => grid.appendChild(card(i)));
+    }
+  }
+
   // Lazy-render charts as cards scroll into view (59 charts at once is heavy).
   OBSERVER = new IntersectionObserver((entries) => {
     for (const e of entries) {
@@ -517,11 +586,61 @@ window.showTab = function (t) {
   document.getElementById("tab-history").classList.toggle("active", t === "history");
   if (t === "history" && !MOVES) loadHistory();
 };
+
+window.showMonitorTab = function (cat) {
+  document.getElementById("grid-china-internet").style.display = cat === "china-internet" ? "" : "none";
+  document.getElementById("grid-ai-tech").style.display = cat === "ai-tech" ? "" : "none";
+  document.getElementById("grid-others").style.display = cat === "others" ? "" : "none";
+  document.getElementById("tab-china-internet").classList.toggle("active", cat === "china-internet");
+  document.getElementById("tab-ai-tech").classList.toggle("active", cat === "ai-tech");
+  document.getElementById("tab-others").classList.toggle("active", cat === "others");
+  if (DATA) {
+    renderIdeas(cat);
+    renderCatalystsTable(cat);
+    renderPastCatalysts(cat);
+  }
+};
+function pastEventRows(category) {
+  const rows = [];
+  const today = new Date(), oneMonthAgo = new Date(today.getTime() - 30 * 24 * 60 * 60 * 1000);
+  const insts = category ? filterByCategory(DATA.instruments, category) : DATA.instruments;
+  for (const inst of insts) {
+    const f = inst.fund || {};
+    if (f.ex_div) {
+      const d = new Date(f.ex_div);
+      if (d >= oneMonthAgo && d < today) {
+        rows.push({ id: inst.id, label: inst.label, date: f.ex_div, event: "Ex-dividend" });
+      }
+    }
+    (inst.events || []).forEach(e => {
+      const d = new Date(e.date);
+      if (d >= oneMonthAgo && d < today) {
+        rows.push({ id: inst.id, label: inst.label, date: e.date, event: e.event });
+      }
+    });
+  }
+  rows.sort((a, b) => new Date(b.date) - new Date(a.date));
+  return rows;
+}
+
 async function loadHistory() {
   const h = document.getElementById("history");
   try { MOVES = await (await fetch("./moves.json", { cache: "no-store" })).json(); }
   catch (e) { h.innerHTML = '<div style="padding:16px;color:var(--muted)">move history not available yet</div>'; return; }
   h.innerHTML = "";
+  const pastRows = pastEventRows();
+  if (pastRows.length) {
+    const trs = pastRows.map(r => `<tr onclick="goTo('${r.id}')">
+      <td class="ct-tk"><b>${r.id}</b> <span class="muted">${r.label}</span></td>
+      <td class="ct-dt">${r.date}</td>
+      <td class="ct-tx"><div>${esc(r.event)}</div></td>
+    </tr>`).join("");
+    const pastEl = document.createElement("div");
+    pastEl.style.cssText = "padding:10px 12px; border-bottom:1px solid var(--border); background:#12161c);";
+    pastEl.innerHTML = `<div class="ct-head">📅 Past Month Events</div>
+      <table class="ct-table"><thead><tr><th>Ticker</th><th>Date</th><th>Event</th></tr></thead><tbody>${trs}</tbody></table>`;
+    h.appendChild(pastEl);
+  }
   for (const inst of DATA.instruments) {
     const m = MOVES[inst.id];
     if (!m) continue;
@@ -555,24 +674,39 @@ async function loadHistory() {
   }
 }
 
-async function load() {
-  try {
-    const res = await fetch("./data.json", { cache: "no-store" });
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    DATA = await res.json();
-  } catch (err) {
-    document.getElementById("meta").textContent = `failed to load data.json: ${err.message}`;
-    return;
-  }
-  STALE = checkStale(DATA);
-  const ideas = DATA.instruments.filter(i => i.idea && i.idea.kind === "enter").length;
-  document.getElementById("meta").textContent =
-    `${DATA.instruments.length} names · ${ideas} enter ideas · ${DATA.source} · ${new Date(DATA.generated_at).toLocaleString()}`;
-  renderIdeas();
-  renderCatalystsTable();
-  render();
+console.log("Before load function");
+
+function load() {
+  console.log("load() called");
+  document.getElementById("meta").textContent = "fetching data...";
+  fetch("./data.json")
+    .then(res => {
+      console.log("fetch returned:", res.status);
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      return res.json();
+    })
+    .then(data => {
+      console.log("data loaded:", data.instruments.length);
+      DATA = data;
+      document.getElementById("meta").textContent = "rendering...";
+      STALE = checkStale(DATA);
+      const ideas = DATA.instruments.filter(i => i.idea && i.idea.kind === "enter").length;
+      document.getElementById("meta").textContent =
+        `${DATA.instruments.length} names · ${ideas} enter ideas · ${DATA.source} · ${new Date(DATA.generated_at).toLocaleString()}`;
+      renderIdeas("china-internet");
+      renderCatalystsTable("china-internet");
+      renderPastCatalysts("china-internet");
+      render();
+    })
+    .catch(err => {
+      console.error("load error:", err);
+      document.getElementById("meta").textContent = `ERROR: ${err.message}`;
+    });
 }
+
+console.log("About to call load()");
 load();
+console.log("load() called successfully");
 </script>
 </body>
 </html>
