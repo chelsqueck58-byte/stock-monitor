@@ -395,19 +395,26 @@ function renderStockHistory() {
     }).join("");
     const el = document.createElement("div");
     el.className = "hcard";
-    el.innerHTML = `<div class="htop">${inst.label} <span class="id">${inst.id}</span></div><div class="hchart"></div><div class="moves">${rows}</div>`;
+    el.innerHTML = `<div class="htop">${inst.label} <span class="id">${inst.id}</span></div><div class="hchart" style="height:120px;width:100%;"></div><div class="moves">${rows}</div>`;
     h.appendChild(el);
     const chartEl = el.querySelector(".hchart");
-    requestAnimationFrame(() => {
-      const chart = LightweightCharts.createChart(chartEl, {
-        layout: { background: { color: "transparent" }, textColor: "#7d8590", fontSize: 9 },
-        grid: { vertLines: { color: "#1b2027" }, horzLines: { color: "#1b2027" } },
-        rightPriceScale: { borderColor: "#21262d" }, timeScale: { borderColor: "#21262d" }, height: 120,
-      });
-      const a = chart.addAreaSeries({ lineColor: "#f0648b", lineWidth: 2, topColor: "rgba(240,100,139,.25)", bottomColor: "rgba(240,100,139,.02)", priceLineVisible: false, lastValueVisible: true });
-      a.setData(inst.bars.map(b => ({ time: b.d, value: b.c })));
-      chart.timeScale().fitContent();
-    });
+    if (inst.bars && inst.bars.length) {
+      setTimeout(() => {
+        try {
+          const chart = LightweightCharts.createChart(chartEl, {
+            layout: { background: { color: "transparent" }, textColor: "#7d8590", fontSize: 9 },
+            grid: { vertLines: { color: "#1b2027" }, horzLines: { color: "#1b2027" } },
+            rightPriceScale: { borderColor: "#21262d" }, timeScale: { borderColor: "#21262d" }, height: 120,
+            width: chartEl.offsetWidth
+          });
+          const a = chart.addAreaSeries({ lineColor: "#f0648b", lineWidth: 2, topColor: "rgba(240,100,139,.25)", bottomColor: "rgba(240,100,139,.02)", priceLineVisible: false, lastValueVisible: true });
+          a.setData(inst.bars.map(b => ({ time: b.d, value: b.c })));
+          chart.timeScale().fitContent();
+        } catch (e) {
+          console.error(`Chart error for ${inst.id}:`, e);
+        }
+      }, 0);
+    }
   }
 }
 
