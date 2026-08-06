@@ -754,10 +754,19 @@ function load() {
         document.getElementById("meta").textContent =
           `${DATA.instruments.length} names · ${ideas} enter ideas · ${DATA.source || 'yahoo'} · ${new Date(DATA.generated_at).toLocaleString()}`;
         console.log("meta updated with counts");
-        render();
-        console.log("render() complete");
-        showTab("summary");
-        console.log("showTab complete");
+        try {
+          render();
+          console.log("render() complete");
+        } catch (re) {
+          console.error("render() ERROR:", re, re.stack);
+        }
+        try {
+          console.log("calling showTab('summary')");
+          showTab("summary");
+          console.log("showTab complete");
+        } catch (se) {
+          console.error("showTab() ERROR:", se, se.stack);
+        }
       } catch (e) {
         console.error("ERROR in promise chain:", e, e.stack);
         document.getElementById("meta").textContent = `ERROR: ${e.message}`;
