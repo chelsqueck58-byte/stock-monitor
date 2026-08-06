@@ -108,7 +108,7 @@
     color:var(--muted); padding:5px 14px; border-radius:6px 6px 0 0; cursor:pointer; font-size:13px; font-family:inherit; }
   .tabs button.active { background:var(--panel); color:var(--text); }
   #monitor-tabs { display:flex !important; visibility:visible !important; opacity:1 !important; }
-  #history { padding:12px; display:grid; gap:12px; grid-template-columns:repeat(auto-fill,minmax(470px,1fr)); }
+  #history { padding:12px; display:block; }
   .hcard { background:var(--panel); border:1px solid var(--border); border-radius:8px; overflow:hidden; }
   .hcard .htop { padding:8px 10px; font-weight:600; border-bottom:1px solid var(--border); }
   .hcard .htop .id { color:var(--muted); font-size:11px; font-weight:400; }
@@ -150,7 +150,7 @@
 <main id="grid-sea-tech" class="monitor-grid" style="display:none"></main>
 <main id="grid-consumer" class="monitor-grid" style="display:none"></main>
 <div id="history" style="display:none;padding:12px"></div>
-<div id="stock-history" style="display:none;padding:12px;display:grid;gap:12px;grid-template-columns:repeat(auto-fill,minmax(470px,1fr))"></div>
+<div id="stock-history" style="display:none;padding:12px;"></div>
 
 <script src="./vendor/lightweight-charts.standalone.production.js"></script>
 <script>
@@ -371,7 +371,7 @@ function renderHistory() {
       <td class="ct-tx"><div>${r.event.startsWith("<") ? r.event : esc(r.event)}</div></td>
     </tr>`).join("");
     const pastEl = document.createElement("div");
-    pastEl.style.cssText = "padding:10px 12px; border-bottom:1px solid var(--border); background:#12161c);";
+    pastEl.style.cssText = "padding:10px 12px; border-bottom:1px solid var(--border); background:#12161c;";
     pastEl.innerHTML = `<div class="ct-head">📅 Past Month Events</div>
       <table class="ct-table"><thead><tr><th>Ticker</th><th>Date</th><th>Event</th></tr></thead><tbody>${trs}</tbody></table>`;
     h.appendChild(pastEl);
