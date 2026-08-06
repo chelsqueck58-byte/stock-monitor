@@ -255,13 +255,17 @@ function filterByCategory(instruments, category) {
 
 function renderIdeas(category) {
   const el = document.getElementById("ideas");
+  console.log("renderIdeas called, STALE:", STALE, "DATA:", !!DATA);
   if (STALE) { el.innerHTML = ""; return; }
+  if (!DATA) { el.innerHTML = "No data"; return; }
   const insts = category ? filterByCategory(DATA.instruments, category) : DATA.instruments;
+  console.log("Ideas rendering, insts:", insts.length);
   const enters = insts.filter(i => i.idea && i.idea.kind === "enter");
   const tps = insts.filter(i => i.idea && i.idea.kind === "take_profit");
+  console.log("Enters:", enters.length, "TPs:", tps.length);
   let html = "";
   if (enters.length) {
-    html += `<div class="ideas-head">⬤ Enter now (1-month) — dig fundamentals, then execute</div>`;
+    html += `<div class="ideas-head">⬅ Enter now (1-month) — dig fundamentals, then execute</div>`;
     html += `<div class="ideas-row">${enters.map(ideaBox).join("")}</div>`;
   }
   if (tps.length) {
@@ -269,6 +273,7 @@ function renderIdeas(category) {
     html += `<div class="ideas-row">${tps.map(i => `<span class="tpchip" onclick="goTo('${i.id}')"><b>${i.label}</b> <span class="id">${i.id}</span> ${i.idea.types.join(" · ")}</span>`).join("")}</div>`;
   }
   el.innerHTML = html || `<div class="ideas-head">No confirmed entries right now — cash is a position.</div>`;
+  console.log("Ideas rendered, HTML length:", el.innerHTML.length);
 }
 
 // Consolidated ticker-by-ticker catalyst table for the next 30 days — reuses
