@@ -743,13 +743,20 @@ function load() {
       console.log("data loaded:", data.instruments.length);
       DATA = data;
       MOVES = moves;
+      console.log("DATA and MOVES set");
       document.getElementById("meta").textContent = "rendering...";
+      console.log("meta updated to 'rendering...'");
       STALE = checkStale(DATA);
+      console.log("STALE checked:", STALE);
       const ideas = DATA.instruments.filter(i => i.idea && i.idea.kind === "enter").length;
+      console.log("ideas count:", ideas);
       document.getElementById("meta").textContent =
         `${DATA.instruments.length} names · ${ideas} enter ideas · ${DATA.source} · ${new Date(DATA.generated_at).toLocaleString()}`;
+      console.log("calling render()");
       render();
+      console.log("render() done, calling showTab");
       showTab("summary");
+      console.log("showTab called");
     })
     .catch(err => {
       console.error("load error:", err);
