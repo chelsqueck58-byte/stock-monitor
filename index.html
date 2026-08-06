@@ -256,7 +256,6 @@ function filterByCategory(instruments, category) {
 function renderIdeas(category) {
   const el = document.getElementById("ideas");
   console.log("renderIdeas called, STALE:", STALE, "DATA:", !!DATA);
-  if (STALE) { el.innerHTML = ""; return; }
   if (!DATA) { el.innerHTML = "No data"; return; }
   const insts = category ? filterByCategory(DATA.instruments, category) : DATA.instruments;
   console.log("Ideas rendering, insts:", insts.length);
@@ -332,7 +331,6 @@ function catalystRows(category) {
 }
 function renderCatalystsTable(category) {
   const el = document.getElementById("catalysts30");
-  if (STALE) { el.innerHTML = ""; return; }
   const rows = catalystRows(category);
   if (!rows.length) { el.innerHTML = ""; return; }
   const trs = rows.map(r => `<tr onclick="goTo('${r.id}')">
@@ -350,7 +348,6 @@ function renderCatalystsTable(category) {
 
 function renderPastCatalysts(category, lookbackDays = 30) {
   const el = document.getElementById("pastCatalysts");
-  if (STALE) { el.innerHTML = ""; return; }
   const rows = pastCatalystRows(category, lookbackDays);
   if (!rows.length) { el.innerHTML = ""; return; }
   const trs = rows.map(r => `<tr onclick="goTo('${r.id}')">
