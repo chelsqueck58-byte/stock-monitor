@@ -632,24 +632,39 @@ function render() {
 
 let MOVES = null;
 window.showTab = function (tabKey) {
+  console.log("showTab called with:", tabKey);
   document.getElementById("tab-summary").classList.toggle("active", tabKey === "summary");
   document.getElementById("tab-history").classList.toggle("active", tabKey === "history");
   document.getElementById("tab-stock-history").classList.toggle("active", tabKey === "stock-history");
   document.getElementById("history").style.display = tabKey === "history" ? "" : "none";
   document.getElementById("stock-history").style.display = tabKey === "stock-history" ? "" : "none";
+
+  // Hide all grids
   for (const c of CATEGORIES) {
-    document.getElementById("tab-" + c.key).classList.toggle("active", tabKey === c.key);
-    document.getElementById("grid-" + c.key).style.display = tabKey === c.key ? "" : "none";
+    document.getElementById("grid-" + c.key).style.display = "none";
+    document.getElementById("tab-" + c.key).classList.remove("active");
   }
-  const category = tabKey === "summary" ? null : (tabKey === "history" || tabKey === "stock-history" ? null : tabKey);
+
+  // Show ideas/catalysts only on summary
+  document.getElementById("ideas").style.display = tabKey === "summary" ? "" : "none";
+  document.getElementById("catalysts30").style.display = tabKey === "summary" ? "" : "none";
+  document.getElementById("pastCatalysts").style.display = tabKey === "summary" ? "" : "none";
+
   if (tabKey === "history") {
     if (DATA) renderHistory();
   } else if (tabKey === "stock-history") {
     if (DATA) renderStockHistory();
-  } else if (DATA) {
-    renderIdeas(category);
-    renderCatalystsTable(category);
-    renderPastCatalysts(category, 30);
+  } else if (tabKey === "summary") {
+    if (DATA) {
+      renderIdeas(null);
+      renderCatalystsTable(null);
+      renderPastCatalysts(null, 30);
+    }
+  } else {
+    // Category tab
+    const grid = document.getElementById("grid-" + tabKey);
+    if (grid) grid.style.display = "";
+    document.getElementById("tab-" + tabKey).classList.add("active");
   }
 };
 function pastCatalystRows(category, lookbackDays = 30) {
