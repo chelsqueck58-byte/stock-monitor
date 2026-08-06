@@ -647,10 +647,11 @@ window.showTab = function (tabKey) {
     document.getElementById("tab-" + c.key).classList.remove("active");
   }
 
-  // Show ideas/catalysts only on summary
+  // Show ideas only on summary, catalysts on all tabs except history/stock-history
   document.getElementById("ideas").style.display = tabKey === "summary" ? "" : "none";
-  document.getElementById("catalysts30").style.display = tabKey === "summary" ? "" : "none";
-  document.getElementById("pastCatalysts").style.display = tabKey === "summary" ? "" : "none";
+  const showCatalysts = tabKey !== "history" && tabKey !== "stock-history";
+  document.getElementById("catalysts30").style.display = showCatalysts ? "" : "none";
+  document.getElementById("pastCatalysts").style.display = showCatalysts ? "" : "none";
 
   if (tabKey === "history") {
     if (DATA) renderHistory();
@@ -663,10 +664,14 @@ window.showTab = function (tabKey) {
       renderPastCatalysts(null, 30);
     }
   } else {
-    // Category tab
+    // Category tab - show catalysts filtered by category
     const grid = document.getElementById("grid-" + tabKey);
     if (grid) grid.style.display = "";
     document.getElementById("tab-" + tabKey).classList.add("active");
+    if (DATA) {
+      renderCatalystsTable(tabKey);
+      renderPastCatalysts(tabKey, 30);
+    }
   }
 };
 function pastCatalystRows(category, lookbackDays = 30) {
