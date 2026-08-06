@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>stock-monitor</title>
+<title>stock-monitor</title><!-- Updated: 1785689855 -->
 <style>
   :root {
     --bg:#0d1117; --panel:#161b22; --border:#21262d; --text:#e6edf3;
@@ -120,38 +120,37 @@
   .mv .mp.u { color:var(--up); } .mv .mp.d { color:var(--down); }
   .mv .mr b { color:var(--text); } .mv .mr .mw { color:var(--muted); }
   .mv .msrc { color:var(--muted); font-size:10px; }
-  .note { width:100%; border:none; border-top:1px solid var(--border); background:transparent;
-    color:var(--text); padding:6px 10px; resize:vertical; min-height:32px; font:inherit; font-size:12px; }
-  .note::placeholder { color:var(--muted); }
 </style>
 </head>
 <body>
 <div id="stale"></div>
 <header>
   <h1>stock-monitor</h1><span class="meta" id="meta">loading…</span>
-  <div class="legend">
-    <div class="lg-row"><span class="lg-cat">Chart</span><b class="ema">20SMA</b>&nbsp;·&nbsp;<b class="sma">50SMA</b>&nbsp;·&nbsp;<b class="vwap">200SMA</b>&nbsp;·&nbsp;S/R lines</div>
-    <div class="lg-row"><span class="lg-cat">⬤ ENTER</span>High-conviction · Breakout · Oversold dip · Pullback bounce · Divergence <i>(see card for which fired)</i></div>
-    <div class="lg-row"><span class="lg-cat">▲ EXIT</span>close&lt;50MA · 63d-low break · 63d-high tag · RSI&gt;70 · weak-volume 20d-high break</div>
-    <div class="lg-row"><span class="lg-cat">Icons</span>CTA↑/↓ = trend-follower regime · 🎯 = auto-researched catalyst · 📅 = dated timeline · 🔒 = your own research (sent via Telegram)</div>
-    <div class="lg-row lg-hint">Click an idea to jump · chart shows late-Apr → now</div>
-  </div>
-  <nav class="tabs"><button id="tab-monitor" class="active" onclick="showTab('monitor')">Monitor</button><button id="tab-history" onclick="showTab('history')">History (≥5% moves)</button></nav>
-</header>
-<div id="monitor">
-  <div id="ideas"></div>
-  <div id="catalysts30"></div>
-  <div id="pastCatalysts"></div>
-  <nav class="tabs" id="monitor-tabs" style="margin:10px 12px 0">
-    <button id="tab-china-internet" class="active" onclick="showMonitorTab('china-internet')">China Internet</button>
-    <button id="tab-ai-tech" onclick="showMonitorTab('ai-tech')">AI & Big Tech</button>
-    <button id="tab-others" onclick="showMonitorTab('others')">All Others</button>
+  <nav class="tabs">
+    <button id="tab-summary" class="active" onclick="showTab('summary')">Summary</button>
+    <button id="tab-china-internet" onclick="showTab('china-internet')">China Internet</button>
+    <button id="tab-ai-tech" onclick="showTab('ai-tech')">AI & Big Tech</button>
+    <button id="tab-semis" onclick="showTab('semis')">Semis</button>
+    <button id="tab-china-ev" onclick="showTab('china-ev')">China EV</button>
+    <button id="tab-singapore" onclick="showTab('singapore')">Singapore</button>
+    <button id="tab-sea-tech" onclick="showTab('sea-tech')">SE Asia Tech</button>
+    <button id="tab-consumer" onclick="showTab('consumer')">Consumer</button>
+    <button id="tab-history" onclick="showTab('history')">History (Past Month)</button>
+    <button id="tab-stock-history" onclick="showTab('stock-history')">Stock History</button>
   </nav>
-  <main id="grid-china-internet" class="monitor-grid"></main>
-  <main id="grid-ai-tech" class="monitor-grid" style="display:none"></main>
-  <main id="grid-others" class="monitor-grid" style="display:none"></main>
-</div>
-<div id="history" style="display:none"></div>
+</header>
+<div id="ideas"></div>
+<div id="catalysts30"></div>
+<div id="pastCatalysts"></div>
+<main id="grid-china-internet" class="monitor-grid" style="display:none"></main>
+<main id="grid-ai-tech" class="monitor-grid" style="display:none"></main>
+<main id="grid-semis" class="monitor-grid" style="display:none"></main>
+<main id="grid-china-ev" class="monitor-grid" style="display:none"></main>
+<main id="grid-singapore" class="monitor-grid" style="display:none"></main>
+<main id="grid-sea-tech" class="monitor-grid" style="display:none"></main>
+<main id="grid-consumer" class="monitor-grid" style="display:none"></main>
+<div id="history" style="display:none;padding:12px"></div>
+<div id="stock-history" style="display:none;padding:12px;display:grid;gap:12px;grid-template-columns:repeat(auto-fill,minmax(470px,1fr))"></div>
 
 <script src="./vendor/lightweight-charts.standalone.production.js"></script>
 <script>
@@ -161,6 +160,17 @@ const TREND_ORDER = { up: 0, flat: 1, down: 2 };
 console.log("TREND_ORDER defined");
 let DATA = null, STALE = false, OBSERVER = null;
 console.log("DATA, STALE, OBSERVER declared");
+
+const GROUP_TO_CATEGORY = {
+  "China internet":      { key: "china-internet", label: "China Internet" },
+  "AI & big tech":       { key: "ai-tech",         label: "AI & Big Tech" },
+  "Semis":               { key: "semis",           label: "Semis" },
+  "China EV":            { key: "china-ev",        label: "China EV" },
+  "Singapore":           { key: "singapore",       label: "Singapore" },
+  "Southeast Asia tech": { key: "sea-tech",        label: "SE Asia Tech" },
+  "Consumer":            { key: "consumer",        label: "Consumer" },
+};
+const CATEGORIES = Object.values(GROUP_TO_CATEGORY);
 
 // HTML-escape freeform text (LLM/web-search/Telegram-sourced) before it goes
 // into a template literal that gets assigned to innerHTML. None of it was
@@ -198,7 +208,6 @@ function checkStale(p) {
   }
   return false;
 }
-function noteKey(id) { return `stockmon.note.${id}`; }
 
 function earnTag(dateStr) {
   if (!dateStr) return "";
@@ -239,19 +248,9 @@ function ideaBox(inst) {
     ${teleResearch(inst)}
   </div>`;
 }
-const CATEGORY_TICKERS = {
-  "china-internet": new Set(["PDD", "9988", "0700", "9618", "3690", "1810", "9888"]),
-  "ai-tech": new Set(["AMZN", "NVDA", "AAPL", "MSFT", "META", "GOOGL", "TSLA", "TSM", "000660", "005930", "MU"]),
-};
-
 function filterByCategory(instruments, category) {
   if (!category) return instruments;
-  if (category === "others") {
-    const inCats = new Set([...CATEGORY_TICKERS["china-internet"], ...CATEGORY_TICKERS["ai-tech"]]);
-    return instruments.filter(i => !inCats.has(i.id));
-  }
-  const tickers = CATEGORY_TICKERS[category];
-  return tickers ? instruments.filter(i => tickers.has(i.id)) : instruments;
+  return instruments.filter(i => getCategory(i) === category);
 }
 
 function renderIdeas(category) {
@@ -285,7 +284,7 @@ function prevPerfBlock(prev, label) {
   const line = (p, prefix) => {
     const cls = p.pct >= 0 ? "u" : "d";
     const src = p.source ? ` <span class="msrc">[${esc(p.source)}]</span>` : "";
-    return `<div class="ct-prev">↩ ${prefix} (${p.date}, <span class="pct ${cls}">${p.pct >= 0 ? "+" : ""}${p.pct}%</span>): ${esc(p.reason)}${src}</div>`;
+    return `<div class="ct-prev">↩ <span class="pct ${cls}">${p.pct >= 0 ? "+" : ""}${p.pct}%</span>: ${esc(p.reason)}${src}</div>`;
   };
   if (list.length === 1) return line(list[0], label);
   return list.map((p, i) => line(p, i === 0 ? label : `Earnings -${i + 1}`)).join("");
@@ -344,18 +343,72 @@ function renderCatalystsTable(category) {
     <table class="ct-table"><thead><tr><th>Ticker</th><th>Date</th><th>Event / Focus / Prev Performance</th></tr></thead><tbody>${trs}</tbody></table>`;
 }
 
-function renderPastCatalysts(category) {
+function renderPastCatalysts(category, lookbackDays = 30) {
   const el = document.getElementById("pastCatalysts");
   if (STALE) { el.innerHTML = ""; return; }
-  const rows = pastEventRows(category);
+  const rows = pastCatalystRows(category, lookbackDays);
   if (!rows.length) { el.innerHTML = ""; return; }
   const trs = rows.map(r => `<tr onclick="goTo('${r.id}')">
     <td class="ct-tk"><b>${r.id}</b> <span class="muted">${r.label}</span></td>
     <td class="ct-dt">${r.date ? r.date : '<span class="muted">—</span>'}</td>
-    <td class="ct-tx">${esc(r.event)}</td>
+    <td class="ct-tx">${r.event.startsWith("<") ? r.event : esc(r.event)}</td>
   </tr>`).join("");
-  el.innerHTML = `<div class="ct-head">📅 Past Catalysts — last 30 days (event only)</div>
+  el.innerHTML = `<div class="ct-head">📅 Past Catalysts — last ${lookbackDays} days</div>
     <table class="ct-table"><thead><tr><th>Ticker</th><th>Date</th><th>Event</th></tr></thead><tbody>${trs}</tbody></table>`;
+}
+
+function renderHistory() {
+  const h = document.getElementById("history");
+  if (!MOVES) { h.innerHTML = '<div style="padding:16px;color:var(--muted)">move history not available</div>'; return; }
+  h.innerHTML = "";
+  const pastRows = pastCatalystRows(null, 30);
+  if (pastRows.length) {
+    const trs = pastRows.map(r => `<tr onclick="goTo('${r.id}')">
+      <td class="ct-tk"><b>${r.id}</b> <span class="muted">${r.label}</span></td>
+      <td class="ct-dt">${r.date}</td>
+      <td class="ct-tx"><div>${r.event.startsWith("<") ? r.event : esc(r.event)}</div></td>
+    </tr>`).join("");
+    const pastEl = document.createElement("div");
+    pastEl.style.cssText = "padding:10px 12px; border-bottom:1px solid var(--border); background:#12161c);";
+    pastEl.innerHTML = `<div class="ct-head">📅 Past Month Events</div>
+      <table class="ct-table"><thead><tr><th>Ticker</th><th>Date</th><th>Event</th></tr></thead><tbody>${trs}</tbody></table>`;
+    h.appendChild(pastEl);
+  } else {
+    h.innerHTML = '<div style="padding:16px;color:var(--muted)">No events in the past month</div>';
+  }
+}
+
+function renderStockHistory() {
+  const h = document.getElementById("stock-history");
+  if (!MOVES) { h.innerHTML = '<div style="padding:16px;color:var(--muted)">move history not available</div>'; return; }
+  h.innerHTML = "";
+  for (const inst of DATA.instruments) {
+    const m = MOVES[inst.id];
+    if (!m) continue;
+    const researched = m.moves.filter(mv => mv.reason);
+    if (!researched.length) continue;
+    const rows = researched.map(mv => {
+      const cls = mv.pct >= 0 ? "u" : "d";
+      const reason = mv.market_wide ? `<span class="mw">${esc(mv.reason)} <i>(market-wide)</i></span>` : `<b>${esc(mv.reason)}</b>`;
+      const src = mv.source ? ` <span class="msrc">[${esc(mv.source)}]</span>` : "";
+      return `<div class="mv"><span class="md">${mv.d}</span><span class="mp ${cls}">${mv.pct >= 0 ? "+" : ""}${mv.pct}%</span><span class="mr">${reason}${src}</span></div>`;
+    }).join("");
+    const el = document.createElement("div");
+    el.className = "hcard";
+    el.innerHTML = `<div class="htop">${inst.label} <span class="id">${inst.id}</span></div><div class="hchart"></div><div class="moves">${rows}</div>`;
+    h.appendChild(el);
+    const chartEl = el.querySelector(".hchart");
+    requestAnimationFrame(() => {
+      const chart = LightweightCharts.createChart(chartEl, {
+        layout: { background: { color: "transparent" }, textColor: "#7d8590", fontSize: 9 },
+        grid: { vertLines: { color: "#1b2027" }, horzLines: { color: "#1b2027" } },
+        rightPriceScale: { borderColor: "#21262d" }, timeScale: { borderColor: "#21262d" }, height: 120,
+      });
+      const a = chart.addAreaSeries({ lineColor: "#f0648b", lineWidth: 2, topColor: "rgba(240,100,139,.25)", bottomColor: "rgba(240,100,139,.02)", priceLineVisible: false, lastValueVisible: true });
+      a.setData(inst.bars.map(b => ({ time: b.d, value: b.c })));
+      chart.timeScale().fitContent();
+    });
+  }
 }
 
 window.goTo = function (id) {
@@ -521,11 +574,7 @@ function card(inst) {
     ${inst.catalyst ? `<div class="catline">🎯 ${esc(inst.catalyst)}</div>` : ""}
     ${catalystTimeline(inst)}
     ${earningsBox(inst)}
-    ${teleResearch(inst)}
-    <textarea class="note" placeholder="notes — ${inst.id}"></textarea>`;
-  const ta = el.querySelector(".note");
-  ta.value = localStorage.getItem(noteKey(inst.id)) || "";
-  ta.addEventListener("input", () => localStorage.setItem(noteKey(inst.id), ta.value));
+    ${teleResearch(inst)}`;
   el.querySelector(".chart")._inst = inst;
   return el;
 }
@@ -537,32 +586,28 @@ function sortFn(a, b) {
 }
 
 function getCategory(inst) {
-  if (CATEGORY_TICKERS["china-internet"].has(inst.id)) return "china-internet";
-  if (CATEGORY_TICKERS["ai-tech"].has(inst.id)) return "ai-tech";
-  return "others";
+  const c = GROUP_TO_CATEGORY[inst.group];
+  return c ? c.key : null;
 }
 
 function render() {
-  const categories = { "china-internet": {}, "ai-tech": {}, "others": {} };
+  const categories = {};
+  for (const cat of CATEGORIES) {
+    categories[cat.key] = [];
+  }
   for (const inst of DATA.instruments) {
     const cat = getCategory(inst);
-    if (!categories[cat][inst.group]) categories[cat][inst.group] = [];
-    categories[cat][inst.group].push(inst);
+    if (cat) categories[cat].push(inst);
   }
 
-  for (const [catKey, catData] of Object.entries(categories)) {
-    const grid = document.getElementById("grid-" + catKey);
+  for (const cat of CATEGORIES) {
+    const grid = document.getElementById("grid-" + cat.key);
     if (!grid) {
-      console.error(`[render] missing grid element: grid-${catKey}`);
+      console.error(`[render] missing grid element: grid-${cat.key}`);
       continue;
     }
     grid.innerHTML = "";
-    const groups = Object.keys(catData).sort();
-    for (const g of groups) {
-      const h = document.createElement("div"); h.className = "section"; h.textContent = g;
-      grid.appendChild(h);
-      catData[g].sort(sortFn).forEach(i => grid.appendChild(card(i)));
-    }
+    categories[cat.key].sort(sortFn).forEach(i => grid.appendChild(card(i)));
   }
 
   // Lazy-render charts as cards scroll into view (59 charts at once is heavy).
@@ -579,99 +624,72 @@ function render() {
 }
 
 let MOVES = null;
-window.showTab = function (t) {
-  document.getElementById("monitor").style.display = t === "monitor" ? "" : "none";
-  document.getElementById("history").style.display = t === "history" ? "" : "none";
-  document.getElementById("tab-monitor").classList.toggle("active", t === "monitor");
-  document.getElementById("tab-history").classList.toggle("active", t === "history");
-  if (t === "history" && !MOVES) loadHistory();
-};
-
-window.showMonitorTab = function (cat) {
-  document.getElementById("grid-china-internet").style.display = cat === "china-internet" ? "" : "none";
-  document.getElementById("grid-ai-tech").style.display = cat === "ai-tech" ? "" : "none";
-  document.getElementById("grid-others").style.display = cat === "others" ? "" : "none";
-  document.getElementById("tab-china-internet").classList.toggle("active", cat === "china-internet");
-  document.getElementById("tab-ai-tech").classList.toggle("active", cat === "ai-tech");
-  document.getElementById("tab-others").classList.toggle("active", cat === "others");
-  if (DATA) {
-    renderIdeas(cat);
-    renderCatalystsTable(cat);
-    renderPastCatalysts(cat);
+window.showTab = function (tabKey) {
+  document.getElementById("tab-summary").classList.toggle("active", tabKey === "summary");
+  document.getElementById("tab-history").classList.toggle("active", tabKey === "history");
+  document.getElementById("tab-stock-history").classList.toggle("active", tabKey === "stock-history");
+  document.getElementById("history").style.display = tabKey === "history" ? "" : "none";
+  document.getElementById("stock-history").style.display = tabKey === "stock-history" ? "" : "none";
+  for (const c of CATEGORIES) {
+    document.getElementById("tab-" + c.key).classList.toggle("active", tabKey === c.key);
+    document.getElementById("grid-" + c.key).style.display = tabKey === c.key ? "" : "none";
+  }
+  const category = tabKey === "summary" ? null : (tabKey === "history" || tabKey === "stock-history" ? null : tabKey);
+  if (tabKey === "history") {
+    if (DATA) renderHistory();
+  } else if (tabKey === "stock-history") {
+    if (DATA) renderStockHistory();
+  } else if (DATA) {
+    renderIdeas(category);
+    renderCatalystsTable(category);
+    renderPastCatalysts(category, 30);
   }
 };
-function pastEventRows(category) {
+function pastCatalystRows(category, lookbackDays = 30) {
   const rows = [];
-  const today = new Date(), oneMonthAgo = new Date(today.getTime() - 30 * 24 * 60 * 60 * 1000);
+  const today = new Date(), cutoff = new Date(today.getTime() - lookbackDays * 24 * 60 * 60 * 1000);
   const insts = category ? filterByCategory(DATA.instruments, category) : DATA.instruments;
+
   for (const inst of insts) {
+    const eventDates = new Set();
+
+    // Add researched moves with outcomes (from MOVES)
+    const m = MOVES && MOVES[inst.id];
+    if (m) {
+      const researched = (m.moves || []).filter(mv => mv.reason);
+      for (const mv of researched) {
+        const d = new Date(mv.d);
+        if (d >= cutoff && d < today) {
+          eventDates.add(mv.d);
+          const label = mv.catalyst_type === "earnings" ? "<b>📊 EARNINGS</b>" : "Move";
+          rows.push({
+            id: inst.id,
+            label: inst.label,
+            date: mv.d,
+            event: `<div style="font-weight:600;color:var(--up)">${label}</div>` + prevPerfBlock({ date: mv.d, pct: mv.pct, reason: mv.reason, source: mv.source }, "Move")
+          });
+        }
+      }
+    }
+
+    // Add bare events (ex-dividend, earnings, etc) if not already covered by a move within ±2 days
     const f = inst.fund || {};
     if (f.ex_div) {
       const d = new Date(f.ex_div);
-      if (d >= oneMonthAgo && d < today) {
+      if (d >= cutoff && d < today && !eventDates.has(f.ex_div)) {
         rows.push({ id: inst.id, label: inst.label, date: f.ex_div, event: "Ex-dividend" });
       }
     }
     (inst.events || []).forEach(e => {
       const d = new Date(e.date);
-      if (d >= oneMonthAgo && d < today) {
+      if (d >= cutoff && d < today && !eventDates.has(e.date)) {
         rows.push({ id: inst.id, label: inst.label, date: e.date, event: e.event });
       }
     });
   }
+
   rows.sort((a, b) => new Date(b.date) - new Date(a.date));
   return rows;
-}
-
-async function loadHistory() {
-  const h = document.getElementById("history");
-  try { MOVES = await (await fetch("./moves.json", { cache: "no-store" })).json(); }
-  catch (e) { h.innerHTML = '<div style="padding:16px;color:var(--muted)">move history not available yet</div>'; return; }
-  h.innerHTML = "";
-  const pastRows = pastEventRows();
-  if (pastRows.length) {
-    const trs = pastRows.map(r => `<tr onclick="goTo('${r.id}')">
-      <td class="ct-tk"><b>${r.id}</b> <span class="muted">${r.label}</span></td>
-      <td class="ct-dt">${r.date}</td>
-      <td class="ct-tx"><div>${esc(r.event)}</div></td>
-    </tr>`).join("");
-    const pastEl = document.createElement("div");
-    pastEl.style.cssText = "padding:10px 12px; border-bottom:1px solid var(--border); background:#12161c);";
-    pastEl.innerHTML = `<div class="ct-head">📅 Past Month Events</div>
-      <table class="ct-table"><thead><tr><th>Ticker</th><th>Date</th><th>Event</th></tr></thead><tbody>${trs}</tbody></table>`;
-    h.appendChild(pastEl);
-  }
-  for (const inst of DATA.instruments) {
-    const m = MOVES[inst.id];
-    if (!m) continue;
-    // Only show moves that actually have a researched reason - unresearched
-    // ones (checked but nothing found, or the 2026-07-23 detection-window fix
-    // surfaced ~1400 older ones not being researched) used to render as a
-    // bare "—" placeholder row; she doesn't want that clutter on the site.
-    const researched = m.moves.filter(mv => mv.reason);
-    if (!researched.length) continue;
-    const rows = researched.map(mv => {
-      const cls = mv.pct >= 0 ? "u" : "d";
-      const reason = mv.market_wide ? `<span class="mw">${esc(mv.reason)} <i>(market-wide)</i></span>` : `<b>${esc(mv.reason)}</b>`;
-      const src = mv.source ? ` <span class="msrc">[${esc(mv.source)}]</span>` : "";
-      return `<div class="mv"><span class="md">${mv.d}</span><span class="mp ${cls}">${mv.pct >= 0 ? "+" : ""}${mv.pct}%</span><span class="mr">${reason}${src}</span></div>`;
-    }).join("");
-    const el = document.createElement("div");
-    el.className = "hcard";
-    el.innerHTML = `<div class="htop">${inst.label} <span class="id">${inst.id}</span></div><div class="hchart"></div><div class="moves">${rows}</div>`;
-    document.getElementById("history").appendChild(el);
-    const chartEl = el.querySelector(".hchart");
-    requestAnimationFrame(() => {
-      const chart = LightweightCharts.createChart(chartEl, {
-        layout: { background: { color: "transparent" }, textColor: "#7d8590", fontSize: 9 },
-        grid: { vertLines: { color: "#1b2027" }, horzLines: { color: "#1b2027" } },
-        rightPriceScale: { borderColor: "#21262d" }, timeScale: { borderColor: "#21262d" }, height: 120,
-      });
-      const a = chart.addAreaSeries({ lineColor: "#f0648b", lineWidth: 2, topColor: "rgba(240,100,139,.25)", bottomColor: "rgba(240,100,139,.02)", priceLineVisible: false, lastValueVisible: true });
-      a.setData(inst.bars.map(b => ({ time: b.d, value: b.c })));
-      chart.timeScale().fitContent();
-    });
-  }
 }
 
 console.log("Before load function");
@@ -679,24 +697,32 @@ console.log("Before load function");
 function load() {
   console.log("load() called");
   document.getElementById("meta").textContent = "fetching data...";
-  fetch("./data.json")
+
+  const dataPromise = fetch("./data-live.json?t=" + Date.now(), { cache: "no-store" })
     .then(res => {
-      console.log("fetch returned:", res.status);
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       return res.json();
-    })
-    .then(data => {
+    });
+
+  const movesPromise = fetch("./moves-live.json", { cache: "no-store" })
+    .then(res => res.json())
+    .catch(err => {
+      console.warn("moves.json unavailable:", err);
+      return {};
+    });
+
+  Promise.all([dataPromise, movesPromise])
+    .then(([data, moves]) => {
       console.log("data loaded:", data.instruments.length);
       DATA = data;
+      MOVES = moves;
       document.getElementById("meta").textContent = "rendering...";
       STALE = checkStale(DATA);
       const ideas = DATA.instruments.filter(i => i.idea && i.idea.kind === "enter").length;
       document.getElementById("meta").textContent =
         `${DATA.instruments.length} names · ${ideas} enter ideas · ${DATA.source} · ${new Date(DATA.generated_at).toLocaleString()}`;
-      renderIdeas("china-internet");
-      renderCatalystsTable("china-internet");
-      renderPastCatalysts("china-internet");
       render();
+      showTab("summary");
     })
     .catch(err => {
       console.error("load error:", err);
