@@ -13,7 +13,7 @@ async function loadContent() {
   try {
     const branch = window.location.pathname.includes('stock-monitor-final') ? 'main' : 'production';
     const repo = window.location.pathname.includes('stock-monitor-final') ? 'stock-monitor-final' : 'stock-monitor';
-    const url = `https://raw.githubusercontent.com/chelsqueck58-byte/${repo}/${branch}/index.html?t=${Date.now()}`;
+    const url = `https://raw.githubusercontent.com/chelsqueck58-byte/${repo}/${branch}/site/index.html?t=${Date.now()}`;
 
     const response = await fetch(url);
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
