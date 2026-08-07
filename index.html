@@ -3,9 +3,12 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Loading...</title>
+<title>Stock Monitor</title>
+</head>
+<body>
+<div id="app"></div>
 <script>
-// Load fresh content from raw GitHub, bypassing Fastly cache
+// Load fresh HTML content from raw GitHub, bypassing Fastly cache
 async function loadContent() {
   try {
     const branch = window.location.pathname.includes('stock-monitor-final') ? 'main' : 'production';
@@ -16,19 +19,18 @@ async function loadContent() {
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
     const html = await response.text();
 
-    // Replace entire document with fetched content
-    document.open();
-    document.write(html);
-    document.close();
+    // Extract and inject just the body content to preserve script execution
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(html, 'text/html');
+
+    // Copy everything from fetched doc to current doc
+    document.documentElement.innerHTML = doc.documentElement.innerHTML;
   } catch (error) {
-    document.body.innerHTML = `<div style="padding:20px;color:red;font-family:monospace;">Error loading content: ${error.message}</div>`;
+    document.body.innerHTML = `<div style="padding:20px;color:red;font-family:monospace;white-space:pre-wrap;">Error: ${error.message}\n\nTrying to load from:\nhttps://raw.githubusercontent.com/chelsqueck58-byte/stock-monitor-final/main/index.html</div>`;
   }
 }
 
 loadContent();
 </script>
-</head>
-<body>
-<div style="padding:20px;font-family:monospace;color:#666;">Loading fresh content...</div>
 </body>
 </html>
