@@ -255,16 +255,13 @@ function filterByCategory(instruments, category) {
 
 function renderIdeas(category) {
   const el = document.getElementById("ideas");
-  console.log("renderIdeas called, STALE:", STALE, "DATA:", !!DATA);
-  if (!DATA) { el.innerHTML = "No data"; return; }
+  if (STALE) { el.innerHTML = ""; return; }
   const insts = category ? filterByCategory(DATA.instruments, category) : DATA.instruments;
-  console.log("Ideas rendering, insts:", insts.length);
   const enters = insts.filter(i => i.idea && i.idea.kind === "enter");
   const tps = insts.filter(i => i.idea && i.idea.kind === "take_profit");
-  console.log("Enters:", enters.length, "TPs:", tps.length);
   let html = "";
   if (enters.length) {
-    html += `<div class="ideas-head">⬅ Enter now (1-month) — dig fundamentals, then execute</div>`;
+    html += `<div class="ideas-head">⬤ Enter now (1-month) — dig fundamentals, then execute</div>`;
     html += `<div class="ideas-row">${enters.map(ideaBox).join("")}</div>`;
   }
   if (tps.length) {
@@ -272,7 +269,6 @@ function renderIdeas(category) {
     html += `<div class="ideas-row">${tps.map(i => `<span class="tpchip" onclick="goTo('${i.id}')"><b>${i.label}</b> <span class="id">${i.id}</span> ${i.idea.types.join(" · ")}</span>`).join("")}</div>`;
   }
   el.innerHTML = html || `<div class="ideas-head">No confirmed entries right now — cash is a position.</div>`;
-  console.log("Ideas rendered, HTML length:", el.innerHTML.length);
 }
 
 // Consolidated ticker-by-ticker catalyst table for the next 30 days — reuses
@@ -331,6 +327,7 @@ function catalystRows(category) {
 }
 function renderCatalystsTable(category) {
   const el = document.getElementById("catalysts30");
+  if (STALE) { el.innerHTML = ""; return; }
   const rows = catalystRows(category);
   if (!rows.length) { el.innerHTML = ""; return; }
   const trs = rows.map(r => `<tr onclick="goTo('${r.id}')">
@@ -348,6 +345,7 @@ function renderCatalystsTable(category) {
 
 function renderPastCatalysts(category, lookbackDays = 30) {
   const el = document.getElementById("pastCatalysts");
+  if (STALE) { el.innerHTML = ""; return; }
   const rows = pastCatalystRows(category, lookbackDays);
   if (!rows.length) { el.innerHTML = ""; return; }
   const trs = rows.map(r => `<tr onclick="goTo('${r.id}')">
@@ -397,26 +395,19 @@ function renderStockHistory() {
     }).join("");
     const el = document.createElement("div");
     el.className = "hcard";
-    el.innerHTML = `<div class="htop">${inst.label} <span class="id">${inst.id}</span></div><div class="hchart" style="height:120px;width:100%;"></div><div class="moves">${rows}</div>`;
+    el.innerHTML = `<div class="htop">${inst.label} <span class="id">${inst.id}</span></div><div class="hchart"></div><div class="moves">${rows}</div>`;
     h.appendChild(el);
     const chartEl = el.querySelector(".hchart");
-    if (inst.bars && inst.bars.length) {
-      setTimeout(() => {
-        try {
-          const chart = LightweightCharts.createChart(chartEl, {
-            layout: { background: { color: "transparent" }, textColor: "#7d8590", fontSize: 9 },
-            grid: { vertLines: { color: "#1b2027" }, horzLines: { color: "#1b2027" } },
-            rightPriceScale: { borderColor: "#21262d" }, timeScale: { borderColor: "#21262d" }, height: 120,
-            width: chartEl.offsetWidth
-          });
-          const a = chart.addAreaSeries({ lineColor: "#f0648b", lineWidth: 2, topColor: "rgba(240,100,139,.25)", bottomColor: "rgba(240,100,139,.02)", priceLineVisible: false, lastValueVisible: true });
-          a.setData(inst.bars.map(b => ({ time: b.d, value: b.c })));
-          chart.timeScale().fitContent();
-        } catch (e) {
-          console.error(`Chart error for ${inst.id}:`, e);
-        }
-      }, 0);
-    }
+    requestAnimationFrame(() => {
+      const chart = LightweightCharts.createChart(chartEl, {
+        layout: { background: { color: "transparent" }, textColor: "#7d8590", fontSize: 9 },
+        grid: { vertLines: { color: "#1b2027" }, horzLines: { color: "#1b2027" } },
+        rightPriceScale: { borderColor: "#21262d" }, timeScale: { borderColor: "#21262d" }, height: 120,
+      });
+      const a = chart.addAreaSeries({ lineColor: "#f0648b", lineWidth: 2, topColor: "rgba(240,100,139,.25)", bottomColor: "rgba(240,100,139,.02)", priceLineVisible: false, lastValueVisible: true });
+      a.setData(inst.bars.map(b => ({ time: b.d, value: b.c })));
+      chart.timeScale().fitContent();
+    });
   }
 }
 
@@ -634,39 +625,24 @@ function render() {
 
 let MOVES = null;
 window.showTab = function (tabKey) {
-  console.log("showTab called with:", tabKey);
   document.getElementById("tab-summary").classList.toggle("active", tabKey === "summary");
   document.getElementById("tab-history").classList.toggle("active", tabKey === "history");
   document.getElementById("tab-stock-history").classList.toggle("active", tabKey === "stock-history");
   document.getElementById("history").style.display = tabKey === "history" ? "" : "none";
   document.getElementById("stock-history").style.display = tabKey === "stock-history" ? "" : "none";
-
-  // Hide all grids
   for (const c of CATEGORIES) {
-    document.getElementById("grid-" + c.key).style.display = "none";
-    document.getElementById("tab-" + c.key).classList.remove("active");
+    document.getElementById("tab-" + c.key).classList.toggle("active", tabKey === c.key);
+    document.getElementById("grid-" + c.key).style.display = tabKey === c.key ? "" : "none";
   }
-
-  // Show ideas/catalysts only on summary
-  document.getElementById("ideas").style.display = tabKey === "summary" ? "" : "none";
-  document.getElementById("catalysts30").style.display = tabKey === "summary" ? "" : "none";
-  document.getElementById("pastCatalysts").style.display = tabKey === "summary" ? "" : "none";
-
+  const category = tabKey === "summary" ? null : (tabKey === "history" || tabKey === "stock-history" ? null : tabKey);
   if (tabKey === "history") {
     if (DATA) renderHistory();
   } else if (tabKey === "stock-history") {
     if (DATA) renderStockHistory();
-  } else if (tabKey === "summary") {
-    if (DATA) {
-      renderIdeas(null);
-      renderCatalystsTable(null);
-      renderPastCatalysts(null, 30);
-    }
-  } else {
-    // Category tab
-    const grid = document.getElementById("grid-" + tabKey);
-    if (grid) grid.style.display = "";
-    document.getElementById("tab-" + tabKey).classList.add("active");
+  } else if (DATA) {
+    renderIdeas(category);
+    renderCatalystsTable(category);
+    renderPastCatalysts(category, 30);
   }
 };
 function pastCatalystRows(category, lookbackDays = 30) {
@@ -737,40 +713,19 @@ function load() {
 
   Promise.all([dataPromise, movesPromise])
     .then(([data, moves]) => {
-      try {
-        console.log("data loaded:", data.instruments.length);
-        DATA = data;
-        MOVES = moves;
-        console.log("DATA and MOVES set");
-        document.getElementById("meta").textContent = "rendering...";
-        console.log("meta updated");
-        STALE = checkStale(DATA);
-        console.log("STALE:", STALE);
-        const ideas = DATA.instruments.filter(i => i.idea && i.idea.kind === "enter").length;
-        console.log("ideas:", ideas);
-        document.getElementById("meta").textContent =
-          `${DATA.instruments.length} names · ${ideas} enter ideas · ${DATA.source || 'yahoo'} · ${new Date(DATA.generated_at).toLocaleString()}`;
-        console.log("meta updated with counts");
-        try {
-          render();
-          console.log("render() complete");
-        } catch (re) {
-          console.error("render() ERROR:", re, re.stack);
-        }
-        try {
-          console.log("calling showTab('summary')");
-          showTab("summary");
-          console.log("showTab complete");
-        } catch (se) {
-          console.error("showTab() ERROR:", se, se.stack);
-        }
-      } catch (e) {
-        console.error("ERROR in promise chain:", e, e.stack);
-        document.getElementById("meta").textContent = `ERROR: ${e.message}`;
-      }
+      console.log("data loaded:", data.instruments.length);
+      DATA = data;
+      MOVES = moves;
+      document.getElementById("meta").textContent = "rendering...";
+      STALE = checkStale(DATA);
+      const ideas = DATA.instruments.filter(i => i.idea && i.idea.kind === "enter").length;
+      document.getElementById("meta").textContent =
+        `${DATA.instruments.length} names · ${ideas} enter ideas · ${DATA.source} · ${new Date(DATA.generated_at).toLocaleString()}`;
+      render();
+      showTab("summary");
     })
     .catch(err => {
-      console.error("Promise.all error:", err);
+      console.error("load error:", err);
       document.getElementById("meta").textContent = `ERROR: ${err.message}`;
     });
 }
@@ -781,6 +736,3 @@ console.log("load() called successfully");
 </script>
 </body>
 </html>
-/* deployed Thu  6 Aug 2026 23:57:58 HKT */
-/* deployed to production Fri  7 Aug 2026 00:07:38 HKT */
-<!-- Cache bust: 1786034617 -->
