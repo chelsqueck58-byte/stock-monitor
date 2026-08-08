@@ -135,7 +135,6 @@
     <button id="tab-singapore" onclick="showTab('singapore')">Singapore</button>
     <button id="tab-sea-tech" onclick="showTab('sea-tech')">SE Asia Tech</button>
     <button id="tab-consumer" onclick="showTab('consumer')">Consumer</button>
-    <button id="tab-history" onclick="showTab('history')">History (Past Month)</button>
     <button id="tab-stock-history" onclick="showTab('stock-history')">Stock History</button>
   </nav>
 </header>
@@ -149,7 +148,6 @@
 <main id="grid-singapore" class="monitor-grid" style="display:none"></main>
 <main id="grid-sea-tech" class="monitor-grid" style="display:none"></main>
 <main id="grid-consumer" class="monitor-grid" style="display:none"></main>
-<div id="history" style="display:none;padding:12px"></div>
 <div id="stock-history" style="display:none;padding:12px;display:grid;gap:12px;grid-template-columns:repeat(auto-fill,minmax(470px,1fr))"></div>
 
 <script src="./vendor/lightweight-charts.standalone.production.js"></script>
@@ -626,18 +624,14 @@ function render() {
 let MOVES = null;
 window.showTab = function (tabKey) {
   document.getElementById("tab-summary").classList.toggle("active", tabKey === "summary");
-  document.getElementById("tab-history").classList.toggle("active", tabKey === "history");
   document.getElementById("tab-stock-history").classList.toggle("active", tabKey === "stock-history");
-  document.getElementById("history").style.display = tabKey === "history" ? "" : "none";
   document.getElementById("stock-history").style.display = tabKey === "stock-history" ? "" : "none";
   for (const c of CATEGORIES) {
     document.getElementById("tab-" + c.key).classList.toggle("active", tabKey === c.key);
     document.getElementById("grid-" + c.key).style.display = tabKey === c.key ? "" : "none";
   }
-  const category = tabKey === "summary" ? null : (tabKey === "history" || tabKey === "stock-history" ? null : tabKey);
-  if (tabKey === "history") {
-    if (DATA) renderHistory();
-  } else if (tabKey === "stock-history") {
+  const category = tabKey === "summary" ? null : (tabKey === "stock-history" ? null : tabKey);
+  if (tabKey === "stock-history") {
     if (DATA) renderStockHistory();
   } else if (DATA) {
     renderIdeas(category);
