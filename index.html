@@ -632,6 +632,9 @@ window.showTab = function (tabKey) {
   }
   const category = tabKey === "summary" ? null : (tabKey === "stock-history" ? null : tabKey);
   if (tabKey === "stock-history") {
+    document.getElementById("ideas").innerHTML = "";
+    document.getElementById("catalysts30").innerHTML = "";
+    document.getElementById("pastCatalysts").innerHTML = "";
     if (DATA) renderStockHistory();
   } else if (DATA) {
     renderIdeas(category);
