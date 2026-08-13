@@ -467,6 +467,27 @@ function teleResearch(inst) {
   return `<div class="teleblock"><div class="th">🔒 Your research (via Telegram)</div>${rows.join("")}</div>`;
 }
 
+function recentPastEvents(inst) {
+  if (!MOVES || !MOVES[inst.id]) return "";
+  const m = MOVES[inst.id];
+  const researched = (m.moves || []).filter(mv => mv.reason).slice(-2).reverse();
+  if (!researched.length) return "";
+  const today = new Date();
+  const rows = researched.map(mv => {
+    const d = new Date(mv.d);
+    if (d >= today) return "";
+    const daysAgo = Math.floor((today - d) / (24 * 60 * 60 * 1000));
+    const cls = mv.pct >= 0 ? "u" : "d";
+    const label = mv.catalyst_type === "earnings" ? "📊" : (mv.catalyst_type === "beta" ? "📈" : "•");
+    return `<div style="font-size:11px; margin:4px 0; padding:4px 0; border-top:1px solid var(--border);">
+      ${label} <span class="pct ${cls}">${mv.pct >= 0 ? "+" : ""}${mv.pct.toFixed(2)}%</span>
+      <span style="color:var(--muted); font-size:10px;">(${daysAgo}d ago)</span>
+      <div style="font-size:10px; color:var(--muted); margin-top:2px;">${esc(mv.reason.substring(0, 90))}${mv.reason.length > 90 ? "..." : ""}</div>
+    </div>`;
+  }).join("");
+  return rows ? `<div style="padding:6px 10px; border-top:1px solid var(--border); background:rgba(88,166,255,.03);">${rows}</div>` : "";
+}
+
 function catalystTimeline(inst) {
   const f = inst.fund;
   const items = [];
@@ -573,6 +594,7 @@ function card(inst) {
     <div class="chart" data-pending="1"></div>
     ${inst.catalyst ? `<div class="catline">🎯 ${esc(inst.catalyst)}</div>` : ""}
     ${catalystTimeline(inst)}
+    ${recentPastEvents(inst)}
     ${earningsBox(inst)}
     ${teleResearch(inst)}`;
   el.querySelector(".chart")._inst = inst;
