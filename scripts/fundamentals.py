@@ -14,7 +14,7 @@ import requests
 ROOT = Path(__file__).resolve().parent.parent
 CONFIG = ROOT / "config" / "universe.json"
 OUT = ROOT / "data" / "fundamentals.json"
-MODULES = "defaultKeyStatistics,earningsTrend,financialData,calendarEvents,earningsHistory"
+MODULES = "defaultKeyStatistics,earningsTrend,financialData,calendarEvents,earningsHistory,quoteType"
 HEADERS = {"User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)"}
 
 
@@ -85,10 +85,17 @@ def fetch(session, crumb, symbol):
             "surprise": round(surp * 100, 1) if surp is not None else None,
         })
 
+    # Try multiple keys for market cap (Yahoo uses different names across modules)
+    mkt_cap = raw(ks, "marketCap") or raw(ks, "market_cap")
+    if not mkt_cap and "quoteType" in d:
+        mkt_cap = raw(d.get("quoteType", {}), "marketCap")
+    fwd_pe = raw(ks, "forwardPE")
+
     return {
         "rev_growth": raw(fd, "revenueGrowth"),
         "eps_growth": raw(fd, "earningsGrowth"),
-        "fwd_pe": raw(ks, "forwardPE"),
+        "market_cap": mkt_cap,
+        "fwd_pe": fwd_pe,
         "peg": raw(ks, "pegRatio"),
         "rev_up": raw(trend[0], "epsRevisions", "upLast30days") if trend else None,
         "rev_down": raw(trend[0], "epsRevisions", "downLast30days") if trend else None,
