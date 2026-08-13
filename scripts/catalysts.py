@@ -27,7 +27,7 @@ CONFIG = ROOT / "config" / "universe.json"
 DATA_JSON = ROOT / "site" / "data.json"
 OUT = ROOT / "data" / "catalysts.json"
 BATCH = 6
-FRESH_DAYS = 4
+FRESH_DAYS = 0  # Run daily — upcoming catalysts change (earnings dates, guidance, new events)
 
 
 def priority_tickers(labels):
