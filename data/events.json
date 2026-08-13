@@ -1,1 +1,146 @@
-{"AAPL":[{"date":"2026-07-28","event":"Apple Upgrade leasing program launch"}]}
+{
+  "past_events": [
+    {
+      "date": "2026-08-12",
+      "ticker": "0700",
+      "event": "Q2 2026 earnings: Revenue RMB 204.8B (+11% YoY), net profit +9%, massive AI capex surge 190%",
+      "impact": "negative",
+      "source": "Company IR"
+    },
+    {
+      "date": "2026-08-13",
+      "ticker": "9618",
+      "event": "Q2 2026 earnings: Revenue RMB 346.4B (-2.9% YoY), EPS \u00a56.29 beat forecast, retail margins 18.5%",
+      "impact": "mixed",
+      "source": "Company IR"
+    }
+  ],
+  "upcoming_macro": [
+    {
+      "date": "2026-09-02",
+      "event": "SEMICON Taiwan begins (Sept 2-4)",
+      "impact": "semiconductor industry catalyst - TSMC, ASML, equipment suppliers signaling demand"
+    },
+    {
+      "date": "2026-09-04",
+      "event": "US NFP (Nonfarm Payrolls) - 08:30 ET",
+      "impact": "high - employment data affects Fed policy"
+    },
+    {
+      "date": "2026-09-10",
+      "event": "US PPI (Producer Price Index) - 08:30 ET",
+      "impact": "high - inflation trending"
+    },
+    {
+      "date": "2026-09-11",
+      "event": "US CPI (Consumer Price Index) - 08:30 ET",
+      "impact": "high - core inflation gauge critical for Fed policy"
+    },
+    {
+      "date": "2026-09-16",
+      "event": "FOMC Meeting concludes - Policy decision 2:00 PM ET",
+      "impact": "critical - rate decision with Q3 SEP projections"
+    },
+    {
+      "date": "2026-10-02",
+      "event": "US NFP (Nonfarm Payrolls) - 08:30 ET",
+      "impact": "high - September employment data"
+    },
+    {
+      "date": "2026-10-28",
+      "event": "FOMC Meeting concludes - Policy decision 2:00 PM ET",
+      "impact": "critical - Q4 SEP, final FOMC before election cycle"
+    }
+  ],
+  "conferences": [
+    {
+      "date": "2026-09-02",
+      "event": "SEMICON Taiwan 2026",
+      "companies": [
+        "TSMC",
+        "ASML",
+        "Equipment suppliers"
+      ],
+      "importance": "high",
+      "focus": "advanced manufacturing, heterogeneous integration, AI chips"
+    },
+    {
+      "date": "2026-09-15",
+      "event": "Salesforce Dreamforce 2026",
+      "location": "San Francisco",
+      "theme": "Agentic Enterprise",
+      "importance": "high"
+    },
+    {
+      "date": "2026-10-20",
+      "event": "NVIDIA GTC Berlin 2026",
+      "focus": "AI, data center, Blackwell GPU ecosystem",
+      "importance": "high"
+    },
+    {
+      "date": "2026-11-30",
+      "event": "AWS re:Invent 2026",
+      "location": "Las Vegas",
+      "focus": "AI-native platforms, enterprise agents",
+      "importance": "high"
+    }
+  ],
+  "company_catalysts": [
+    {
+      "date": "2026-08-26",
+      "ticker": "NVDA",
+      "event": "Q2 FY2026 earnings - watch for Blackwell GPU shipment rates",
+      "type": "earnings"
+    },
+    {
+      "date": "2026-09-02",
+      "ticker": "AVGO",
+      "event": "Q3 2026 earnings - AI chip demand, customer concentration",
+      "type": "earnings"
+    },
+    {
+      "date": "2026-09-09",
+      "ticker": "AAPL",
+      "event": "iPhone 18 announcement expected",
+      "type": "product_launch"
+    },
+    {
+      "date": "2026-09-18",
+      "ticker": "AAPL",
+      "event": "iPhone 18 pre-orders/availability begins",
+      "type": "product_availability"
+    },
+    {
+      "date": "2026-09-22",
+      "ticker": "MU",
+      "event": "Q4 2026 earnings - DRAM/NAND pricing, AI memory demand",
+      "type": "earnings"
+    },
+    {
+      "date": "2026-10-14",
+      "ticker": "ASML",
+      "event": "Q3 2026 earnings - EUV lithography orders, China restrictions",
+      "type": "earnings"
+    }
+  ],
+  "china_catalysts": [
+    {
+      "date": "2026-08-20",
+      "ticker": "BABA",
+      "event": "Q2 FY2026 earnings - cloud revenue, AI investments",
+      "type": "earnings"
+    },
+    {
+      "date": "2026-08-18",
+      "ticker": "BIDU",
+      "event": "Q2 2026 earnings - AI assistant adoption, search revenue",
+      "type": "earnings"
+    },
+    {
+      "date": "ongoing",
+      "region": "China",
+      "event": "AI model approval cycle - CAC regulatory environment, algorithm registry updates",
+      "type": "regulatory"
+    }
+  ]
+}
