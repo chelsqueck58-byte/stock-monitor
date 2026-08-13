@@ -1,0 +1,162 @@
+{
+  "AAPL": {
+    "category": "Platform",
+    "subcategory": "Mag7",
+    "region": "US"
+  },
+  "MSFT": {
+    "category": "Hyperscaler/Cloud",
+    "subcategory": "Azure",
+    "region": "US"
+  },
+  "GOOGL": {
+    "category": "Hyperscaler/Cloud",
+    "subcategory": "Google Cloud",
+    "region": "US"
+  },
+  "AMZN": {
+    "category": "Hyperscaler/Cloud",
+    "subcategory": "AWS",
+    "region": "US"
+  },
+  "META": {
+    "category": "Platform",
+    "subcategory": "Mag7",
+    "region": "US"
+  },
+  "NVDA": {
+    "category": "Compute",
+    "subcategory": "GPU/AI accelerator",
+    "region": "US"
+  },
+  "TSLA": {
+    "category": "Platform",
+    "subcategory": "Mag7",
+    "region": "US"
+  },
+  "ORCL": {
+    "category": "Hyperscaler/Cloud",
+    "subcategory": "Oracle Cloud",
+    "region": "US"
+  },
+  "9988": {
+    "category": "Hyperscaler/Cloud",
+    "subcategory": "Alibaba Cloud",
+    "region": "China",
+    "name": "Alibaba"
+  },
+  "0700": {
+    "category": "Hyperscaler/Cloud",
+    "subcategory": "Tencent Cloud",
+    "region": "China",
+    "name": "Tencent"
+  },
+  "9888": {
+    "category": "Hyperscaler/Cloud",
+    "subcategory": "Baidu Cloud",
+    "region": "China",
+    "name": "Baidu"
+  },
+  "AMD": {
+    "category": "Compute",
+    "subcategory": "CPU",
+    "region": "US"
+  },
+  "INTC": {
+    "category": "Foundry",
+    "subcategory": "Foundry",
+    "region": "US"
+  },
+  "AVGO": {
+    "category": "Compute",
+    "subcategory": "ASIC",
+    "region": "US"
+  },
+  "MRVL": {
+    "category": "Compute",
+    "subcategory": "ASIC",
+    "region": "US"
+  },
+  "TSM": {
+    "category": "Foundry",
+    "subcategory": "Foundry",
+    "region": "US"
+  },
+  "GFS": {
+    "category": "Foundry",
+    "subcategory": "Foundry",
+    "region": "US"
+  },
+  "MU": {
+    "category": "Memory",
+    "subcategory": "NAND",
+    "region": "US"
+  },
+  "005930": {
+    "category": "Memory",
+    "subcategory": "DRAM/HBM",
+    "region": "US",
+    "name": "Samsung"
+  },
+  "000660": {
+    "category": "Memory",
+    "subcategory": "DRAM/HBM",
+    "region": "US",
+    "name": "SK Hynix"
+  },
+  "WDC": {
+    "category": "Memory",
+    "subcategory": "NAND",
+    "region": "US"
+  },
+  "ASML": {
+    "category": "Equipment",
+    "subcategory": "Lithography (EUV)",
+    "region": "US"
+  },
+  "AMAT": {
+    "category": "Equipment",
+    "subcategory": "Deposition/etch/CMP",
+    "region": "US"
+  },
+  "LRCX": {
+    "category": "Equipment",
+    "subcategory": "Deposition/etch/CMP",
+    "region": "US"
+  },
+  "TEL": {
+    "category": "Equipment",
+    "subcategory": "Deposition/etch/CMP",
+    "region": "US"
+  },
+  "KLAC": {
+    "category": "Equipment",
+    "subcategory": "Process control/metrology",
+    "region": "US"
+  },
+  "COHR": {
+    "category": "Equipment",
+    "subcategory": "Optical/Interconnect",
+    "region": "US"
+  },
+  "LITE": {
+    "category": "Equipment",
+    "subcategory": "Optical/Interconnect",
+    "region": "US"
+  },
+  "CRDO": {
+    "category": "Equipment",
+    "subcategory": "Optical/Interconnect",
+    "region": "US"
+  },
+  "MPWR": {
+    "category": "Power/Analog",
+    "subcategory": "Power/Analog",
+    "region": "US"
+  },
+  "VICR": {
+    "category": "Power/Analog",
+    "subcategory": "Power/Analog",
+    "region": "US"
+  }
+}

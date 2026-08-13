@@ -262,6 +262,119 @@
             "symbol": "SMCI",
             "sec_type": "STK"
           }
+        },
+        {
+          "id": "MRVL",
+          "label": "Marvell Technology",
+          "yahoo": "MRVL",
+          "ibkr": {
+            "symbol": "MRVL",
+            "sec_type": "STK"
+          }
+        },
+        {
+          "id": "GFS",
+          "label": "GlobalFoundries",
+          "yahoo": "GFS",
+          "ibkr": {
+            "symbol": "GFS",
+            "sec_type": "STK"
+          }
+        },
+        {
+          "id": "WDC",
+          "label": "Western Digital",
+          "yahoo": "WDC",
+          "ibkr": {
+            "symbol": "WDC",
+            "sec_type": "STK"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Semiconductor Equipment",
+      "members": [
+        {
+          "id": "AMAT",
+          "label": "Applied Materials",
+          "yahoo": "AMAT",
+          "ibkr": {
+            "symbol": "AMAT",
+            "sec_type": "STK"
+          }
+        },
+        {
+          "id": "LRCX",
+          "label": "Lam Research",
+          "yahoo": "LRCX",
+          "ibkr": {
+            "symbol": "LRCX",
+            "sec_type": "STK"
+          }
+        },
+        {
+          "id": "KLAC",
+          "label": "KLA",
+          "yahoo": "KLAC",
+          "ibkr": {
+            "symbol": "KLAC",
+            "sec_type": "STK"
+          }
+        },
+        {
+          "id": "COHR",
+          "label": "Coherent",
+          "yahoo": "COHR",
+          "ibkr": {
+            "symbol": "COHR",
+            "sec_type": "STK"
+          }
+        },
+        {
+          "id": "LITE",
+          "label": "Lumentum",
+          "yahoo": "LITE",
+          "ibkr": {
+            "symbol": "LITE",
+            "sec_type": "STK"
+          }
+        },
+        {
+          "id": "CRDO",
+          "label": "Corrado Optics",
+          "yahoo": "CRDO",
+          "ibkr": {
+            "symbol": "CRDO",
+            "sec_type": "STK"
+          }
+        },
+        {
+          "id": "TEL",
+          "label": "Tokyo Electron",
+          "yahoo": "TEL",
+          "ibkr": {
+            "symbol": "TEL",
+            "sec_type": "STK"
+          }
+        },
+        {
+          "id": "MPWR",
+          "label": "Monolithic Power Systems",
+          "yahoo": "MPWR",
+          "ibkr": {
+            "symbol": "MPWR",
+            "sec_type": "STK"
+          }
+        },
+        {
+          "id": "VICR",
+          "label": "Vicor",
+          "yahoo": "VICR",
+          "ibkr": {
+            "symbol": "VICR",
+            "sec_type": "STK"
+          }
         }
       ]
     },
