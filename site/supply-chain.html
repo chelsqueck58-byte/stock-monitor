@@ -276,9 +276,9 @@ function load() {
   document.getElementById("meta").textContent = "loading...";
 
   Promise.all([
-    fetch("./data-live.json?t=" + Date.now()).then(r => r.json()),
-    fetch("./moves-live.json?t=" + Date.now()).then(r => r.json()).catch(() => ({})),
-    fetch("./fundamentals.json?t=" + Date.now()).then(r => r.json()).catch(() => ({})),
+    fetch("./data.json?t=" + Date.now()).then(r => r.json()),
+    fetch("./moves.json?t=" + Date.now()).then(r => r.json()).catch(() => ({})),
+    fetch("./data/fundamentals.json?t=" + Date.now()).then(r => r.json()).catch(() => ({})),
     fetch("./data/supply-chain-map.json?t=" + Date.now()).then(r => r.json()).catch(() => ({}))
   ]).then(([data, moves, fund, scmap]) => {
     DATA = data;
