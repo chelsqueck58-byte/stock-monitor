@@ -230,15 +230,6 @@
             "symbol": "ARM",
             "sec_type": "STK"
           }
-        },
-        {
-          "id": "SSNLF",
-          "label": "Samsung Electronics ADR",
-          "yahoo": "SSNLF",
-          "ibkr": {
-            "symbol": "SSNLF",
-            "sec_type": "STK"
-          }
         }
       ]
     },
