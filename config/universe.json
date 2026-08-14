@@ -104,6 +104,15 @@
             "exchange": "SEHK",
             "currency": "HKD"
           }
+        },
+        {
+          "id": "NTES",
+          "label": "NetEase",
+          "yahoo": "NTES",
+          "ibkr": {
+            "symbol": "NTES",
+            "sec_type": "STK"
+          }
         }
       ]
     },
@@ -210,6 +219,24 @@
           "yahoo": "MU",
           "ibkr": {
             "symbol": "MU",
+            "sec_type": "STK"
+          }
+        },
+        {
+          "id": "ARMUSD",
+          "label": "ARM Holdings",
+          "yahoo": "ARM",
+          "ibkr": {
+            "symbol": "ARM",
+            "sec_type": "STK"
+          }
+        },
+        {
+          "id": "SSNLF",
+          "label": "Samsung Electronics ADR",
+          "yahoo": "SSNLF",
+          "ibkr": {
+            "symbol": "SSNLF",
             "sec_type": "STK"
           }
         }
@@ -359,6 +386,60 @@
           }
         },
         {
+          "id": "GLW",
+          "label": "Corning",
+          "yahoo": "GLW",
+          "ibkr": {
+            "symbol": "GLW",
+            "sec_type": "STK"
+          }
+        },
+        {
+          "id": "CIEN",
+          "label": "Ciena",
+          "yahoo": "CIEN",
+          "ibkr": {
+            "symbol": "CIEN",
+            "sec_type": "STK"
+          }
+        },
+        {
+          "id": "AAOI",
+          "label": "Applied Optoelectronics",
+          "yahoo": "AAOI",
+          "ibkr": {
+            "symbol": "AAOI",
+            "sec_type": "STK"
+          }
+        },
+        {
+          "id": "FN",
+          "label": "Fabrinet",
+          "yahoo": "FN",
+          "ibkr": {
+            "symbol": "FN",
+            "sec_type": "STK"
+          }
+        },
+        {
+          "id": "ACMR",
+          "label": "ACM Research",
+          "yahoo": "ACMR",
+          "ibkr": {
+            "symbol": "ACMR",
+            "sec_type": "STK"
+          }
+        },
+        {
+          "id": "NINOY",
+          "label": "Nikon",
+          "yahoo": "NINOY",
+          "ibkr": {
+            "symbol": "NINOY",
+            "sec_type": "STK"
+          }
+        },
+        {
           "id": "MPWR",
           "label": "Monolithic Power Systems",
           "yahoo": "MPWR",
@@ -373,6 +454,29 @@
           "yahoo": "VICR",
           "ibkr": {
             "symbol": "VICR",
+            "sec_type": "STK"
+          }
+        },
+        {
+          "id": "IFNNY",
+          "label": "Infineon",
+          "yahoo": "IFNNY",
+          "ibkr": {
+            "symbol": "IFNNY",
+            "sec_type": "STK"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Foundry China",
+      "members": [
+        {
+          "id": "SMI",
+          "label": "SMIC",
+          "yahoo": "SMI",
+          "ibkr": {
+            "symbol": "SMI",
             "sec_type": "STK"
           }
         }
