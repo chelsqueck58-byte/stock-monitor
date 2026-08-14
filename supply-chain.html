@@ -57,7 +57,7 @@
   .detail-meta { display:flex; gap:6px; font-size:9px; color:var(--muted); margin-top:3px; flex-wrap:wrap; }
   .detail-meta .pct { color:var(--up); font-weight:600; }
   .detail-meta .pct.down { color:var(--down); }
-  .detail-chart { height:100px; padding:8px; flex-shrink:0; }
+  .detail-chart { height:100px; padding:8px; padding-bottom:20px; flex-shrink:0; margin-bottom:4px; }
   .detail-catalysts { padding:10px; font-size:10px; border-top:1px solid var(--border); margin-top:8px; word-break:break-word; flex-grow:1; overflow-y:auto; }
   .catalyst-event { color:var(--muted); font-size:10px; margin-bottom:10px; line-height:1.5; }
   .catalyst-earnings { color:#ff6b9d; font-weight:600; font-size:11px; margin-bottom:8px; margin-top:10px; }
@@ -428,18 +428,18 @@ function renderLargeChart(container, inst) {
 
   const chart = LightweightCharts.createChart(container, {
     width: container.clientWidth,
-    height: 250,
+    height: container.clientHeight,
     layout: {
       background: { color: '#0d1117' },
       textColor: '#e6edf3',
     },
     timeScale: {
       visible: true,
-      timeVisible: true,
+      timeVisible: false,
       secondsVisible: false,
       showBorders: false,
       drawTicks: false,
-      tickMarkMaxCharacterLength: 10,
+      tickMarkMaxCharacterLength: 8,
     },
     rightPriceScale: {
       autoScale: true,
