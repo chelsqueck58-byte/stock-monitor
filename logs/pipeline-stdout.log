@@ -1,0 +1,181 @@
+
+============================================================
+[PIPELINE START] 2026-08-14 07:30:02
+
+
+============================================================
+[07:30:02] Running fundamentals...
+
+fundamentals: 64 ok, 0 reused last-good, 0 never fetched -> /Users/chelsqueck/stock-monitor/data/fundamentals.json
+
+[fundamentals] ✓ OK
+
+============================================================
+[07:30:51] Running catalysts...
+
+20 tickers due (skipped 0 still-fresh): ['PDD', '9988', '0700', '3690', '1810', '9888', 'NVDA', 'AAPL', 'MSFT', 'META', 'TSM', 'MU', 'AMD', 'ASML', 'INTC', 'AVGO', 'SMCI', 'MRVL', 'LRCX', 'COHR']
+  PDD: Q2 2026 earnings report Aug 24; focus on Temu regulatory risk and online marketing revenue
+  9988: Q2 2026 earnings Aug 20 with Qwen AI expansion powering Apple China devices and revenue gr
+  0700: WorkBuddy AI assistant gains traction as China's most popular workplace AI tool; monetizat
+  3690: Q3 2026 earnings Sep 2; key focus is food delivery subsidy rollback and margin sustainabil
+  1810: Board meeting Aug 18 to approve interim results; dividend decision amid margin pressure an
+  9888: Q2 2026 earnings Aug 18 with core AI business up 49% YoY and Kunlunxin AI chip spinoff lis
+  NVDA: Rubin Ultra will use HBM4E (8-high, 12-high), not HBM4; four-die Rubin remains on roadmap 
+  AAPL: iPhone 18 Pro, Pro Max, and foldable iPhone Ultra launching September 2026 [MacRumors]
+  MSFT: Q1 FY2027 earnings (Oct 27) to validate Azure 45% growth and prove capex is generating ret
+  META: Q3 2026 earnings (Oct 28) to confirm overtaking Google in global advertising revenue for f
+  TSM: Q3 2026 earnings (Oct 15-16) showing CoWoS bottleneck narrowing signals easing AI chip sup
+  MU: HBM supply tightens 2028 vs 2027, scaling back 2028 AI accelerator configurations; J.P. Mo
+  AMD: Q3 2026 earnings Nov 3 + $5B debt raise for AI expansion to validate TAM capture strategy 
+  ASML: Q3 2026 earnings Oct 14 confirm semiconductor demand surge; JP Morgan PT raised to €2,400 
+  INTC: Q3 2026 earnings Oct 22 to report server CPU revenue share gains and CXL strategy progress
+  AVGO: Q3 2026 earnings Sep 2 validate AI accelerator revenue momentum and custom chip profitabil
+  SMCI: Q4 FY2027 earnings Nov 3 confirm $65-72B guidance and record AI infrastructure backlog con
+  MRVL: Q2 FY2027 earnings Aug 27 next week to validate sustained AI data-center demand trajectory
+  LRCX: Sept quarter revenue guidance $8.1B (+20% QoQ) on WFE strength; targeting mid-50s% gross m
+  COHR: Q1 FY27 guidance $2.2-2.4B revenue; targeting first $3B quarter; indium phosphide fab doub
+catalysts: 31 names total -> /Users/chelsqueck/stock-monitor/data/catalysts.json
+
+[catalysts] ✓ OK
+
+============================================================
+[07:39:46] Running news...
+
+[gmail collect failed] No module named 'google'
+sources: X=31 Gmail=0 Telegram=4
+news: 12 tickers tagged (priority searched: ['9988', '0700', '3690', '1810', '9888', 'NVDA', 'AAPL', 'MSFT', 'META', 'TSM', 'MU', 'AMD', 'ASML', 'INTC', 'SMCI']) -> /Users/chelsqueck/stock-monitor/data/news.json
+  NVDA: Rubin Ultra HBM4E 8-high/12-high stack confirmed; four-die Kyber remains on roadmap [X @ju
+  INTC: Q2 server CPU revenue share gained despite unit loss; CXL for KV cache offload [X @jukan05
+  LITE: IQE optical supply chokepoint linked; early-year thesis validated [X @aleabitoreddit]
+  MU: HBM supply tighter 2028 than 2027; AI accelerator configs may scale back [X @jukan05]
+  000660: HBM supply shortage worse in 2028 vs 2027; memory scaling risk for AI [X @jukan05]
+  AAPL: Jefferies downgrade cites iPhone all-glass cancellation; memory cost inflation [Search]
+  MSFT: Q revenue $90.01B beats consensus; Azure reaccelerates; Copilot seats >30M [Search]
+  META: Open-sourcing Muse Glimmer AI model family; NABTU infrastructure trades partnership [Searc
+  0700: Q2 revenue RMB 204.8B (+11% YoY); net profit below forecast; capex headwind [Search]
+  TSM: July revenue $14.5B (+45% YoY); capex raised to $60-64B; Sony image sensor JV [Search]
+  ASML: 2026 guidance raised 2x; customers ramping AI chip production; dividend +17% [Search]
+  SMCI: Q4 EPS $1.70 beat; $60B+ record backlog; gross margin 15-17% vs 8.2-8.4% guide [Search]
+events: 3 tickers with dated catalysts -> /Users/chelsqueck/stock-monitor/data/events.json
+
+[news] ✓ OK
+
+============================================================
+[07:41:44] Running ivdata...
+
+
+[ivdata] ✗ FAILED
+
+============================================================
+[07:41:44] Running macro_events...
+
+macro events still fresh (0d old), skipping
+
+[macro_events] ✓ OK
+
+============================================================
+[07:41:44] Running movements...
+
+moves: 62 names, 2498 total (>= 5.0%), 3 new unresearched (0 fetch failures) -> /Users/chelsqueck/stock-monitor/data/moves.json
+
+[movements] ✓ OK
+
+============================================================
+[07:42:17] Running earnings_research...
+
+0 tickers due (skipped 15 still-fresh)
+earnings focus: 15 names total -> /Users/chelsqueck/stock-monitor/data/earnings.json
+
+[earnings_research] ✓ OK
+
+============================================================
+[07:42:17] Running movements_research...
+
+
+[movements_research] ✗ TIMEOUT after 900s
+
+============================================================
+[07:57:17] Running build...
+
+  ok   SPY            777.88  730 bars
+  ok   QQQ            732.07  730 bars
+  ok   PDD             84.17  730 bars
+  ok   9988           121.90  730 bars
+  ok   0700           441.00  730 bars
+  ok   9618           123.00  730 bars
+  ok   3690            91.25  730 bars
+  ok   1810            25.88  730 bars
+  ok   9888           103.00  730 bars
+  ok   AMZN           265.13  730 bars
+  ok   NVDA           225.30  730 bars
+  ok   AAPL           305.26  730 bars
+  ok   MSFT           496.88  730 bars
+  ok   META           594.97  730 bars
+  ok   GOOGL          346.36  730 bars
+  ok   TSLA           339.96  730 bars
+  ok   TSM            430.49  730 bars
+  ok   000660   1,593,000.00  729 bars
+  ok   005930     268,000.00  729 bars
+  ok   MU             949.83  730 bars
+  ok   AMD            483.01  730 bars
+  ok   ASML         1,847.90  730 bars
+  ok   INTC           104.56  730 bars
+  ok   AVGO           417.82  730 bars
+  ok   SMCI            39.16  730 bars
+  ok   MRVL           222.18  730 bars
+  ok   GFS             52.69  730 bars
+  ok   WDC            487.29  730 bars
+  ok   AMAT           534.54  730 bars
+  ok   LRCX           337.01  730 bars
+  ok   KLAC           209.37  730 bars
+  ok   COHR           327.23  730 bars
+  ok   LITE           880.41  730 bars
+  ok   CRDO           265.99  730 bars
+  ok   TEL            214.74  730 bars
+  ok   MPWR         1,362.55  730 bars
+  ok   VICR           226.64  730 bars
+  ok   0175            17.91  730 bars
+  ok   1211            88.40  730 bars
+  ok   2015            48.22  730 bars
+  ok   9868            45.38  730 bars
+  ok   9866            35.32  730 bars
+  ok   3750           652.50  306 bars
+  ok   9863            40.18  730 bars
+  ok   UOB             41.70  727 bars
+  ok   KEPPEL          11.11  727 bars
+  ok   DBS             76.50  727 bars
+  ok   OCBC            31.50  727 bars
+  ok   SINGTEL          4.25  727 bars
+  ok   STENG           10.36  727 bars
+  ok   SGX             24.97  727 bars
+  ok   CAPLAND          2.75  727 bars
+  ok   SE             123.32  730 bars
+  ok   GRAB             3.70  730 bars
+  ok   MCD            272.25  730 bars
+  ok   SBUX           108.55  730 bars
+  ok   PEP            140.62  730 bars
+  ok   WMT            115.72  730 bars
+  ok   COST           961.85  730 bars
+  ok   PG             144.26  730 bars
+  ok   KO              87.42  730 bars
+  ok   NKE             41.23  730 bars
+  ok   DPZ            350.88  730 bars
+  ok   GRMN           311.93  730 bars
+
+Wrote /Users/chelsqueck/stock-monitor/site/data.json (1956 KB) - 64 ok, 0 failed, source=yahoo
+
+[build] ✓ OK
+
+============================================================
+[PIPELINE COMPLETE] 2026-08-14 07:57:52
+[SUMMARY] 7/9 stages OK, elapsed 1670s
+
+  ✓ fundamentals
+  ✓ catalysts
+  ✓ news
+  ✗ ivdata
+  ✓ macro_events
+  ✓ movements
+  ✓ earnings_research
+  ✗ movements_research
+  ✓ build

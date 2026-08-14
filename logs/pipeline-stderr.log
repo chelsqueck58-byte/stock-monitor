@@ -1,0 +1,5 @@
+/Users/chelsqueck/stock-monitor/.venv/bin/python3: can't open file '/Users/chelsqueck/stock-monitor/scripts/orchestrate.py': [Errno 2] No such file or directory
+Traceback (most recent call last):
+  File "/Users/chelsqueck/stock-monitor/scripts/ivdata.py", line 9, in <module>
+    from ib_insync import IB, Stock, util
+ModuleNotFoundError: No module named 'ib_insync'

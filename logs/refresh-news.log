@@ -1,0 +1,53 @@
+[2026-08-09T07:30:22.527206] processed 0 new message(s)
+[2026-08-09T07:30:22.636514] doc processor starting
+nothing new to merge
+./scripts/refresh-news.sh:20: no such file or directory: /Users/chelsqueck/stock-monitor/.venv/bin/python
+./scripts/refresh-news.sh:24: no such file or directory: /Users/chelsqueck/stock-monitor/.venv/bin/python
+./scripts/refresh-news.sh:27: no such file or directory: /Users/chelsqueck/stock-monitor/.venv/bin/python
+./scripts/refresh-news.sh:30: no such file or directory: /Users/chelsqueck/stock-monitor/.venv/bin/python
+./scripts/refresh-news.sh:33: no such file or directory: /Users/chelsqueck/stock-monitor/.venv/bin/python
+[2026-08-14T07:30:25.686524] processed 0 new message(s)
+[2026-08-14T07:30:25.793259] doc processor starting
+nothing new to merge
+Traceback (most recent call last):
+  File "/Users/chelsqueck/stock-monitor/scripts/ivdata.py", line 9, in <module>
+    from ib_insync import IB, Stock, util
+ModuleNotFoundError: No module named 'ib_insync'
+[gmail collect failed] No module named 'google'
+sources: X=32 Gmail=0 Telegram=4
+news: 9 tickers tagged (priority searched: ['9988', '0700', '3690', '1810', '9888', 'NVDA', 'AAPL', 'MSFT', 'META', 'TSM', 'MU', 'AMD', 'ASML', 'INTC', 'SMCI']) -> /Users/chelsqueck/stock-monitor/data/news.json
+  NVDA: Rubin Ultra unlikely to use HBM4, will use 8-high/12-high HBM4E; Kyber on roadmap [X @juka
+  INTC: Q2 2026: lost server CPU unit share, gained revenue share; bullish on CXL [X @jukan05]
+  MU: J.P. Morgan: HBM supply worse in 2028 than 2027, better than May 2026 estimates [X @jukan0
+  AAPL: Jefferies downgrade to Sell; memory cost inflation and supply constraints cited [WebSearch
+  MSFT: Q4 beat: $90.01B revenue vs $87.62B expected; JPMorgan & Wells Fargo raise targets [WebSea
+  META: Launching AI detection system; $130-145B capex 2026 on data center expansion [WebSearch]
+  TSM: Q2 net income NT$706.56B; Sony image-sensor JV approved; $60-64B capex for 2026 [WebSearch
+  AMD: Q2 record $11.5B revenue, $1.38 EPS; Q3 guidance $13B; acquired Taalas [WebSearch]
+  ASML: Q2: €9.3B sales, €2.9B net income; raised sales forecast on AI chip demand [WebSearch]
+events: 3 tickers with dated catalysts -> /Users/chelsqueck/stock-monitor/data/events.json
+1 tickers due (skipped 14 still-fresh)
+  0175: Whether export momentum (revised 750k/2026 target) & margin expansion can sustain amid mac
+earnings focus: 15 names total -> /Users/chelsqueck/stock-monitor/data/earnings.json
+20 tickers due (skipped 0 still-fresh): ['PDD', '9988', '0700', '3690', '1810', '9888', 'NVDA', 'AAPL', 'MSFT', 'META', 'TSM', 'MU', 'AMD', 'ASML', 'INTC', 'AVGO', 'SMCI', 'MRVL', 'LRCX', 'COHR']
+  PDD: H1 2026 earnings Aug 25; regulatory clarity on refund-without-returns policy impact key [S
+  9988: Q2 2026 earnings Aug 20; Qwen3.8 AI monetization amid EU 550M fine pressure [Barchart]
+  0700: Hy3 AI model free access ends Aug 31; monetization test follows weak Q2 profit miss [TipRa
+  1810: Board meeting Aug 18 for H1 2026 earnings; 550k EV target, $20B HKD buyback in focus [TipR
+  9888: Q2 2026 earnings Aug 18; extraordinary shareholder meeting Aug 26 on strategy [Barchart]
+  NVDA: Q2 FY2027 earnings Aug 26; BofA expects guidance raise ($107-108B vs $104B consensus) on A
+  AAPL: Next earnings Oct 29; Q3 beat revenue but miss EPS/guidance raises questions on hardware c
+  MSFT: Fiscal Q1 FY2027 earnings late October; Azure 43% growth and Copilot 30M seats sustaining 
+  META: Q3 2026 revenue guidance ($61-64B) misses consensus; investors weighing $130-145B CapEx vi
+  TSM: Q3 2026 revenue outlook ($44.6-45.8B); AI capacity utilization and gross margin 65-67% tra
+  MU: HBM4 yield ramp on 2026 sold-out supply; strategic multi-year customer agreements locking 
+  AMD: MI450/Helios platform launch in 2H 2026 driving data center AI displacement vs NVIDIA [See
+  ASML: 2026 guidance raised to €43-45B; Q3 earnings October confirms sustained AI capex demand [A
+  INTC: Q3 earnings (Oct) on Data Center AI momentum (59% YoY Q2 growth) and server share recovery
+  AVGO: Broadcom Q3 earnings Sept 2 on AI custom chip revenue tracking to $16B quarterly, $100B+ a
+  SMCI: FY2027 guidance $65-72B hinges on backlog-to-revenue conversion with 6K racks/month scalin
+  MRVL: AI memory infrastructure products launched Aug 2026 targeting commercialization with major
+  LRCX: SanDisk's Aug 13 Investor Day signals sustained memory capex spending, boosting semiconduc
+  COHR: FCC proposal to ban Chinese optical transceiver imports positions Coherent as domestic sup
+catalysts: 31 names total -> /Users/chelsqueck/stock-monitor/data/catalysts.json
+macro events still fresh (0d old), skipping

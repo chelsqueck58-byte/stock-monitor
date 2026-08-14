@@ -399,9 +399,9 @@ def main():
     if args.no_alert:
         return
 
-    triggered = fresh_flags(entries, datetime.now(timezone.utc))
-    if triggered:
-        notify(format_levels_message(triggered))
+    # triggered = fresh_flags(entries, datetime.now(timezone.utc))
+    # if triggered:
+    #     notify(format_levels_message(triggered))
     if failures:
         notify(f"⚠ <b>Data gap</b>: {len(failures)} dropped — {', '.join(failures[:10])}")
     if reused:

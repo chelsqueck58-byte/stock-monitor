@@ -391,6 +391,6 @@ def summarise(bars, settings):
         "bars": [
             {"d": bar["date"], "o": bar["open"], "h": bar["high"],
              "l": bar["low"], "c": bar["close"], "v": bar.get("volume")}
-            for bar in bars[-260:]
+            for bar in bars[-730:]
         ],
     }
