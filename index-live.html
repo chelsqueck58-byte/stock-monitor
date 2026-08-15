@@ -720,13 +720,13 @@ function load() {
   console.log("load() called");
   document.getElementById("meta").textContent = "fetching data...";
 
-  const dataPromise = fetch("./data.json?t=" + Date.now(), { cache: "no-store" })
+  const dataPromise = fetch("./data-live.json?t=" + Date.now(), { cache: "no-store" })
     .then(res => {
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       return res.json();
     });
 
-  const movesPromise = fetch("./moves.json", { cache: "no-store" })
+  const movesPromise = fetch("./moves-live.json", { cache: "no-store" })
     .then(res => res.json())
     .catch(err => {
       console.warn("moves.json unavailable:", err);
