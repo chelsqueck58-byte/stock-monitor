@@ -3,3 +3,7 @@ Traceback (most recent call last):
   File "/Users/chelsqueck/stock-monitor/scripts/ivdata.py", line 9, in <module>
     from ib_insync import IB, Stock, util
 ModuleNotFoundError: No module named 'ib_insync'
+Traceback (most recent call last):
+  File "/Users/chelsqueck/stock-monitor/scripts/ivdata.py", line 9, in <module>
+    from ib_insync import IB, Stock, util
+ModuleNotFoundError: No module named 'ib_insync'

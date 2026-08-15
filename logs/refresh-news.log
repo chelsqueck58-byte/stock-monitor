@@ -51,3 +51,60 @@ earnings focus: 15 names total -> /Users/chelsqueck/stock-monitor/data/earnings.
   COHR: FCC proposal to ban Chinese optical transceiver imports positions Coherent as domestic sup
 catalysts: 31 names total -> /Users/chelsqueck/stock-monitor/data/catalysts.json
 macro events still fresh (0d old), skipping
+[getUpdates failed] HTTP Error 409: Conflict
+[2026-08-15T07:30:01.173565] poll failed or returned nothing
+[2026-08-15T07:30:01.370532] doc processor starting
+nothing new to merge
+Traceback (most recent call last):
+  File "/Users/chelsqueck/stock-monitor/scripts/ivdata.py", line 9, in <module>
+    from ib_insync import IB, Stock, util
+ModuleNotFoundError: No module named 'ib_insync'
+[gmail collect failed] No module named 'google'
+sources: X=23 Gmail=0 Telegram=4
+news: 17 tickers tagged (priority searched: ['PDD', '9988', '0700', '9618', '3690', '1810', '9888', 'NTES', 'AAPL', 'MSFT', 'META', 'TSM', 'MU', 'AMD', 'INTC']) -> /Users/chelsqueck/stock-monitor/data/news.json
+  000660: SK Hynix H1 2026 avg per-capita pay ~144M KRW (~687K RMB), up ~23% YoY from 117M KRW [X @f
+  AAPL: Apple's China AI Intelligence (w/ Alibaba's Qwen) to launch soon; Houston plant starts Mac
+  9988: Reuters: Apple's China AI model built w/ Alibaba's Qwen (not just using it as-is); every r
+  9888: Moody's downgrades Baidu from A to A-, citing structural decline in search ads as AI erode
+  MSFT: Reuters: Microsoft shrinking China ops, pivoting to serve Chinese firms going abroad; clos
+  MU: Trader still bullish MU/Samsung on memory bottleneck; says main change has been stock pric
+  005930: Korean media: Samsung mulls repurposing NRD-K R&D fab Line 2 into foundry line for 2nm HBM
+  INTC: GF Securities reiterates Buy, $136 PT on equity offering; CEO subscribing directly; foundr
+  NVDA: DigiTimes: Nvidia's next-gen Feynman platform to use TSMC's A16 (2nm), raise SoIC 3D stack
+  TSM: DigiTimes: Nvidia's Feynman platform (next-next-gen) to use TSMC's upgraded 2nm process A1
+  LITE: Trader flags photonics sector rotation to $AXTI/$LITE this week amid ongoing memory bottle
+  0700: Tencent shares fell after Q2 capex jumped 65% QoQ to RMB52.8B on AI infra spend; revenue +
+  9618: JD.com Q2 2026 revenue RMB346.4B (-2.9% YoY); income from ops RMB4.5B vs loss a year ago; 
+  1810: Xiaomi's HyperOS 4 set to launch in China in August 2026 alongside Xiaomi 18 lineup/Mix Fo
+  NTES: NetEase to report Q2 2026 results Aug 20, 2026 (before US market open) [WebSearch]
+  META: Meta partners with NABTU to invest in skilled trades workers building AI infrastructure (a
+  AMD: AMD closed record $4.75B IG debt offering (largest-ever) Aug 14 to fund AI/data-center bui
+events: 3 tickers with dated catalysts -> /Users/chelsqueck/stock-monitor/data/events.json
+3 tickers due (skipped 15 still-fresh)
+  CIEN: Watching if AI hyperscaler optical demand and $7.7B backlog hold into Q4 guide, after Q2 s
+  FN: Focus on whether AI datacom/transceiver demand keeps accelerating despite supply constrain
+  NTES: Eyes on gaming pipeline: Marvel Rivals engagement trends, Sea of Dawn Q3 launch, Destiny: 
+earnings focus: 18 names total -> /Users/chelsqueck/stock-monitor/data/earnings.json
+20 tickers due (skipped 0 still-fresh): ['PDD', '9988', '0700', '9618', '3690', '1810', '9888', 'NTES', 'NVDA', 'AAPL', 'MSFT', 'META', 'TSM', 'MU', 'AMD', 'INTC', 'AVGO', 'SMCI', 'MRVL', 'CRDO']
+  PDD: Q2 earnings due ~Aug 24-31; consensus EPS ~$2.77 as market watches margin trends amid comp
+  9988: Reuters: Apple's China Apple Intelligence to run on Alibaba's Qwen LLM, launching with iOS
+  0700: Q2 revenue +11% y/y to RMB204.8bn on Hunyuan3/AI momentum; buyback pace vs rising AI capex
+  9618: Q2 (Aug 13) profit beat despite revenue dip from tough 618 comps; guided Q3 retail revenue
+  3690: Q2 revenue +11.7% y/y but adj. profit -89% amid delivery price war; CEO warns of Q3 core-c
+  1810: Q2 earnings due Aug 18; YU7 EV demand vs smartphone margin pressure from rising memory chi
+  9888: Moody's downgraded Baidu A→A- citing structural decline in search ads as AI competition er
+  NTES: NetEase reports Q2 2026 results Aug 20; market watching gaming momentum (games rev +18% Qo
+  NVDA: DigiTimes: Nvidia's next-gen Feynman platform jumps straight to TSMC's A16 2nm node, more 
+  AAPL: Reuters: Apple's China-specific Apple Intelligence (built on Alibaba's Qwen LLM) set to la
+  MSFT: Next catalyst: FQ1 FY27 earnings (~late Oct) testing whether Azure's 43% YoY growth & Copi
+  META: EU Commission's preliminary DSA finding vs Meta (addictive IG/FB design, under-13 safeguar
+  TSM: 5.5x reticle CoWoS advanced packaging entered volume production Aug 11 (12 HBM4 stacks, 98
+  MU: HBM3E/HBM4 sold out through 2027-28; FQ4 earnings ~late Sep expected to show FCF topping $
+  AMD: MI400 (CDNA5) launches H2 2026, backed by OpenAI's 6GW MI450 commitment and Meta's $60B su
+  INTC: Closed $20B equity offering (upsized from $15B) Aug 12 to fund 14A foundry/EMIB buildout; 
+  AVGO: Reports FQ3 earnings Sep 2; Hock Tan guides AI semiconductor revenue past $100B in 2027 as
+  SMCI: FQ4 beat Aug 11 with FY27 revenue guide $65-72B (vs $53.29B consensus) on $60B+ record ord
+  MRVL: New AI memory portfolio (Bravera SC6, Structera X, Photonic Fabric) drove shares +14%; nex
+  CRDO: FQ1 earnings call set for Sep 1, 2026; FY27 optical/AI connectivity revenue growth guided 
+catalysts: 33 names total -> /Users/chelsqueck/stock-monitor/data/catalysts.json
+macro events still fresh (1d old), skipping
