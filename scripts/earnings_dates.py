@@ -43,15 +43,17 @@ def _opens_with_earnings_ref(reason):
     return bool(re.search(r"\bq[1-4]\b", head)) or "earnings" in head
 
 
-def already_covered(tid, quarter_end, moves_by_id):
-    """True if an already-researched earnings move exists near a plausible
-    report window for this quarter (quarter-end + 0-70 days, the normal
-    reporting lag) - within +/-4 days of any such move counts as covered."""
+def already_covered(tid, anchor_iso, moves_by_id):
+    """True if an already-researched earnings move exists within a wide
+    window around the anchor date - wide enough to cover both anchor flavors
+    (an estimated report date, or a raw quarter-end awaiting its ~0-90d
+    reporting lag)."""
     entry = moves_by_id.get(tid)
     if not entry:
         return False
-    qend = datetime.date.fromisoformat(quarter_end)
-    window_start, window_end = qend, qend + datetime.timedelta(days=75)
+    anchor = datetime.date.fromisoformat(anchor_iso)
+    window_start = anchor - datetime.timedelta(days=15)
+    window_end = anchor + datetime.timedelta(days=95)
     for mv in entry.get("moves", []):
         if not mv.get("reason") or not _opens_with_earnings_ref(mv["reason"]):
             continue
@@ -89,12 +91,14 @@ def parse_obj(text):
 
 
 def research_one(item):
-    tid, label, quarter_end, surprise = item
-    q_label = f"quarter ended {quarter_end}"
-    surprise_note = f" (EPS surprise was {surprise:+.1f}% vs estimate)" if surprise is not None else ""
+    tid, label, anchor_iso, qkey, surprise = item
+    q_label = f"the quarter ending closest to {qkey}" if qkey else f"its most recent quarter (expected around {anchor_iso})"
+    surprise_note = f" (EPS surprise was previously estimated at {surprise:+.1f}% vs consensus)" if surprise is not None else ""
     prompt = (
-        f"Find the exact date {label} ({tid}) reported its earnings results for the "
-        f"{q_label}{surprise_note}. Use web search. Then find how the stock reacted "
+        f"Find the exact date {label} ({tid}) most recently reported quarterly earnings "
+        f"results - {q_label}{surprise_note}. This company's data feed suggests they "
+        f"reported on or close to {anchor_iso}; confirm the real date via web search "
+        "rather than assuming that estimate is exact. Then find how the stock reacted "
         "on that trading day or the next one (percent move) and a one-line reason "
         "investors gave for that reaction (or note if the move was minor/in-line).\n"
         'RULES: report_date must be a real date you found, format "YYYY-MM-DD". If you '
@@ -114,7 +118,47 @@ def research_one(item):
             "Reply with ONLY the JSON object.\n\n" + raw
         )
         parsed = parse_obj(ask_claude(fixup))
-    return tid, label, quarter_end, parsed
+    return tid, label, anchor_iso, qkey, parsed
+
+
+def latest_reported_anchor(f, today):
+    """The best available signal for 'what quarter did this company most
+    recently report, and around what date' - NOT trusted from earnings_history
+    alone, since Yahoo's quoteSummary earningsHistory module lags: it can take
+    days-to-weeks after a real report before that quarter's actual EPS shows
+    up there. Confirmed live on Tencent, which reported Q2 2026 on 2026-08-12
+    (per user) - earnings_history still listed Q1 (2026-03-31) as the latest
+    ACTUALIZED entry, so the quarter-list approach missed it completely.
+
+    Better signal: next_earnings itself. Once Yahoo's calendar has advanced
+    next_earnings to a date >1 quarter out, that update only happens AFTER a
+    report lands - so the true report already occurred, roughly one quarterly
+    cadence (~91d) before next_earnings. Falls back to the earnings_history
+    quarter-end when next_earnings isn't usefully in the future (e.g. missing,
+    or still <=35d out - that one belongs to the *upcoming* catalysts view,
+    not this past-report gap-fill).
+    """
+    next_earn = f.get("next_earnings")
+    if next_earn:
+        try:
+            ne = datetime.date.fromisoformat(next_earn)
+            days_out = (ne - today).days
+            if days_out > 35:
+                approx_report = ne - datetime.timedelta(days=91)
+                if approx_report <= today:
+                    return approx_report, "~" + approx_report.isoformat()
+        except ValueError:
+            pass
+    hist = f.get("earnings_history") or []
+    reported = [q for q in hist if q.get("actual") is not None and q.get("q")]
+    if not reported:
+        return None, None
+    latest = max(reported, key=lambda q: q["q"])
+    try:
+        qend = datetime.date.fromisoformat(latest["q"])
+    except ValueError:
+        return None, None
+    return qend, latest["q"]
 
 
 def main():
@@ -128,32 +172,36 @@ def main():
 
     todo = []
     for tid, f in fund.items():
-        hist = f.get("earnings_history") or []
-        reported = [q for q in hist if q.get("actual") is not None and q.get("q")]
-        if not reported:
+        anchor_date, qkey = latest_reported_anchor(f, today)
+        if anchor_date is None:
             continue
-        latest = max(reported, key=lambda q: q["q"])
-        qend = latest["q"]
+        anchor_iso = anchor_date.isoformat()
 
         cached = out.get(tid)
-        if cached and cached.get("quarter") == qend:
+        if cached and cached.get("anchor") == anchor_iso:
             fetched = cached.get("fetched")
             if fetched and (today - datetime.date.fromisoformat(fetched)).days < FRESH_DAYS:
                 continue
 
-        if already_covered(tid, qend, moves):
-            out[tid] = {"quarter": qend, "report_date": None, "reaction_pct": None,
-                        "reason": None, "source": None, "covered_by_move": True,
-                        "fetched": today.isoformat()}
+        if already_covered(tid, anchor_iso, moves):
+            out[tid] = {"anchor": anchor_iso, "quarter": qkey, "report_date": None,
+                        "reaction_pct": None, "reason": None, "source": None,
+                        "covered_by_move": True, "fetched": today.isoformat()}
             continue
 
-        todo.append((tid, labels.get(tid, tid), qend, latest.get("surprise")))
+        surprise = None
+        hist = f.get("earnings_history") or []
+        matching = [q for q in hist if q.get("q") == qkey]
+        if matching:
+            surprise = matching[0].get("surprise")
+        todo.append((tid, labels.get(tid, tid), anchor_iso, qkey, surprise))
 
     print(f"{len(todo)} tickers need report-date research (of {len(fund)} total)")
 
     with ThreadPoolExecutor(max_workers=WORKERS) as ex:
-        for tid, label, qend, parsed in ex.map(research_one, todo):
-            entry = {"quarter": qend, "covered_by_move": False, "fetched": today.isoformat()}
+        for tid, label, anchor_iso, qkey, parsed in ex.map(research_one, todo):
+            entry = {"anchor": anchor_iso, "quarter": qkey, "covered_by_move": False,
+                     "fetched": today.isoformat()}
             if parsed:
                 rd = (parsed.get("report_date") or "").strip()
                 entry["report_date"] = rd or None
@@ -163,7 +211,7 @@ def main():
             else:
                 entry.update(report_date=None, reaction_pct=None, reason=None, source=None)
             out[tid] = entry
-            print(f"  {tid:7} {qend} -> {entry.get('report_date')}: {entry.get('reason')}")
+            print(f"  {tid:7} {qkey or anchor_iso} -> {entry.get('report_date')}: {entry.get('reason')}")
             OUT.write_text(json.dumps(out, ensure_ascii=False, separators=(",", ":")))
 
     found = sum(1 for v in out.values() if v.get("report_date"))
