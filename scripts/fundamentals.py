@@ -98,6 +98,7 @@ def fetch(session, crumb, symbol):
         "fwd_pe": fwd_pe,
         "peg": raw(ks, "pegRatio"),
         "gross_margin": raw(fd, "grossMargins"),
+        "operating_margin": raw(fd, "operatingMargins"),
         "net_margin": raw(fd, "profitMargins"),
         "operating_cashflow": raw(fd, "operatingCashflow"),
         "free_cashflow": raw(fd, "freeCashflow"),
