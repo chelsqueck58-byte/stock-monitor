@@ -40,6 +40,28 @@
           }
         },
         {
+          "id": "2513",
+          "label": "Zhipu AI",
+          "yahoo": "2513.HK",
+          "ibkr": {
+            "symbol": "2513",
+            "sec_type": "STK",
+            "exchange": "SEHK",
+            "currency": "HKD"
+          }
+        },
+        {
+          "id": "0100",
+          "label": "MiniMax",
+          "yahoo": "0100.HK",
+          "ibkr": {
+            "symbol": "100",
+            "sec_type": "STK",
+            "exchange": "SEHK",
+            "currency": "HKD"
+          }
+        },
+        {
           "id": "9988",
           "label": "Alibaba",
           "yahoo": "9988.HK",
@@ -220,6 +242,17 @@
           "ibkr": {
             "symbol": "ARM",
             "sec_type": "STK"
+          }
+        },
+        {
+          "id": "688256",
+          "label": "Cambricon",
+          "yahoo": "688256.SS",
+          "ibkr": {
+            "symbol": "688256",
+            "sec_type": "STK",
+            "exchange": "SEHKNTL",
+            "currency": "CNY"
           }
         }
       ]
@@ -771,7 +804,7 @@
     "level_cluster_pct": 1.5,
     "proximity_alert_pct": 1.5,
     "stale_after_hours": 30,
-    "min_bars": 210,
+    "min_bars": 100,
     "donchian_period": 20
   }
 }
