@@ -374,3 +374,190 @@ Wrote /Users/chelsqueck/stock-monitor/site/data.json (6093 KB) - 74 ok, 0 failed
   ✓ earnings_research
   ✓ movements_research
   ✓ build
+
+============================================================
+[PIPELINE START] 2026-08-16 07:30:00
+
+
+============================================================
+[07:30:00] Running fundamentals...
+
+fundamentals: 74 ok, 0 reused last-good, 0 never fetched -> /Users/chelsqueck/stock-monitor/data/fundamentals.json
+
+[fundamentals] ✓ OK
+
+============================================================
+[07:30:58] Running catalysts...
+
+20 tickers due (skipped 0 still-fresh): ['PDD', '9988', '0700', '9618', '3690', '1810', '9888', 'NTES', 'NVDA', 'AAPL', 'MSFT', 'META', 'TSM', 'MU', 'AMD', 'INTC', 'AVGO', 'SMCI', 'MRVL', 'CRDO']
+  PDD: Reports Q2 earnings ~Aug 24-31; focus on whether heavy ecosystem/Temu spending stabilizes 
+  9988: Cloud/AI capex is the story: Qwen3.8 model launch + accelerating cloud growth ahead of Q1F
+  0700: Shares fell 3.7% after Aug 12 Q2 print (revenue +11%) despite EPS beat; market now watchin
+  9618: Posted Aug 13 interim results: profit beat despite revenue dip, buybacks ramped up; pace o
+  3690: CEO Wang Xing warned Q3 core-commerce will post a significant loss as Meituan keeps subsid
+  1810: Reports earnings Aug 26; EV deliveries (31.3k in July) trail pace needed to hit 550k 2026 
+  9888: Baidu reports Q2 2026 earnings Aug 18, then holds an EGM Aug 26 in Beijing for shareholder
+  NTES: NetEase reports Q2 2026 earnings Aug 20 pre-market; Street eyes EPS ~$2.28 after Q1's 25% 
+  NVDA: Nvidia reportedly cut its $250B OpenAI data-center commitment to under $120B, raising AI-i
+  AAPL: US senators (Banks, Schumer) and Commerce Sec. Lutnick are pressuring Apple to drop plans 
+  MSFT: Azure hit a $100B run-rate (+43% YoY) in the Jul 29 beat-and-raise print; eased FY27 capex
+  META: Capex scrutiny intensifies after $125-145B 2026 guidance and an EPS miss; in-house Iris AI
+  TSM: TSMC raised FY26 outlook as AI demand accelerates: July sales +45% YoY, capex raised to $6
+  MU: Senators gave Apple until Aug 21 to pledge no Chinese (CXMT/YMTC) memory chip purchases; M
+  AMD: AMD's Aug 4 Q2 beat ($11.5B data center rev, EPS $1.38) shifts focus to MI400/MI455X GPU r
+  INTC: Intel closed a $20B share sale (US gov now ~10% holder) to fund 14A fabs; market awaits ru
+  AVGO: Broadcom reports FQ3 earnings Sept 2 (est. $29.44B rev/$2.55 EPS); watch AI revenue and FY
+  SMCI: SMCI's Aug 11 FQ4 print showed $11.12B rev, margin surged to 17.6% (vs 8.2-8.4% guide) and
+  MRVL: AI memory portfolio launch (Bravera SC6, Structera X, Photonic Fabric) drove stock +14-16%
+  CRDO: FY27 guide of 80%+ revenue growth incl. $600M+ optical networking revenue (ZeroFlap optics
+catalysts: 33 names total -> /Users/chelsqueck/stock-monitor/data/catalysts.json
+
+[catalysts] ✓ OK
+
+============================================================
+[07:33:51] Running news...
+
+[gmail collect failed] No module named 'google'
+sources: X=8 Gmail=0 Telegram=4
+news: 6 tickers tagged (priority searched: ['PDD', '9988', '0700', '9618', '3690', '1810', '9888', 'NTES', 'NVDA', 'AAPL', 'MSFT', 'META', 'TSM', 'MU', 'AMD']) -> /Users/chelsqueck/stock-monitor/data/news.json
+  AAPL: US govt reportedly urges Apple not to buy Chinese memory chips (CXMT/YMTC hiking prices an
+  MU: US govt urges Apple to avoid Chinese memory chips; $MU seen as a beneficiary of the shift 
+  000660: US govt urges Apple to avoid Chinese memory chips; $SKHY (SK Hynix) seen as a beneficiary 
+  005930: US govt urges Apple to avoid Chinese memory chips; Samsung seen as a beneficiary [X @aleab
+  1810: Xiaomi officially launched HyperOS 4 (Aug 14): 40% performance boost, 300% faster inter-de
+  META: META shares down ~27% from recent highs after Q2 FCF fell ~91% YoY amid $130-145B 2026 AI 
+events: 3 tickers with dated catalysts -> /Users/chelsqueck/stock-monitor/data/events.json
+
+[news] ✓ OK
+
+============================================================
+[07:35:38] Running ivdata...
+
+
+[ivdata] ✗ FAILED
+
+============================================================
+[07:35:38] Running macro_events...
+
+macro events still fresh (2d old), skipping
+
+[macro_events] ✓ OK
+
+============================================================
+[07:35:38] Running movements...
+
+moves: 71 names, 3268 total (>= 5.0%), 0 new unresearched (0 fetch failures) -> /Users/chelsqueck/stock-monitor/data/moves.json
+
+[movements] ✓ OK
+
+============================================================
+[07:36:18] Running earnings_research...
+
+0 tickers due (skipped 18 still-fresh)
+earnings focus: 18 names total -> /Users/chelsqueck/stock-monitor/data/earnings.json
+
+[earnings_research] ✓ OK
+
+============================================================
+[07:36:18] Running movements_research...
+
+0 chunks across 71 names, 6 in parallel
+done: 2813/3268 moves sourced
+
+[movements_research] ✓ OK
+
+============================================================
+[07:36:18] Running build...
+
+  ok   SPY            776.34  730 bars
+  ok   QQQ            731.07  730 bars
+  ok   PDD             84.79  730 bars
+  ok   9988           119.90  730 bars
+  ok   0700           440.00  730 bars
+  ok   9618           110.20  730 bars
+  ok   3690            87.20  730 bars
+  ok   1810            25.62  730 bars
+  ok   9888           100.80  730 bars
+  ok   NTES           125.12  730 bars
+  ok   AMZN           262.65  730 bars
+  ok   NVDA           225.16  730 bars
+  ok   AAPL           305.93  730 bars
+  ok   MSFT           495.40  730 bars
+  ok   META           589.85  730 bars
+  ok   GOOGL          345.90  730 bars
+  ok   TSLA           342.27  730 bars
+  ok   TSM            426.35  730 bars
+  ok   000660   1,645,000.00  729 bars
+  ok   005930     274,500.00  729 bars
+  ok   MU             971.66  730 bars
+  ok   ARMUSD         279.44  730 bars
+  ok   AMD            514.39  730 bars
+  ok   ASML         1,844.08  730 bars
+  ok   INTC           102.50  730 bars
+  ok   AVGO           392.99  730 bars
+  ok   SMCI            39.84  730 bars
+  ok   MRVL           222.02  730 bars
+  ok   GFS             54.58  730 bars
+  ok   WDC            508.80  730 bars
+  ok   AMAT           507.18  730 bars
+  ok   LRCX           332.36  730 bars
+  ok   KLAC           203.72  730 bars
+  ok   COHR           325.83  730 bars
+  ok   LITE           926.14  730 bars
+  ok   CRDO           259.90  730 bars
+  ok   TEL            216.23  730 bars
+  ok   GLW            165.99  730 bars
+  ok   CIEN           428.77  730 bars
+  ok   AAOI           150.28  730 bars
+  ok   FN             570.22  730 bars
+  ok   ACMR            80.42  730 bars
+  ok   NINOY           12.80  730 bars
+  ok   MPWR         1,402.01  730 bars
+  ok   VICR           234.74  730 bars
+  ok   IFNNY           71.68  730 bars
+  ok   SMI             44.29  445 bars
+  ok   0175            17.82  730 bars
+  ok   1211            88.25  730 bars
+  ok   2015            47.46  730 bars
+  ok   9868            45.52  730 bars
+  ok   9866            35.18  730 bars
+  ok   3750           641.50  307 bars
+  ok   9863            40.06  730 bars
+  ok   UOB             41.80  727 bars
+  ok   KEPPEL          11.17  727 bars
+  ok   DBS             75.53  727 bars
+  ok   OCBC            31.79  727 bars
+  ok   SINGTEL          4.45  727 bars
+  ok   STENG           10.96  727 bars
+  ok   SGX             25.24  727 bars
+  ok   CAPLAND          2.74  727 bars
+  ok   SE             121.94  730 bars
+  ok   GRAB             3.62  730 bars
+  ok   MCD            272.83  730 bars
+  ok   SBUX           107.69  730 bars
+  ok   PEP            140.79  730 bars
+  ok   WMT            115.27  730 bars
+  ok   COST           961.10  730 bars
+  ok   PG             144.55  730 bars
+  ok   KO              87.71  730 bars
+  ok   NKE             40.73  730 bars
+  ok   DPZ            346.27  730 bars
+  ok   GRMN           310.20  730 bars
+
+Wrote /Users/chelsqueck/stock-monitor/site/data.json (6093 KB) - 74 ok, 0 failed, source=yahoo
+
+[build] ✓ OK
+
+============================================================
+[PIPELINE COMPLETE] 2026-08-16 07:36:58
+[SUMMARY] 8/9 stages OK, elapsed 418s
+
+  ✓ fundamentals
+  ✓ catalysts
+  ✓ news
+  ✗ ivdata
+  ✓ macro_events
+  ✓ movements
+  ✓ earnings_research
+  ✓ movements_research
+  ✓ build

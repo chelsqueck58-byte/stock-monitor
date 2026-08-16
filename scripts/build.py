@@ -46,10 +46,24 @@ def _opens_with_earnings_ref(reason):
     "Fiscal Q3...", "Beat Q1...", "Missed Q1..." all put the quarter at word
     2, not a fixed character offset). A false match like "Investor re-rating
     on Q1 results" puts Q1 at word 4 - reliably later, since it's referencing
-    a report in passing rather than describing it."""
-    words = re.findall(r"[a-zA-Z0-9]+", reason)[:3]
-    head = " ".join(words).lower()
-    return bool(re.search(r"\bq[1-4]\b", head)) or "earnings" in head
+    a report in passing rather than describing it.
+
+    EV/auto delivery reports ("Q2 2026 deliveries ~62,682 units missed...")
+    open with the exact same "Q[1-4]" pattern but are a DIFFERENT event from
+    quarterly earnings - confirmed live on TSLA/XPeng/NIO/Li Auto, all
+    wrongly tagged as earnings moves until this exclusion. A delivery report
+    only counts if "earnings" is also explicit nearby (a wider 6-word window
+    catches that combo without re-admitting the delivery-only false positives,
+    which never mention "earnings" that early)."""
+    words6 = re.findall(r"[a-zA-Z0-9]+", reason)[:6]
+    head6 = " ".join(words6).lower()
+    head3 = " ".join(words6[:3]).lower()
+    has_ref = bool(re.search(r"\bq[1-4]\b", head3)) or "earnings" in head3
+    if not has_ref:
+        return False
+    if "deliver" in head6 and "earnings" not in head6:
+        return False
+    return True
 
 
 def find_prev_earnings_reactions(moves, limit=4):

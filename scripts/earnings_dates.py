@@ -38,9 +38,19 @@ FRESH_DAYS = 3  # a ticker's latest reported quarter doesn't change often
 
 
 def _opens_with_earnings_ref(reason):
-    words = re.findall(r"[a-zA-Z0-9]+", reason or "")[:3]
-    head = " ".join(words).lower()
-    return bool(re.search(r"\bq[1-4]\b", head)) or "earnings" in head
+    # Same delivery-report exclusion as build.py's copy of this heuristic -
+    # "Q2 2026 deliveries ~62,682 units..." (TSLA/XPeng/NIO/Li Auto) is a
+    # different event from a quarterly earnings report despite the Q[1-4]
+    # opener, and must not satisfy an earnings-window match.
+    words6 = re.findall(r"[a-zA-Z0-9]+", reason or "")[:6]
+    head6 = " ".join(words6).lower()
+    head3 = " ".join(words6[:3]).lower()
+    has_ref = bool(re.search(r"\bq[1-4]\b", head3)) or "earnings" in head3
+    if not has_ref:
+        return False
+    if "deliver" in head6 and "earnings" not in head6:
+        return False
+    return True
 
 
 def already_covered(tid, anchor_iso, moves_by_id):

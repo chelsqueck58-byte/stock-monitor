@@ -108,3 +108,47 @@ earnings focus: 18 names total -> /Users/chelsqueck/stock-monitor/data/earnings.
   CRDO: FQ1 earnings call set for Sep 1, 2026; FY27 optical/AI connectivity revenue growth guided 
 catalysts: 33 names total -> /Users/chelsqueck/stock-monitor/data/catalysts.json
 macro events still fresh (1d old), skipping
+[getUpdates failed] HTTP Error 409: Conflict
+[2026-08-16T07:30:01.243918] poll failed or returned nothing
+[2026-08-16T07:30:01.428705] doc processor starting
+nothing new to merge
+Traceback (most recent call last):
+  File "/Users/chelsqueck/stock-monitor/scripts/ivdata.py", line 9, in <module>
+    from ib_insync import IB, Stock, util
+ModuleNotFoundError: No module named 'ib_insync'
+[gmail collect failed] No module named 'google'
+sources: X=8 Gmail=0 Telegram=4
+news: 7 tickers tagged (priority searched: ['PDD', '9988', '0700', '9618', '3690', '1810', '9888', 'NTES', 'NVDA', 'AAPL', 'MSFT', 'META', 'TSM', 'MU', 'AMD']) -> /Users/chelsqueck/stock-monitor/data/news.json
+  AAPL: US govt urges Apple not to buy Chinese memory chips (CXMT/YMTC); Apple once relied on them
+  MU: US govt urges Apple to avoid Chinese memory chips - Micron seen as beneficiary [X @aleabit
+  000660: US govt urges Apple to avoid Chinese memory chips - SK Hynix seen as beneficiary [X @aleab
+  005930: US govt urges Apple to avoid Chinese memory chips - Samsung seen as beneficiary [X @aleabi
+  PDD: Himalaya Capital added ~6.15M PDD shares per 13F filing dated Aug 14, 2026 [Web]
+  1810: Xiaomi officially introduced HyperOS 4 on Aug 14, 2026, claims 40% performance boost [Web]
+  9888: Baidu called EGM for Aug 26, 2026 to authorize up to 20% new share issuance and 10% buybac
+events: 3 tickers with dated catalysts -> /Users/chelsqueck/stock-monitor/data/events.json
+0 tickers due (skipped 18 still-fresh)
+earnings focus: 18 names total -> /Users/chelsqueck/stock-monitor/data/earnings.json
+20 tickers due (skipped 0 still-fresh): ['PDD', '9988', '0700', '9618', '3690', '1810', '9888', 'NTES', 'NVDA', 'AAPL', 'MSFT', 'META', 'TSM', 'MU', 'AMD', 'INTC', 'AVGO', 'SMCI', 'MRVL', 'CRDO']
+  PDD: Reports Q2 earnings ~Aug 24-31; focus on whether heavy ecosystem/Temu spending stabilizes 
+  9988: Cloud/AI capex is the story: Qwen3.8 model launch + accelerating cloud growth ahead of Q1F
+  0700: Shares fell 3.7% after Aug 12 Q2 print (revenue +11%) despite EPS beat; market now watchin
+  9618: Posted Aug 13 interim results: profit beat despite revenue dip, buybacks ramped up; pace o
+  3690: CEO Wang Xing warned Q3 core-commerce will post a significant loss as Meituan keeps subsid
+  1810: Reports earnings Aug 26; EV deliveries (31.3k in July) trail pace needed to hit 550k 2026 
+  9888: Q2 2026 earnings call Aug 18 before US open, plus Aug 26 EGM on dual-primary HKEX listing 
+  NTES: Q2/1H2026 earnings set for Aug 20 board meeting/release, EPS est. $2.28, amid Strong Buy a
+  NVDA: Q2 FY27 earnings Aug 26; Street eyes $93-95B revenue as China H200 sales stay near zero un
+  AAPL: Commerce Sec. Lutnick told Apple US opposes it sourcing Chinese memory (CXMT/YMTC); senato
+  MSFT: Riding 30%/30-day surge post blockbuster FY26 Q4 (Azure +43%, Copilot 30M seats); market w
+  META: AI capex ($130-145B 2026 guide) and weak FCF ($784M vs $8.55B) post-earnings-miss remain t
+  TSM: TSMC raised FY26 revenue growth guide to 40%+ and capex to $62B, plus $100B more for Arizo
+  MU: Bipartisan senators gave Apple until Aug 21 to commit not to buy CXMT chips; Micron is lob
+  AMD: Market awaits AMD's MI450/Helios shipment ramp and OpenAI's 6GW deployment start in H2, wi
+  INTC: After its $20B stock offering closed Aug 12 to fund 14A buildout, focus shifts to Intel's 
+  AVGO: Broadcom's Sept 3 FY26 Q3 earnings is next test of AI chip growth story, guided AI semi re
+  SMCI: SMCI's Aug 11 beat cheered markets, but Sept-quarter margin guide points back down; execut
+  MRVL: Aug 27 earnings next major catalyst after stock jumped ~14-16% on new AI memory portfolio 
+  CRDO: Q1 FY27 earnings due Sept 1; guided $465-475M rev, high-60s margins signal AI data-center 
+catalysts: 33 names total -> /Users/chelsqueck/stock-monitor/data/catalysts.json
+macro events still fresh (2d old), skipping
