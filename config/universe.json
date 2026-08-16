@@ -104,15 +104,6 @@
             "exchange": "SEHK",
             "currency": "HKD"
           }
-        },
-        {
-          "id": "NTES",
-          "label": "NetEase",
-          "yahoo": "NTES",
-          "ibkr": {
-            "symbol": "NTES",
-            "sec_type": "STK"
-          }
         }
       ]
     },
