@@ -12,11 +12,21 @@ silently disappears from both the upcoming (>30d away, wrong bucket) and past
 beat (actual 7.433 vs est 7.235, +2.7%) - too small to trip movements.py, so
 nothing recorded its report date.
 
-Skips a ticker's latest quarter if a move within +/-4 days of any already-
-researched earnings-tagged move exists for that ticker in moves.json (already
-covered, no need to re-search). Writes data/earnings_dates.json:
-{tid: {"quarter": "...", "report_date": "...", "reaction_pct": float|null,
-       "reason": "...", "source": "...", "fetched": "YYYY-MM-DD"}}
+Skips a quarter if a move within +/-4 days of any already-researched
+earnings-tagged move exists for that ticker in moves.json (already covered,
+no need to re-search). Writes data/earnings_dates.json:
+{tid: [{"quarter": "...", "report_date": "...", "reaction_pct": float|null,
+        "reason": "...", "source": "...", "fetched": "YYYY-MM-DD"}, ...]}
+
+IMPORTANT - this is a LIST per ticker, not a single object. It used to be a
+single object holding only the most-recently-reported quarter, overwritten
+every time a newer quarter became "latest" - which silently discarded every
+older quarter that had ALSO been under movements.py's 5% detection floor.
+Confirmed live: Tencent's May/Aug/Nov 2025 quarters were all wiped this way,
+leaving an 11-month gap in Stock History with zero recorded earnings events.
+Now accumulates, and walks back BACKFILL_QUARTERS quarters (not just the
+current one) each run, bounded by how far real price bars go back (~2yr) so
+actual_reaction_pct() always has real data to compute the reaction from.
 
 Run:  .venv/bin/python scripts/earnings_dates.py
 """
@@ -36,6 +46,7 @@ OUT = ROOT / "data" / "earnings_dates.json"
 DATA_JSON = ROOT / "site" / "data.json"
 WORKERS = 6
 FRESH_DAYS = 3  # a ticker's latest reported quarter doesn't change often
+BACKFILL_QUARTERS = 6  # ~18 months back, comfortably inside the 730d price-bar window
 
 
 def _opens_with_earnings_ref(reason):
@@ -103,11 +114,11 @@ def parse_obj(text):
 
 def research_one(item):
     tid, label, anchor_iso, qkey, surprise = item
-    q_label = f"the quarter ending closest to {qkey}" if qkey else f"its most recent quarter (expected around {anchor_iso})"
+    q_label = f"the quarter ending closest to {qkey}" if qkey else f"the quarter expected around {anchor_iso}"
     surprise_note = f" (EPS surprise was previously estimated at {surprise:+.1f}% vs consensus)" if surprise is not None else ""
     prompt = (
-        f"Find the exact date {label} ({tid}) most recently reported quarterly earnings "
-        f"results - {q_label}{surprise_note}. This company's data feed suggests they "
+        f"Find the exact date {label} ({tid}) reported quarterly earnings results for "
+        f"{q_label}{surprise_note}. This company's data feed suggests they "
         f"reported on or close to {anchor_iso}; confirm the real date via web search "
         "rather than assuming that estimate is exact. Then find how the stock reacted "
         "on that trading day or the next one (percent move) and a one-line reason "
@@ -262,6 +273,22 @@ def latest_reported_anchor(f, today):
     return qend, latest["q"]
 
 
+def historical_anchors(latest_anchor_date, latest_qkey, n, bars):
+    """Up to n anchors walking back ~91 days (one quarterly cadence) at a
+    time from the latest one. Stops early once it walks past the earliest
+    available price bar - no point generating an anchor
+    actual_reaction_pct() could never compute a real reaction for anyway."""
+    anchors = [(latest_anchor_date, latest_qkey)]
+    earliest_bar = bars[0]["d"] if bars else None
+    cur = latest_anchor_date
+    for _ in range(n - 1):
+        cur = cur - datetime.timedelta(days=91)
+        if earliest_bar and cur.isoformat() < earliest_bar:
+            break
+        anchors.append((cur, cur.isoformat()))
+    return anchors
+
+
 def main():
     fund = json.loads(FUND.read_text())
     moves = json.loads(MOVES.read_text()) if MOVES.exists() else {}
@@ -269,7 +296,11 @@ def main():
     labels = {m["id"]: m["label"] for g in universe["groups"] for m in g["members"]}
     bars_by_id = load_bars_by_id()
 
-    out = json.loads(OUT.read_text()) if OUT.exists() else {}
+    raw_out = json.loads(OUT.read_text()) if OUT.exists() else {}
+    # Migrate the old single-object-per-ticker schema: a bare dict here means
+    # this ticker predates the accumulate-instead-of-overwrite fix and only
+    # ever held its single most-recently-researched quarter.
+    out = {tid: (v if isinstance(v, list) else [v]) for tid, v in raw_out.items()}
     today = datetime.date.today()
 
     todo = []
@@ -277,31 +308,53 @@ def main():
         anchor_date, qkey = latest_reported_anchor(f, today)
         if anchor_date is None:
             continue
-        anchor_iso = anchor_date.isoformat()
+        anchors = historical_anchors(anchor_date, qkey, BACKFILL_QUARTERS, bars_by_id.get(tid))
+        latest_anchor_iso = anchor_date.isoformat()
 
-        cached = out.get(tid)
-        if cached and cached.get("anchor") == anchor_iso:
-            fetched = cached.get("fetched")
-            if fetched and (today - datetime.date.fromisoformat(fetched)).days < FRESH_DAYS:
+        existing = out.setdefault(tid, [])
+        existing_by_anchor = {e.get("anchor"): e for e in existing}
+
+        for a_date, a_qkey in anchors:
+            anchor_iso = a_date.isoformat()
+            cached = existing_by_anchor.get(anchor_iso)
+            if cached:
+                if anchor_iso == latest_anchor_iso:
+                    # Only the latest anchor is worth re-checking - a genuine
+                    # report always eventually gets a real date, but keep
+                    # retrying on a short cadence until one's found.
+                    if cached.get("report_date") or cached.get("covered_by_move"):
+                        continue
+                    fetched = cached.get("fetched")
+                    if fetched and (today - datetime.date.fromisoformat(fetched)).days < FRESH_DAYS:
+                        continue
+                else:
+                    continue  # settled history, never re-researched
+
+            if already_covered(tid, anchor_iso, moves):
+                entry = {"anchor": anchor_iso, "quarter": a_qkey, "report_date": None,
+                          "reaction_pct": None, "reason": None, "source": None,
+                          "covered_by_move": True, "fetched": today.isoformat()}
+                if cached:
+                    existing[existing.index(cached)] = entry
+                else:
+                    existing.append(entry)
+                existing_by_anchor[anchor_iso] = entry
                 continue
 
-        if already_covered(tid, anchor_iso, moves):
-            out[tid] = {"anchor": anchor_iso, "quarter": qkey, "report_date": None,
-                        "reaction_pct": None, "reason": None, "source": None,
-                        "covered_by_move": True, "fetched": today.isoformat()}
-            continue
+            surprise = None
+            hist = f.get("earnings_history") or []
+            matching = [q for q in hist if q.get("q") == a_qkey]
+            if matching:
+                surprise = matching[0].get("surprise")
+            todo.append((tid, labels.get(tid, tid), anchor_iso, a_qkey, surprise, cached))
+            existing_by_anchor[anchor_iso] = True  # claim it, no dup within this run
 
-        surprise = None
-        hist = f.get("earnings_history") or []
-        matching = [q for q in hist if q.get("q") == qkey]
-        if matching:
-            surprise = matching[0].get("surprise")
-        todo.append((tid, labels.get(tid, tid), anchor_iso, qkey, surprise))
-
-    print(f"{len(todo)} tickers need report-date research (of {len(fund)} total)")
+    print(f"{len(todo)} ticker-quarters need report-date research (of {len(fund)} tickers)")
 
     with ThreadPoolExecutor(max_workers=WORKERS) as ex:
-        for tid, label, anchor_iso, qkey, parsed in ex.map(research_one, todo):
+        research_items = [item[:5] for item in todo]
+        cached_by_key = {(item[0], item[2]): item[5] for item in todo}
+        for tid, label, anchor_iso, qkey, parsed in ex.map(research_one, research_items):
             entry = {"anchor": anchor_iso, "quarter": qkey, "covered_by_move": False,
                      "fetched": today.isoformat()}
             if parsed:
@@ -317,12 +370,19 @@ def main():
                 entry["reaction_pct"] = computed_pct if computed_pct is not None else parsed.get("reaction_pct")
             else:
                 entry.update(report_date=None, reaction_pct=None, reason=None, source=None)
-            out[tid] = entry
+            existing = out.setdefault(tid, [])
+            prior = cached_by_key.get((tid, anchor_iso))
+            if prior and prior in existing:
+                existing[existing.index(prior)] = entry
+            else:
+                existing.append(entry)
             print(f"  {tid:7} {qkey or anchor_iso} -> {entry.get('report_date')}: {entry.get('reason')}")
             OUT.write_text(json.dumps(out, ensure_ascii=False, separators=(",", ":")))
 
-    found = sum(1 for v in out.values() if v.get("report_date"))
-    print(f"earnings_dates: {found}/{len(out)} with a found report date -> {OUT}")
+    total_entries = sum(len(v) for v in out.values())
+    found = sum(1 for v in out.values() for e in v if e.get("report_date"))
+    print(f"earnings_dates: {found}/{total_entries} entries with a found report date "
+          f"across {len(out)} tickers -> {OUT}")
 
 
 if __name__ == "__main__":
