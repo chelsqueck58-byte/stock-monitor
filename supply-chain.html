@@ -1076,7 +1076,10 @@ function buildHistPeSection() {
     rows += `<tr class="cmp-cat-row"><td colspan="4">${esc(cat)}</td></tr>`;
     for (const inst of list.sort((a, b) => a.label.localeCompare(b.label))) {
       const hp = HIST_PE[inst.id];
-      const years = (hp.years || []).slice().reverse(); // oldest -> newest, left to right
+      // Sort by actual date rather than trust research-response order - some
+      // responses came back oldest-first, others newest-first, inconsistently.
+      const years = (hp.years || []).slice()
+        .sort((a, b) => (a.period_end || "").localeCompare(b.period_end || ""));
       let yearsCell = na;
       if (years.length) {
         yearsCell = `<div class="cmp-seg-list">` + years.map(y => {
