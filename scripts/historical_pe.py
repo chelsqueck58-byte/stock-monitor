@@ -38,7 +38,10 @@ EXTRA_TICKERS = {"ASML"}
 
 # Sanity bound - a computed P/E outside this range is more likely a currency
 # or unit bug than a real number. Flagged, not silently kept.
-PE_SANITY_MIN, PE_SANITY_MAX = 0, 500
+PE_SANITY_MIN, PE_SANITY_MAX = 2, 500
+# A P/E under this floor is more likely an inflated/mis-scaled EPS than a
+# stock genuinely priced at a few years of earnings - confirmed failure mode,
+# see forward_pe.py (PDD's Yahoo-derived EPS was ~8-10x too high).
 
 
 def ask_claude(prompt, timeout=280):
