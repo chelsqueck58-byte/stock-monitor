@@ -22,7 +22,6 @@ OUTPUT = ROOT / "site" / "data.json"
 ALERT_STATE = ROOT / "data" / "alert_state.json"
 FUNDAMENTALS = ROOT / "data" / "fundamentals.json"
 NEWS = ROOT / "data" / "news.json"
-IV = ROOT / "data" / "iv.json"
 EARNINGS = ROOT / "data" / "earnings.json"
 EVENTS = ROOT / "data" / "events.json"
 CATALYSTS = ROOT / "data" / "catalysts.json"
@@ -290,13 +289,6 @@ def main():
         except (json.JSONDecodeError, OSError):
             pass
 
-    iv = {}
-    if IV.exists():
-        try:
-            iv = json.loads(IV.read_text())
-        except (json.JSONDecodeError, OSError):
-            pass
-
     def load_json(path):
         if not path.exists():
             return {}
@@ -338,7 +330,6 @@ def main():
         return {
             "fund": fundamentals.get(tid),
             "news": news.get(tid),
-            "iv": iv.get(tid),
             "earn": earnings.get(tid),
             "prev_earnings": find_prev_earnings_reactions(ticker_moves),
             "events": ticker_events,

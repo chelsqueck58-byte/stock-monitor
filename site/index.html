@@ -217,16 +217,13 @@ function earnTag(dateStr) {
   return `ER ${dateStr}`;
 }
 function fundLine(inst) {
-  const f = inst.fund, iv = inst.iv, p = [];
+  const f = inst.fund, p = [];
   if (f) {
     if (f.fwd_pe != null) p.push(`fwd P/E ${f.fwd_pe.toFixed(1)}`);
     if (f.peg != null) p.push(`PEG ${f.peg.toFixed(2)}`);
     if (f.next_earnings) p.push(earnTag(f.next_earnings));
   }
-  if (iv) {
-    const hot = iv.iv_rank >= 80 ? ' class="er-soon"' : "";
-    p.push(`<span${hot}>IVr ${iv.iv_rank}% · ±${iv.move_1m}%/mo</span>`);
-  } else if (inst.rvol != null) {
+  if (inst.rvol != null) {
     p.push(`vol ${inst.rvol}% · ±${inst.rmove}%/mo`);
   }
   return p.join(" · ");
@@ -242,7 +239,6 @@ function ideaBox(inst) {
     <div class="ih"><b>${inst.label}</b> <span class="id">${inst.id}</span> · ${val}</div>
     <div class="ir"><b>${types}</b>${er ? " · " + er : ""} · RSI ${inst.rsi ?? "–"}${inst.weekly_rsi != null ? ` (wk ${inst.weekly_rsi})` : ""}</div>
     ${exitList}
-    ${inst.iv && inst.iv.iv_rank >= 80 ? `<div class="nw" style="color:var(--down)">⚠ event risk — IV rank ${inst.iv.iv_rank}%, options pricing ±${inst.iv.move_1m}%/mo</div>` : ""}
     ${inst.catalyst ? `<div class="catline">🎯 ${esc(inst.catalyst)}</div>` : ""}
     ${inst.news ? `<div class="nw">📰 ${esc(inst.news)}</div>` : ""}
     ${teleResearch(inst)}

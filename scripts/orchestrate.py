@@ -49,11 +49,10 @@ def main():
     # Stage 1: Fundamentals (fresh P/E, market cap, earnings dates)
     results['fundamentals'] = run_script('fundamentals')
 
-    # Stage 2: Parallel web research (catalysts, news, IV, macro)
+    # Stage 2: Parallel web research (catalysts, news, macro)
     # These can theoretically run in parallel, but running sequentially is safer for API limits
     results['catalysts'] = run_script('catalysts')
     results['news'] = run_script('news')
-    results['ivdata'] = run_script('ivdata')
     results['macro_events'] = run_script('macro_events')
 
     # Stage 3: Price movements & research
