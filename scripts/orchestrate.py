@@ -5,7 +5,8 @@ Runs all data collection scripts sequentially with sensible checkpoints:
 - Stage 1: Fetch fundamentals (P/E, market cap, earnings dates)
 - Stage 2: Parallel web searches (catalysts, news, IV, macro)
 - Stage 3: Detect and research price movements
-- Stage 4: Merge all sources and deploy
+- Stage 4: Merge all sources
+- Stage 5: Deploy to stock-monitor + ai-supply-chain GitHub Pages
 
 Run: .venv/bin/python scripts/orchestrate.py
 """
@@ -60,8 +61,25 @@ def main():
     results['earnings_research'] = run_script('earnings_research')
     results['movements_research'] = run_script('movements_research', timeout=900)
 
-    # Stage 4: Merge & deploy
+    # Stage 4: Merge
     results['build'] = run_script('build')
+
+    # Stage 5: Deploy to both public GitHub Pages repos (stock-monitor + ai-supply-chain)
+    if results['build']:
+        print(f"\n{'='*60}\n[{datetime.datetime.now().strftime('%H:%M:%S')}] Deploying...\n", flush=True)
+        try:
+            deploy = subprocess.run(
+                ["/bin/zsh", str(SCRIPTS / "deploy-pages.sh")],
+                cwd=ROOT, timeout=300, capture_output=False,
+            )
+            results['deploy'] = deploy.returncode == 0
+            print(f"\n[deploy] {'✓ OK' if results['deploy'] else '✗ FAILED'}", flush=True)
+        except Exception as e:
+            results['deploy'] = False
+            print(f"\n[deploy] ✗ ERROR: {e}", flush=True)
+    else:
+        results['deploy'] = False
+        print("\n[deploy] ✗ SKIPPED (build failed)", flush=True)
 
     # Summary
     end = datetime.datetime.now()
