@@ -44,7 +44,7 @@ PE_SANITY_MIN, PE_SANITY_MAX = 2, 500
 # see forward_pe.py (PDD's Yahoo-derived EPS was ~8-10x too high).
 
 
-def ask_claude(prompt, timeout=280):
+def ask_claude(prompt, timeout=420):
     env = os.environ.copy()
     env.pop("ANTHROPIC_API_KEY", None)
     try:
@@ -129,6 +129,13 @@ def yahoo_chart_close_near(symbol, date_str, session):
 def process_one(item, session):
     tid, label, symbol, currency = item
     parsed = research_eps(tid, label, symbol, currency)
+    # A genuinely empty response (0 years) for an established company is far
+    # more likely a transient timeout under concurrent load than a real
+    # absence of history - confirmed by re-running the same prompt standalone
+    # for tickers that came back empty in a full-cohort run and getting a
+    # real, well-sourced answer both times. One retry before accepting empty.
+    if not (parsed or {}).get("years"):
+        parsed = research_eps(tid, label, symbol, currency)
     years_raw = (parsed or {}).get("years") or []
     years = []
     for y in years_raw:
