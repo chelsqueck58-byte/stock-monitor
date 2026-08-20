@@ -155,8 +155,10 @@ def process_one(item, session):
             "pe": pe,
             "flag": flag,
         })
+    # years/valid_pe are newest-first (as returned by the research prompt), so
+    # the most recent 3 years are the first 3 elements, not the last 3.
     valid_pe = [y["pe"] for y in years if y["pe"] is not None]
-    avg_3y = round(sum(valid_pe[-3:]) / len(valid_pe[-3:]), 1) if len(valid_pe) >= 1 else None
+    avg_3y = round(sum(valid_pe[:3]) / len(valid_pe[:3]), 1) if len(valid_pe) >= 1 else None
     avg_5y = round(sum(valid_pe) / len(valid_pe), 1) if valid_pe else None
     return tid, {
         "currency": currency,
