@@ -3,14 +3,21 @@ company's last reported one.
 
 Two different reliability tiers, deliberately not treated the same:
 
-- FY+1 (the nearest forward year): pulled directly from Yahoo's free
-  earningsTrend module, which is a real aggregated analyst consensus with an
-  actual analyst count attached (query1.finance.yahoo.com quoteSummary,
-  "+1y" period). No LLM involved - this is the most reliable number in the
-  whole P/E pipeline.
-- FY+2 / FY+3 (two and three years out): Yahoo's free tier stops at +1y, so
-  these need web research. Consensus coverage genuinely thins out this far
-  out, especially for smaller/newer names - the prompt requires a real
+- FY+1 and FY+2 (the two nearest forward years): pulled directly from
+  Yahoo's free earningsTrend module, which is a real aggregated analyst
+  consensus with an actual analyst count attached
+  (query1.finance.yahoo.com quoteSummary, "0y"/"+1y" periods). No LLM
+  involved - these are the most reliable numbers in the whole P/E pipeline.
+  Yahoo's own "0y"/"+1y" periods are relative to ITS notion of the current
+  fiscal year, which for a company deep into an unreported fiscal year is
+  1-2 years past the last *reported* FY (T) - "0y" is the nearest, in
+  effect FY+1 from T, and "+1y" is the one after that, FY+2 from T. The
+  frontend re-derives the actual T+N offset from each estimate's own
+  fy_label rather than trusting positional order, so this is safe even
+  when Yahoo's "0y" is missing and only "+1y" comes back.
+- FY+3 (three years out): Yahoo's free tier stops at +1y, so this needs
+  web research. Consensus coverage genuinely thins out this far out,
+  especially for smaller/newer names - the prompt requires a real
   multi-analyst consensus figure from a named aggregator (Zacks, TipRanks,
   Visible Alpha, MarketBeat, Simply Wall St, or a sell-side note cited in
   press) and returns nothing (not a guess) when no such figure exists.
@@ -57,24 +64,30 @@ def session_with_crumb():
     return s, crumb
 
 
-def fetch_yahoo_fy1(session, crumb, symbol):
-    """Nearest forward fiscal year consensus EPS, straight from Yahoo - no LLM."""
+def fetch_yahoo_fy_trend(session, crumb, symbol):
+    """Nearest two forward fiscal years' consensus EPS, straight from Yahoo -
+    no LLM. '0y' = Yahoo's current (in-progress/unreported) fiscal year,
+    '+1y' = the one after that. Keyed by period code; either key may be
+    missing if Yahoo doesn't have coverage."""
     url = f"https://query1.finance.yahoo.com/v10/finance/quoteSummary/{symbol}"
     try:
         r = session.get(url, params={"modules": "earningsTrend", "crumb": crumb}, timeout=15)
         r.raise_for_status()
         trend = r.json()["quoteSummary"]["result"][0].get("earningsTrend", {}).get("trend", [])
     except Exception:
-        return None
+        return {}
+    out = {}
     for t in trend:
-        if t.get("period") == "+1y":
-            eps = (t.get("earningsEstimate", {}).get("avg") or {}).get("raw")
-            n = (t.get("earningsEstimate", {}).get("numberOfAnalysts") or {}).get("raw")
-            end_date = t.get("endDate")
-            if eps is None:
-                return None
-            return {"period_end": end_date, "eps_estimate": eps, "num_analysts": n}
-    return None
+        period = t.get("period")
+        if period not in ("0y", "+1y"):
+            continue
+        eps = (t.get("earningsEstimate", {}).get("avg") or {}).get("raw")
+        n = (t.get("earningsEstimate", {}).get("numberOfAnalysts") or {}).get("raw")
+        end_date = t.get("endDate")
+        if eps is None:
+            continue
+        out[period] = {"period_end": end_date, "eps_estimate": eps, "num_analysts": n}
+    return out
 
 
 def ask_claude(prompt, timeout=280):
@@ -100,12 +113,13 @@ def parse_obj(text):
         return None
 
 
-def research_fy2_fy3(tid, label, symbol, currency, fy1_end):
+def research_fy3(tid, label, symbol, currency, latest_yahoo_end):
     prompt = (
-        f"Find analyst CONSENSUS EPS estimates for {label} ({symbol}) for its "
-        f"TWO fiscal years after the one ending {fy1_end} - i.e. the second and "
-        f"third fiscal years out from today. Per share in {currency} (matching "
-        f"the currency {symbol} actually trades in on this exchange).\n"
+        f"Find the analyst CONSENSUS EPS estimate for {label} ({symbol}) for "
+        f"its fiscal year immediately after the one ending {latest_yahoo_end} "
+        f"- i.e. the next fiscal year out beyond that. Per share in {currency} "
+        f"(matching the currency {symbol} actually trades in on this "
+        "exchange).\n"
         "HARD REQUIREMENTS:\n"
         "1. Must be a genuine aggregated CONSENSUS across multiple analysts - "
         "from a named source like Zacks Consensus Estimate, TipRanks analyst "
@@ -114,8 +128,8 @@ def research_fy2_fy3(tid, label, symbol, currency, fy1_end):
         "consensus figure. A single analyst's individual estimate or price "
         "target does NOT count.\n"
         "2. Consensus coverage this far out is often thin or nonexistent - "
-        "if you cannot find a genuine multi-analyst consensus for a given "
-        "year, DO NOT estimate or guess one. Omit that year entirely.\n"
+        "if you cannot find a genuine multi-analyst consensus for this "
+        "year, DO NOT estimate or guess one. Omit it entirely.\n"
         "2b. Many consensus-aggregator sites (Fintel, TipRanks, MarketScreener, "
         "MarketBeat, Alpha Spread) block automated/non-browser fetches with a "
         "Cloudflare challenge or 403 page. If a fetch tool returns a challenge "
@@ -129,7 +143,7 @@ def research_fy2_fy3(tid, label, symbol, currency, fy1_end):
         "CRITICAL: reply with ONLY JSON, nothing else:\n"
         '{"years":[{"fy_label":"FY2028","period_end":"YYYY-MM-DD",'
         '"eps_estimate":0.00,"num_analysts":0,"converted":false,"source":"..."}]}\n'
-        'If neither year has genuine consensus coverage: {"years":[]}'
+        'If it has no genuine consensus coverage: {"years":[]}'
     )
     raw = ask_claude(prompt)
     parsed = parse_obj(raw)
@@ -145,29 +159,33 @@ def process_one(item, session, crumb, price_by_id):
     price = price_by_id.get(tid)
     years = []
 
-    fy1 = fetch_yahoo_fy1(session, crumb, symbol)
-    if fy1 and price:
-        eps = fy1["eps_estimate"]
+    yahoo_trend = fetch_yahoo_fy_trend(session, crumb, symbol)
+    for period in ("0y", "+1y"):
+        fy = yahoo_trend.get(period)
+        if not fy or not price:
+            continue
+        eps = fy["eps_estimate"]
         pe = round(price / eps, 1) if eps and eps > 0 else None
         flag = None
         if eps is not None and eps <= 0:
             flag = "consensus EPS estimate is negative/zero"
         elif pe is not None and not (PE_SANITY_MIN < pe < PE_SANITY_MAX):
             flag = f"P/E {pe}x outside sanity range - check currency/units"
-        fy1_label = f"FY{fy1['period_end'][:4]}" if fy1.get("period_end") else None
+        fy_label = f"FY{fy['period_end'][:4]}" if fy.get("period_end") else None
         years.append({
-            "fy_label": fy1_label,
-            "period_end": fy1["period_end"],
+            "fy_label": fy_label,
+            "period_end": fy["period_end"],
             "eps_estimate": eps,
-            "num_analysts": fy1["num_analysts"],
+            "num_analysts": fy["num_analysts"],
             "converted": False,
-            "source": "Yahoo Finance earningsTrend consensus (+1y)",
+            "source": f"Yahoo Finance earningsTrend consensus ({period})",
             "pe": pe,
             "flag": flag,
         })
 
-    fy1_end = fy1["period_end"] if fy1 else "the most recently completed fiscal year"
-    parsed = research_fy2_fy3(tid, label, symbol, currency, fy1_end)
+    latest_end = max((y["period_end"] for y in years if y.get("period_end")), default=None)
+    ref_end = latest_end or "the most recently completed fiscal year"
+    parsed = research_fy3(tid, label, symbol, currency, ref_end)
     for y in (parsed or {}).get("years") or []:
         eps = y.get("eps_estimate")
         if not isinstance(eps, (int, float)):
