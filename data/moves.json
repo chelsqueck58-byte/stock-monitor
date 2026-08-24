@@ -260,6 +260,15 @@
     "label": "Zhipu AI",
     "moves": [
       {
+        "d": "2026-08-21",
+        "pct": 10.4,
+        "px": 1129.0,
+        "market_wide": false,
+        "reason": "National Supercomputing Internet launched Zhipu's GLM-5.3 API service; Anthropic IPO progress lifted AI-model peers too",
+        "source": "ifeng.com",
+        "checked": true
+      },
+      {
         "d": "2026-08-18",
         "pct": -13.3,
         "px": 1043.0,
@@ -1039,6 +1048,24 @@
     "label": "MiniMax",
     "moves": [
       {
+        "d": "2026-08-21",
+        "pct": 11.9,
+        "px": 347.2,
+        "market_wide": false,
+        "reason": "Launched MiniMax Design, a multimodal creative AI agent workspace, to accelerate H3 model commercialization",
+        "source": "Futunn",
+        "checked": true
+      },
+      {
+        "d": "2026-08-20",
+        "pct": 6.2,
+        "px": 310.4,
+        "market_wide": false,
+        "reason": null,
+        "source": null,
+        "checked": true
+      },
+      {
         "d": "2026-08-19",
         "pct": -8.3,
         "px": 292.4,
@@ -1817,6 +1844,15 @@
   "9988": {
     "label": "Alibaba",
     "moves": [
+      {
+        "d": "2026-08-24",
+        "pct": -9.27,
+        "px": 111.6,
+        "market_wide": false,
+        "reason": "Prices HK$80bn (~$10.2bn) share placement - 710M new shares at 8.4% discount - to fund AI infra buildout; largest-ever primary follow-on by a HK-listed company. Modest sector spillover (Tencent/Meituan/JD -2 to -2.5%) but Alibaba fell ~4-5x more on dilution/discount mechanics, not a broad selloff.",
+        "source": "CNBC/Investing.com",
+        "checked": true
+      },
       {
         "d": "2026-08-03",
         "pct": 7.0,
@@ -2722,15 +2758,6 @@
         "reason": null,
         "source": null,
         "checked": true
-      },
-      {
-        "d": "2024-10-23",
-        "pct": 5.5,
-        "px": 194.9,
-        "market_wide": false,
-        "reason": null,
-        "source": null,
-        "checked": true
       }
     ]
   },
@@ -3420,15 +3447,6 @@
         "market_wide": false,
         "reason": "Trump tariffs announced April 2; stock fell amid trade war escalation",
         "source": "motleyfool.com",
-        "checked": true
-      },
-      {
-        "d": "2024-11-01",
-        "pct": 6.2,
-        "px": 197.93,
-        "market_wide": false,
-        "reason": "Q3 2024 earnings beat; AWS revenue up 19%, operating income up 56%",
-        "source": "cnbc.com",
         "checked": true
       }
     ]
@@ -4145,6 +4163,15 @@
   "TSLA": {
     "label": "Tesla",
     "moves": [
+      {
+        "d": "2026-08-21",
+        "pct": 5.1,
+        "px": 362.86,
+        "market_wide": false,
+        "reason": "Clark County, Nevada cleared Tesla robotaxi service in Las Vegas; also confirmed European Semi truck debut",
+        "source": "fool.com",
+        "checked": true
+      },
       {
         "d": "2026-07-23",
         "pct": -14.5,
@@ -4956,6 +4983,15 @@
   "000660": {
     "label": "SK Hynix",
     "moves": [
+      {
+        "d": "2026-08-20",
+        "pct": 12.7,
+        "px": 1691000.0,
+        "market_wide": false,
+        "reason": "Shares surged 12.7% after SK Hynix unveiled 40 trillion won ($28.7B) buyback and full cancellation, its largest-ever treasury share cancellation",
+        "source": "CNBC",
+        "checked": true
+      },
       {
         "d": "2026-08-19",
         "pct": -9.7,
@@ -5897,6 +5933,15 @@
   "005930": {
     "label": "Samsung Elec",
     "moves": [
+      {
+        "d": "2026-08-20",
+        "pct": 9.5,
+        "px": 271000.0,
+        "market_wide": false,
+        "reason": "Reports Samsung's board will finalize a ~KRW100tn ($72B) shareholder return plan, funded by 50% of FCF via cash dividends",
+        "source": "tradingkey.com",
+        "checked": true
+      },
       {
         "d": "2026-08-19",
         "pct": -7.8,
@@ -8944,15 +8989,6 @@
         "reason": null,
         "source": null,
         "checked": true
-      },
-      {
-        "d": "2024-10-18",
-        "pct": 20.0,
-        "px": 288.4,
-        "market_wide": false,
-        "reason": "Hit 20% limit-up to record high on speculative 'China's Nvidia' momentum trading; no single named catalyst",
-        "source": "Sina Finance",
-        "checked": true
       }
     ]
   },
@@ -10786,15 +10822,6 @@
         "reason": "Trump election win sparked broad rally in chip/tech stocks on deregulation, tax-cut hopes",
         "source": "yahoo finance",
         "checked": true
-      },
-      {
-        "d": "2024-11-01",
-        "pct": 7.8,
-        "px": 23.2,
-        "market_wide": false,
-        "reason": "Shares jumped after Q3 earnings beat estimates and Q4 guidance topped Street forecasts",
-        "source": "cnbc.com",
-        "checked": true
       }
     ]
   },
@@ -12461,21 +12488,30 @@
         "reason": "Independent Special Committee found no evidence of fraud or misconduct by management",
         "source": "Business Wire",
         "checked": true
-      },
-      {
-        "d": "2024-11-01",
-        "pct": -10.5,
-        "px": 26.05,
-        "market_wide": false,
-        "reason": "Ongoing auditor crisis and emerging revenue guidance concerns",
-        "source": "finance.yahoo.com",
-        "checked": true
       }
     ]
   },
   "MRVL": {
     "label": "Marvell Technology",
     "moves": [
+      {
+        "d": "2026-08-21",
+        "pct": -5.6,
+        "px": 237.04,
+        "market_wide": false,
+        "reason": "Google warrant dilution (59M MRVL shares at $206.58) overshadowed AI deal optimism; high 58x P/E amplified selloff",
+        "source": "Yahoo Finance",
+        "checked": true
+      },
+      {
+        "d": "2026-08-20",
+        "pct": 5.8,
+        "px": 251.01,
+        "market_wide": false,
+        "reason": "Extended rally after Google custom-chip deal disclosure as analysts (JPMorgan) raised targets on $120B opportunity",
+        "source": "Benzinga",
+        "checked": true
+      },
       {
         "d": "2026-08-19",
         "pct": 9.2,
@@ -13302,15 +13338,6 @@
         "market_wide": false,
         "reason": "Q3 2025 earnings beat; revenue $1.52B (4% above consensus); Q4 guidance $1.8B (26% YoY)",
         "source": "prnewswire.com",
-        "checked": true
-      },
-      {
-        "d": "2024-11-01",
-        "pct": 5.8,
-        "px": 84.77,
-        "market_wide": true,
-        "reason": "AI chip stocks rallied broadly after Amazon's strong Q3 beat and AWS growth lifted sentiment for AI suppliers",
-        "source": "CNBC",
         "checked": true
       }
     ]
@@ -17435,6 +17462,15 @@
     "label": "Lumentum",
     "moves": [
       {
+        "d": "2026-08-20",
+        "pct": 6.2,
+        "px": 879.28,
+        "market_wide": false,
+        "reason": "Rebounded on dip-buying after AI-networking sector pullback; strong 800G shipment demand reinforced bullish thesis",
+        "source": "tradingkey.com",
+        "checked": true
+      },
+      {
         "d": "2026-08-19",
         "pct": -5.2,
         "px": 827.6,
@@ -20210,15 +20246,6 @@
         "reason": "Broad market/tech rally after Trump election win; Nasdaq extended postelection surge",
         "source": "CNBC",
         "checked": true
-      },
-      {
-        "d": "2024-11-01",
-        "pct": 7.2,
-        "px": 40.43,
-        "market_wide": false,
-        "reason": null,
-        "source": null,
-        "checked": true
       }
     ]
   },
@@ -21680,6 +21707,15 @@
   "AAOI": {
     "label": "Applied Optoelectronics",
     "moves": [
+      {
+        "d": "2026-08-20",
+        "pct": 5.7,
+        "px": 129.1,
+        "market_wide": false,
+        "reason": null,
+        "source": null,
+        "checked": true
+      },
       {
         "d": "2026-08-19",
         "pct": -7.0,
@@ -23640,15 +23676,6 @@
         "market_wide": false,
         "reason": "Ran up ahead of Q3 results due after the close amid broad tech rally on Fed rate cut",
         "source": "zacks.com",
-        "checked": true
-      },
-      {
-        "d": "2024-11-01",
-        "pct": 7.8,
-        "px": 16.84,
-        "market_wide": true,
-        "reason": "Amazon's Q3 beat and AI capex outlook lifted data-center suppliers; AMZN +6% led tech rally",
-        "source": "cnbc.com",
         "checked": true
       }
     ]
@@ -28239,24 +28266,6 @@
         "reason": "Citi upgraded target price to HK$19.4 from HK$15.58, raised 2025/26 sales and profit forecasts",
         "source": "Sina Finance",
         "checked": true
-      },
-      {
-        "d": "2024-10-23",
-        "pct": 6.6,
-        "px": 14.54,
-        "market_wide": false,
-        "reason": "Shares rose 7.06% on Galaxy brand's 2025 shipment guidance seen doubling to 900k+ units",
-        "source": "eastmoney.com",
-        "checked": true
-      },
-      {
-        "d": "2024-10-22",
-        "pct": 7.1,
-        "px": 13.64,
-        "market_wide": false,
-        "reason": null,
-        "source": null,
-        "checked": true
       }
     ]
   },
@@ -28457,6 +28466,15 @@
   "2015": {
     "label": "Li Auto",
     "moves": [
+      {
+        "d": "2026-08-20",
+        "pct": 5.5,
+        "px": 50.55,
+        "market_wide": true,
+        "reason": "Auto stocks rallied after China's Aug 18 policy pushing rural NEV sales & charging infrastructure expansion",
+        "source": "sina.com.cn",
+        "checked": true
+      },
       {
         "d": "2026-07-29",
         "pct": 9.9,
@@ -28761,24 +28779,6 @@
         "market_wide": false,
         "reason": null,
         "source": null,
-        "checked": true
-      },
-      {
-        "d": "2024-10-23",
-        "pct": 6.3,
-        "px": 107.4,
-        "market_wide": false,
-        "reason": "Li Auto fully rolled out its 'End-to-End + VLM' autonomous driving system (OTA 6.4) across L6/L7/L8/L9/MEGA models",
-        "source": "news.qq.com",
-        "checked": true
-      },
-      {
-        "d": "2024-10-22",
-        "pct": 5.0,
-        "px": 101.0,
-        "market_wide": true,
-        "reason": "HK-listed auto stocks rallied on record Sept NEV production/sales data (+48.8% YoY) and Q4 seasonal demand optimism",
-        "source": "finance.sina.com.cn",
         "checked": true
       }
     ]
@@ -31787,6 +31787,15 @@
   "WMT": {
     "label": "Walmart",
     "moves": [
+      {
+        "d": "2026-08-20",
+        "pct": -9.2,
+        "px": 103.84,
+        "market_wide": false,
+        "reason": "Q2 US comp sales grew just 2.6% (vs 3.7% est, slowest in 6 yrs); weak Q3 EPS guide despite earnings beat/raised outlook",
+        "source": "Yahoo Finance/Reuters",
+        "checked": true
+      },
       {
         "d": "2026-05-21",
         "pct": -7.3,
