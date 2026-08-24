@@ -223,9 +223,18 @@ def main():
         found = events.get(tid)
         new_evs = [e for e in found if isinstance(e, dict) and e.get("date") and e.get("event")] if isinstance(found, list) else []
         old_evs = [e for e in existing_events.get(tid, []) if e.get("date", "") >= today_iso]
+        # Dedup by date alone, not (date, event) text - the same real event
+        # gets re-extracted with slightly different wording run to run (e.g.
+        # "Start of KRW1.5tn share buyback" vs "Buyback program begins" vs
+        # "Samsung share buyback begins", all the same Aug 24 event), and an
+        # exact-text key let all three accumulate. A ticker genuinely having
+        # two distinct specifically-dated catalysts on the same day is rare
+        # enough that collapsing to one is the right tradeoff. old_evs comes
+        # first so previously-established wording wins over a same-day
+        # rephrasing from today's run.
         seen, combined = set(), []
         for e in old_evs + new_evs:
-            key = (e.get("date"), e.get("event"))
+            key = e.get("date")
             if key not in seen:
                 seen.add(key)
                 combined.append(e)
