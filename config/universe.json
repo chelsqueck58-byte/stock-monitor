@@ -793,6 +793,66 @@
           }
         }
       ]
+    },
+    {
+      "name": "Gold & Jewelry",
+      "members": [
+        {
+          "id": "6181",
+          "label": "Laopu Gold",
+          "yahoo": "6181.HK",
+          "ibkr": {
+            "symbol": "6181",
+            "sec_type": "STK",
+            "exchange": "SEHK",
+            "currency": "HKD"
+          }
+        },
+        {
+          "id": "1929",
+          "label": "Chow Tai Fook",
+          "yahoo": "1929.HK",
+          "ibkr": {
+            "symbol": "1929",
+            "sec_type": "STK",
+            "exchange": "SEHK",
+            "currency": "HKD"
+          }
+        },
+        {
+          "id": "0590",
+          "label": "Luk Fook",
+          "yahoo": "0590.HK",
+          "ibkr": {
+            "symbol": "0590",
+            "sec_type": "STK",
+            "exchange": "SEHK",
+            "currency": "HKD"
+          }
+        },
+        {
+          "id": "0116",
+          "label": "Chow Sang Sang",
+          "yahoo": "0116.HK",
+          "ibkr": {
+            "symbol": "0116",
+            "sec_type": "STK",
+            "exchange": "SEHK",
+            "currency": "HKD"
+          }
+        },
+        {
+          "id": "002867",
+          "label": "Chow Tai Seng",
+          "yahoo": "002867.SZ",
+          "ibkr": {
+            "symbol": "002867",
+            "sec_type": "STK",
+            "exchange": "SEHKNTL",
+            "currency": "CNY"
+          }
+        }
+      ]
     }
   ],
   "settings": {

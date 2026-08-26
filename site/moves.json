@@ -260,6 +260,24 @@
     "label": "Zhipu AI",
     "moves": [
       {
+        "d": "2026-08-25",
+        "pct": 5.2,
+        "px": 1059.0,
+        "market_wide": false,
+        "reason": null,
+        "source": null,
+        "checked": true
+      },
+      {
+        "d": "2026-08-24",
+        "pct": -10.8,
+        "px": 1007.0,
+        "market_wide": true,
+        "reason": "Alibaba's HK$80bn AI share placement sparked sector-wide dilution fears, dragging Hong Kong tech/AI stocks lower",
+        "source": "Epoch Times",
+        "checked": true
+      },
+      {
         "d": "2026-08-21",
         "pct": 10.4,
         "px": 1129.0,
@@ -1047,6 +1065,15 @@
   "0100": {
     "label": "MiniMax",
     "moves": [
+      {
+        "d": "2026-08-24",
+        "pct": -10.1,
+        "px": 312.2,
+        "market_wide": true,
+        "reason": "HK tech selloff after Alibaba's HK$80b discounted share placement for AI capex; AI-app peers MiniMax, Zhipu both fell over 10%",
+        "source": "sina.com.cn",
+        "checked": true
+      },
       {
         "d": "2026-08-21",
         "pct": 11.9,
@@ -2462,6 +2489,15 @@
   "3690": {
     "label": "Meituan",
     "moves": [
+      {
+        "d": "2026-08-25",
+        "pct": -6.7,
+        "px": 77.2,
+        "market_wide": false,
+        "reason": null,
+        "source": null,
+        "checked": true
+      },
       {
         "d": "2026-07-15",
         "pct": 5.3,
@@ -4702,15 +4738,6 @@
         "reason": "Post-election rally lifted Tesla past $1 trillion market cap following Trump victory",
         "source": "CNBC",
         "checked": true
-      },
-      {
-        "d": "2024-11-06",
-        "pct": 14.8,
-        "px": 288.53,
-        "market_wide": false,
-        "reason": "Trump election victory Nov 5 sparked post-election rally on optimism around EV policy",
-        "source": "Forbes",
-        "checked": true
       }
     ]
   },
@@ -5934,6 +5961,15 @@
     "label": "Samsung Elec",
     "moves": [
       {
+        "d": "2026-08-24",
+        "pct": -8.7,
+        "px": 257000.0,
+        "market_wide": false,
+        "reason": "Shares fell after Samsung's record ~110tn won shareholder-return plan disappointed on buyback/cancellation details",
+        "source": "koreajoongangdaily.com",
+        "checked": true
+      },
+      {
         "d": "2026-08-20",
         "pct": 9.5,
         "px": 271000.0,
@@ -6523,6 +6559,15 @@
   "MU": {
     "label": "Micron",
     "moves": [
+      {
+        "d": "2026-08-24",
+        "pct": -5.8,
+        "px": 910.43,
+        "market_wide": true,
+        "reason": "Broad semiconductor selloff ahead of Nvidia earnings; Intel, AMD, TSMC, SOXX all fell too",
+        "source": "247wallst.com",
+        "checked": true
+      },
       {
         "d": "2026-08-18",
         "pct": -7.0,
@@ -7386,15 +7431,6 @@
         "reason": null,
         "source": null,
         "checked": true
-      },
-      {
-        "d": "2024-11-06",
-        "pct": 6.0,
-        "px": 111.83,
-        "market_wide": true,
-        "reason": "Post-Trump election victory market rally, broad semiconductor sector gain",
-        "source": "CNBC",
-        "checked": true
       }
     ]
   },
@@ -8171,6 +8207,15 @@
   "688256": {
     "label": "Cambricon",
     "moves": [
+      {
+        "d": "2026-08-24",
+        "pct": -6.4,
+        "px": 969.05,
+        "market_wide": true,
+        "reason": "Sector-wide China AI computing-hardware selloff (STAR/ChiNext -3%) after SK Hynix CPO strategy shift and Nvidia CPO mass-production news shook capex expectations",
+        "source": "10jqka.com.cn",
+        "checked": true
+      },
       {
         "d": "2026-08-19",
         "pct": -9.6,
@@ -8976,15 +9021,6 @@
         "d": "2024-11-01",
         "pct": -9.4,
         "px": 275.85,
-        "market_wide": false,
-        "reason": null,
-        "source": null,
-        "checked": true
-      },
-      {
-        "d": "2024-10-22",
-        "pct": -5.2,
-        "px": 282.55,
         "market_wide": false,
         "reason": null,
         "source": null,
@@ -10813,15 +10849,6 @@
         "reason": "Shares slid a day after Gelsinger ouster as investors saw no 'quick fix' for turnaround",
         "source": "cnbc.com",
         "checked": true
-      },
-      {
-        "d": "2024-11-06",
-        "pct": 7.4,
-        "px": 25.05,
-        "market_wide": true,
-        "reason": "Trump election win sparked broad rally in chip/tech stocks on deregulation, tax-cut hopes",
-        "source": "yahoo finance",
-        "checked": true
       }
     ]
   },
@@ -11211,6 +11238,24 @@
   "SMCI": {
     "label": "Super Micro Computer",
     "moves": [
+      {
+        "d": "2026-08-25",
+        "pct": 9.4,
+        "px": 38.46,
+        "market_wide": false,
+        "reason": "Cisco unveiled Secure AI Factory partnership with Supermicro; also Taiwan indicted 9 individuals, not the company, clearing liability overhang",
+        "source": "247wallst.com",
+        "checked": true
+      },
+      {
+        "d": "2026-08-24",
+        "pct": -5.6,
+        "px": 35.17,
+        "market_wide": false,
+        "reason": "Taiwan indicted 9 incl. 2 SMCI Taiwan staff over alleged illegal AI server exports to China",
+        "source": "Benzinga",
+        "checked": true
+      },
       {
         "d": "2026-08-12",
         "pct": 19.0,
@@ -12460,33 +12505,6 @@
         "market_wide": false,
         "reason": "Fell after Chinese media report SMCI halted Malaysia factory expansion, shifting Nvidia GB200 orders to Wiwynn",
         "source": "Benzinga",
-        "checked": true
-      },
-      {
-        "d": "2024-11-07",
-        "pct": 12.2,
-        "px": 25.48,
-        "market_wide": true,
-        "reason": "Short covering and technical rebound after heavy selling oversold conditions",
-        "source": "marketplace-technical",
-        "checked": true
-      },
-      {
-        "d": "2024-11-06",
-        "pct": -18.1,
-        "px": 22.7,
-        "market_wide": false,
-        "reason": "Q1 FY2025 revenue guidance cut to $5.9-6.0B from $6.0-7.0B; JPMorgan downgraded to Underweight",
-        "source": "JPMorgan,SEC",
-        "checked": true
-      },
-      {
-        "d": "2024-11-05",
-        "pct": 6.4,
-        "px": 27.7,
-        "market_wide": false,
-        "reason": "Independent Special Committee found no evidence of fraud or misconduct by management",
-        "source": "Business Wire",
         "checked": true
       }
     ]
@@ -13893,30 +13911,21 @@
         "reason": null,
         "source": null,
         "checked": true
-      },
-      {
-        "d": "2024-11-06",
-        "pct": 13.1,
-        "px": 46.79,
-        "market_wide": false,
-        "reason": "Continued strength following Nov 5 earnings announcement",
-        "source": "nasdaq.com",
-        "checked": true
-      },
-      {
-        "d": "2024-11-05",
-        "pct": 14.9,
-        "px": 41.37,
-        "market_wide": false,
-        "reason": "Q3 2024 earnings beat and strong free cash flow guidance",
-        "source": "sec.gov",
-        "checked": true
       }
     ]
   },
   "WDC": {
     "label": "Western Digital",
     "moves": [
+      {
+        "d": "2026-08-24",
+        "pct": -5.2,
+        "px": 435.38,
+        "market_wide": true,
+        "reason": "Storage/memory sector selloff as rising Treasury yields hit high-multiple AI/semiconductor names; MU, STX, MRVL also fell",
+        "source": "tradingkey.com",
+        "checked": true
+      },
       {
         "d": "2026-08-19",
         "pct": -6.9,
@@ -17437,30 +17446,21 @@
         "reason": null,
         "source": null,
         "checked": true
-      },
-      {
-        "d": "2024-11-07",
-        "pct": 10.1,
-        "px": 109.45,
-        "market_wide": false,
-        "reason": "Earnings momentum following strong Q1 results announcement",
-        "source": "earnings follow-up",
-        "checked": true
-      },
-      {
-        "d": "2024-11-06",
-        "pct": 6.3,
-        "px": 99.43,
-        "market_wide": false,
-        "reason": "Q1 FY2025 earnings beat: $1.35B revenue +28% YoY, EPS $0.74 +357% YoY",
-        "source": "earnings announcement",
-        "checked": true
       }
     ]
   },
   "LITE": {
     "label": "Lumentum",
     "moves": [
+      {
+        "d": "2026-08-25",
+        "pct": 6.7,
+        "px": 885.57,
+        "market_wide": true,
+        "reason": "Optical/AI networking sector rebound; tech selloff eased ahead of Nvidia earnings, peers Coherent, Corning also rose",
+        "source": "TradingKey",
+        "checked": true
+      },
       {
         "d": "2026-08-20",
         "pct": 6.2,
@@ -18691,15 +18691,6 @@
         "px": 83.85,
         "market_wide": false,
         "reason": "Q1 FY2025 earnings beat; revenue $336.9M vs est, record datacom laser orders",
-        "source": "Business Wire",
-        "checked": true
-      },
-      {
-        "d": "2024-11-06",
-        "pct": 8.7,
-        "px": 71.97,
-        "market_wide": false,
-        "reason": "Q1 FY2025 earnings beat; revenue $336.9M vs est, record datacom AI orders",
         "source": "Business Wire",
         "checked": true
       }
@@ -20228,24 +20219,6 @@
         "reason": "Fed Chair Powell: Fed not in hurry to cut rates; Dec rate cut odds fell to 62% from 82.5%",
         "source": "CNBC",
         "checked": true
-      },
-      {
-        "d": "2024-11-07",
-        "pct": 6.0,
-        "px": 47.02,
-        "market_wide": true,
-        "reason": "Fed cut rates 25bp to 4.5-4.75%; S&P 500, Nasdaq hit record closes extending postelection rally",
-        "source": "CNBC",
-        "checked": true
-      },
-      {
-        "d": "2024-11-06",
-        "pct": 6.0,
-        "px": 44.35,
-        "market_wide": true,
-        "reason": "Broad market/tech rally after Trump election win; Nasdaq extended postelection surge",
-        "source": "CNBC",
-        "checked": true
       }
     ]
   },
@@ -20937,6 +20910,15 @@
   "CIEN": {
     "label": "Ciena",
     "moves": [
+      {
+        "d": "2026-08-24",
+        "pct": -6.0,
+        "px": 371.95,
+        "market_wide": false,
+        "reason": "Profit-taking on stretched valuation and de-risking ahead of Sept 3 Q3 earnings, per GF Value overvaluation note",
+        "source": "GuruFocus",
+        "checked": true
+      },
       {
         "d": "2026-08-18",
         "pct": -8.9,
@@ -21707,6 +21689,24 @@
   "AAOI": {
     "label": "Applied Optoelectronics",
     "moves": [
+      {
+        "d": "2026-08-25",
+        "pct": 5.1,
+        "px": 113.15,
+        "market_wide": false,
+        "reason": "Partial rebound from Mon's 13.8% ATM-dilution selloff; investors reassessed at lower prices, Q3 rev guide up to $290M",
+        "source": "Investing.com",
+        "checked": true
+      },
+      {
+        "d": "2026-08-24",
+        "pct": -13.8,
+        "px": 107.63,
+        "market_wide": false,
+        "reason": "Stock plunged after AAOI launched a $600M at-the-market equity offering (8-K filed Fri), sparking dilution fears",
+        "source": "Benzinga",
+        "checked": true
+      },
       {
         "d": "2026-08-20",
         "pct": 5.7,
@@ -23668,15 +23668,6 @@
         "reason": "Q3 revenue beat ($65.2M) with Q4 guidance of $94-104M (~45% QoQ growth) reported Nov 7 after close",
         "source": "zacks.com",
         "checked": true
-      },
-      {
-        "d": "2024-11-07",
-        "pct": 10.4,
-        "px": 17.9,
-        "market_wide": false,
-        "reason": "Ran up ahead of Q3 results due after the close amid broad tech rally on Fed rate cut",
-        "source": "zacks.com",
-        "checked": true
       }
     ]
   },
@@ -24581,24 +24572,6 @@
         "market_wide": true,
         "reason": "Chip/AI-hardware selloff after Applied Materials' weak outlook; hawkish Powell rate comments hit tech broadly",
         "source": "nasdaq.com",
-        "checked": true
-      },
-      {
-        "d": "2024-11-07",
-        "pct": 6.4,
-        "px": 262.4,
-        "market_wide": true,
-        "reason": "Post-election rally extended as Fed cut rates 25bp; Nasdaq closed at record above 19,000",
-        "source": "cnbc.com",
-        "checked": true
-      },
-      {
-        "d": "2024-11-06",
-        "pct": 7.2,
-        "px": 246.73,
-        "market_wide": true,
-        "reason": "Broad post-election surge after Trump victory; Nasdaq +3% to record, tech among biggest gainers",
-        "source": "cnbc.com",
         "checked": true
       }
     ]
@@ -25622,15 +25595,6 @@
         "reason": "China ADRs fell as Beijing's 10T yuan NPC stimulus package disappointed investors",
         "source": "Reuters",
         "checked": true
-      },
-      {
-        "d": "2024-11-07",
-        "pct": 8.7,
-        "px": 20.6,
-        "market_wide": false,
-        "reason": "Q3 2024 beat: revenue +21% to $204M, non-GAAP EPS $0.63; raised FY24 revenue guidance to $725-745M",
-        "source": "GlobeNewswire",
-        "checked": true
       }
     ]
   },
@@ -26611,6 +26575,15 @@
     "label": "Vicor",
     "moves": [
       {
+        "d": "2026-08-24",
+        "pct": -5.3,
+        "px": 189.99,
+        "market_wide": true,
+        "reason": "Broad semiconductor selloff as chip stocks fell ahead of Nvidia's Q2 earnings report",
+        "source": "247wallst.com",
+        "checked": true
+      },
+      {
         "d": "2026-08-19",
         "pct": -11.5,
         "px": 214.57,
@@ -27572,24 +27545,6 @@
         "reason": null,
         "source": null,
         "checked": true
-      },
-      {
-        "d": "2024-11-06",
-        "pct": 9.8,
-        "px": 57.7,
-        "market_wide": false,
-        "reason": null,
-        "source": null,
-        "checked": true
-      },
-      {
-        "d": "2024-11-05",
-        "pct": 12.0,
-        "px": 52.54,
-        "market_wide": false,
-        "reason": null,
-        "source": null,
-        "checked": true
       }
     ]
   },
@@ -28257,15 +28212,6 @@
         "reason": null,
         "source": null,
         "checked": true
-      },
-      {
-        "d": "2024-10-25",
-        "pct": 8.2,
-        "px": 15.04,
-        "market_wide": false,
-        "reason": "Citi upgraded target price to HK$19.4 from HK$15.58, raised 2025/26 sales and profit forecasts",
-        "source": "Sina Finance",
-        "checked": true
       }
     ]
   },
@@ -28771,21 +28717,30 @@
         "reason": "HK shares fell after Q3 results showed weak Q4 revenue guidance (RMB432-459bn), below expectations",
         "source": "Zhitong Finance",
         "checked": true
-      },
-      {
-        "d": "2024-10-25",
-        "pct": 5.1,
-        "px": 111.2,
-        "market_wide": false,
-        "reason": null,
-        "source": null,
-        "checked": true
       }
     ]
   },
   "9868": {
     "label": "XPeng",
     "moves": [
+      {
+        "d": "2026-08-26",
+        "pct": 7.8,
+        "px": 46.68,
+        "market_wide": false,
+        "reason": "Rebound from oversold post-earnings selloff as investors refocused on $900M Dogotix robotics funding",
+        "source": "investing.com (cn)",
+        "checked": true
+      },
+      {
+        "d": "2026-08-25",
+        "pct": -9.2,
+        "px": 43.3,
+        "market_wide": false,
+        "reason": "Wider Q2 loss (3x consensus) and weak Q3 revenue guidance below Street estimates spooked investors",
+        "source": "invezz.com",
+        "checked": true
+      },
       {
         "d": "2026-07-17",
         "pct": -8.7,
@@ -29333,15 +29288,6 @@
         "market_wide": true,
         "reason": "Record Oct EV deliveries plus hopes for NPC fiscal stimulus (Nov 4-8) lifted China EV stocks broadly",
         "source": "South China Morning Post",
-        "checked": true
-      },
-      {
-        "d": "2024-10-28",
-        "pct": 7.2,
-        "px": 44.8,
-        "market_wide": false,
-        "reason": "XPeng AeroHT flying-car mass-production base broke ground in Guangzhou",
-        "source": "Sina Finance",
         "checked": true
       }
     ]
@@ -29933,15 +29879,6 @@
         "reason": "Macquarie upgraded NIO to buy, $6.60 target, citing Onvo L60 as Q4 sales catalyst; NIO.US rose 10.46% overnight, lifting HK shares",
         "source": "Tencent News (qq.com)",
         "checked": true
-      },
-      {
-        "d": "2024-10-28",
-        "pct": 5.6,
-        "px": 41.55,
-        "market_wide": true,
-        "reason": "HK catch-up rally after Friday's China battery/EV sector surge (+6.3%) and Wall St gains fed into Monday's HK session",
-        "source": "Sina Finance",
-        "checked": true
       }
     ]
   },
@@ -30232,6 +30169,15 @@
   "9863": {
     "label": "Leapmotor",
     "moves": [
+      {
+        "d": "2026-08-25",
+        "pct": -5.7,
+        "px": 40.32,
+        "market_wide": false,
+        "reason": "Leapmotor cut FY26 net profit target to ~CNY3bn from CNY5bn as H1 margin narrowed on rising material costs",
+        "source": "CnEVPost",
+        "checked": true
+      },
       {
         "d": "2026-07-29",
         "pct": 9.5,
@@ -31069,6 +31015,15 @@
   "SE": {
     "label": "Sea Limited",
     "moves": [
+      {
+        "d": "2026-08-25",
+        "pct": 6.5,
+        "px": 123.18,
+        "market_wide": false,
+        "reason": null,
+        "source": null,
+        "checked": true
+      },
       {
         "d": "2026-08-11",
         "pct": 14.6,
@@ -32184,6 +32139,1714 @@
         "market_wide": false,
         "reason": null,
         "source": null,
+        "checked": true
+      }
+    ]
+  },
+  "6181": {
+    "label": "Laopu Gold",
+    "moves": [
+      {
+        "d": "2026-08-21",
+        "pct": 7.5,
+        "px": 397.8,
+        "market_wide": true,
+        "reason": "Spot gold hit ~$4581/oz (+12% in Aug) on Fed rate-cut bets; HK gold/jewelry stocks incl. Laopu rallied broadly.",
+        "source": "Sina Finance",
+        "checked": true
+      },
+      {
+        "d": "2026-08-20",
+        "pct": 8.1,
+        "px": 370.2,
+        "market_wide": true,
+        "reason": "Spot gold jumped ~4% to $4527 after US Treasury doubled long-bond buybacks; HK gold-jewelry stocks incl. Laopu surged.",
+        "source": "Sina Finance",
+        "checked": true
+      },
+      {
+        "d": "2026-08-17",
+        "pct": 5.2,
+        "px": 350.8,
+        "market_wide": true,
+        "reason": "HSI rose 1.34% as gold rebounded on weak US data; HK gold-jewelry stocks incl. Laopu ranked among top HSI gainers.",
+        "source": "Sina Finance",
+        "checked": true
+      },
+      {
+        "d": "2026-08-11",
+        "pct": -8.5,
+        "px": 362.0,
+        "market_wide": true,
+        "reason": "HK gold stocks sold off broadly as bullion pulled back from $4434 high on profit-taking; UBS said earnings estimates too high.",
+        "source": "Sina Finance / ifeng",
+        "checked": true
+      },
+      {
+        "d": "2026-08-10",
+        "pct": 12.4,
+        "px": 395.6,
+        "market_wide": true,
+        "reason": "Spot gold broke above $4300/oz, lifting HK gold-jewelry retailers sector-wide; Laopu Gold led gains.",
+        "source": "Sina Finance",
+        "checked": true
+      },
+      {
+        "d": "2026-08-05",
+        "pct": 6.7,
+        "px": 340.2,
+        "market_wide": true,
+        "reason": "Gold surged on Fed rate-cut bets and easing Mideast tensions, driving a sector-wide rally in gold stocks.",
+        "source": "Sina Finance / Eastmoney",
+        "checked": true
+      },
+      {
+        "d": "2026-07-31",
+        "pct": 10.1,
+        "px": 324.8,
+        "market_wide": true,
+        "reason": "Gold prices rebounded after weak US Q2 GDP data cooled inflation expectations, lifting gold-related HK stocks broadly.",
+        "source": "Sina Finance",
+        "checked": true
+      },
+      {
+        "d": "2026-07-28",
+        "pct": -23.8,
+        "px": 302.2,
+        "market_wide": false,
+        "reason": "Profit alert showed H1 net profit +83-85% YoY, but Q2 revenue/profit fell sharply vs Q1, missing consensus; brokers cut targets.",
+        "source": "Bloomberg",
+        "checked": true
+      },
+      {
+        "d": "2026-07-27",
+        "pct": 5.7,
+        "px": 396.4,
+        "market_wide": false,
+        "reason": "Shares rose after Beijing SKP flagship store launched a Qixi Festival promotion event.",
+        "source": "Sina Finance",
+        "checked": true
+      },
+      {
+        "d": "2026-07-22",
+        "pct": 6.1,
+        "px": 397.2,
+        "market_wide": true,
+        "reason": "Gold surged to 2-week high on Mideast/Houthi Red Sea tensions; HK gold-sector stocks rallied broadly.",
+        "source": "Investing.com",
+        "checked": true
+      },
+      {
+        "d": "2026-07-17",
+        "pct": -6.3,
+        "px": 350.0,
+        "market_wide": false,
+        "reason": "Spot gold plunged on hawkish Fed bets to under $4000/oz, hurting gold-jewelry demand outlook; shares fell to HK$350.",
+        "source": "Sina Finance",
+        "checked": true
+      },
+      {
+        "d": "2026-07-09",
+        "pct": -5.6,
+        "px": 383.0,
+        "market_wide": false,
+        "reason": "Gold pulled back on stronger USD/yields and Mideast de-escalation profit-taking; Laopu led HSI decliners (index -0.7%).",
+        "source": "Eastmoney",
+        "checked": true
+      },
+      {
+        "d": "2026-07-03",
+        "pct": 6.0,
+        "px": 382.2,
+        "market_wide": true,
+        "reason": "Gold jumped ~2.3% overnight after weak US June payrolls data boosted Fed rate-cut bets",
+        "source": "Tencent News",
+        "checked": true
+      },
+      {
+        "d": "2026-06-30",
+        "pct": -5.3,
+        "px": 346.4,
+        "market_wide": true,
+        "reason": "Spot gold broke below $4,000/oz; HK gold-jewelry peers also fell 4-5%+ amid weak 618 sales",
+        "source": "Sina Finance",
+        "checked": true
+      },
+      {
+        "d": "2026-06-25",
+        "pct": -8.1,
+        "px": 367.8,
+        "market_wide": true,
+        "reason": "Spot gold broke $4,000 support, hitting $3,962, ~30% off January's $5,598 record high",
+        "source": "Sina Finance",
+        "checked": true
+      },
+      {
+        "d": "2026-06-23",
+        "pct": -7.1,
+        "px": 404.0,
+        "market_wide": true,
+        "reason": "Gold fell over 2%, breaking $4,100, on hawkish Fed remarks and easing US-Iran tensions",
+        "source": "Tencent News",
+        "checked": true
+      },
+      {
+        "d": "2026-06-22",
+        "pct": -5.1,
+        "px": 434.8,
+        "market_wide": false,
+        "reason": null,
+        "source": null,
+        "checked": true
+      },
+      {
+        "d": "2026-06-12",
+        "pct": 6.0,
+        "px": 470.0,
+        "market_wide": true,
+        "reason": "Rebounded from oversold levels amid broader HK gold-jewelry sector rally with peers also up",
+        "source": "21jingji",
+        "checked": true
+      },
+      {
+        "d": "2026-06-08",
+        "pct": -5.4,
+        "px": 473.0,
+        "market_wide": true,
+        "reason": "Gold fell ~3.25% after strong US May jobs data cut Fed rate-cut bets, triggering broad selloff",
+        "source": "Tencent News",
+        "checked": true
+      },
+      {
+        "d": "2026-06-01",
+        "pct": 7.7,
+        "px": 543.0,
+        "market_wide": false,
+        "reason": null,
+        "source": null,
+        "checked": true
+      },
+      {
+        "d": "2026-05-20",
+        "pct": -6.9,
+        "px": 496.0,
+        "market_wide": true,
+        "reason": "Spot gold crashed overnight, breaking $4,500 support, in a broad precious-metals selloff",
+        "source": "Sina Finance",
+        "checked": true
+      },
+      {
+        "d": "2026-04-15",
+        "pct": 6.8,
+        "px": 673.0,
+        "market_wide": false,
+        "reason": null,
+        "source": null,
+        "checked": true
+      },
+      {
+        "d": "2026-03-24",
+        "pct": 16.1,
+        "px": 648.5,
+        "market_wide": false,
+        "reason": "Surged after FY2025 results: revenue +221% YoY, net profit +230.5% to RMB4.87bn, beat estimates",
+        "source": "Sina Finance",
+        "checked": true
+      },
+      {
+        "d": "2026-03-23",
+        "pct": -8.6,
+        "px": 558.5,
+        "market_wide": true,
+        "reason": "Spot gold plunged 3%+, breaking $4,350 in 9th straight down day, dragging down HK consumption stocks",
+        "source": "Sina Finance",
+        "checked": true
+      },
+      {
+        "d": "2026-03-19",
+        "pct": -5.2,
+        "px": 638.0,
+        "market_wide": true,
+        "reason": "Spot gold plunged near 4% as Fed held rates and Mideast conflict dragged on, hitting gold/jewelry stocks",
+        "source": "21jingji.com",
+        "checked": true
+      },
+      {
+        "d": "2026-03-03",
+        "pct": -5.5,
+        "px": 683.0,
+        "market_wide": true,
+        "reason": "Spot gold and silver crashed intraday (gold fell below $5,280/oz), dragging down China gold-jewelry stocks",
+        "source": "Sina Finance",
+        "checked": true
+      },
+      {
+        "d": "2026-02-24",
+        "pct": -6.5,
+        "px": 739.0,
+        "market_wide": true,
+        "reason": "Hong Kong stocks opened broadly lower, tracking a Wall Street selloff on geopolitical and tariff risk fears",
+        "source": "RTHK",
+        "checked": true
+      },
+      {
+        "d": "2026-02-16",
+        "pct": 6.4,
+        "px": 786.0,
+        "market_wide": false,
+        "reason": "Hang Seng Index added Laopu Gold as a new constituent, spurring index-fund buying",
+        "source": "Bloomberg",
+        "checked": true
+      },
+      {
+        "d": "2026-02-09",
+        "pct": 6.3,
+        "px": 770.5,
+        "market_wide": false,
+        "reason": null,
+        "source": null,
+        "checked": true
+      },
+      {
+        "d": "2026-01-26",
+        "pct": 7.8,
+        "px": 849.5,
+        "market_wide": false,
+        "reason": "Gold topped $5,000/oz and store queues intensified further, signaling resilient luxury gold demand",
+        "source": "oeeee.com",
+        "checked": true
+      },
+      {
+        "d": "2026-01-23",
+        "pct": 6.8,
+        "px": 788.0,
+        "market_wide": false,
+        "reason": "Overnight crowds queued at SKP stores nationwide as shoppers rushed in ahead of Spring Festival",
+        "source": "oeeee.com",
+        "checked": true
+      },
+      {
+        "d": "2026-01-09",
+        "pct": 5.5,
+        "px": 659.0,
+        "market_wide": false,
+        "reason": null,
+        "source": null,
+        "checked": true
+      },
+      {
+        "d": "2025-12-30",
+        "pct": -5.6,
+        "px": 629.5,
+        "market_wide": true,
+        "reason": "Broad selloff in HK 'new consumption' stocks; Pop Mart, Bloks, others also fell 2-5%+",
+        "source": "East Money (eastmoney.com)",
+        "checked": true
+      },
+      {
+        "d": "2025-12-22",
+        "pct": 6.5,
+        "px": 700.5,
+        "market_wide": true,
+        "reason": "HK 'new consumption' stocks rallied after Beijing (MOFCOM) pledged Dec 20 to boost consumption",
+        "source": "163.com",
+        "checked": true
+      },
+      {
+        "d": "2025-12-08",
+        "pct": -6.7,
+        "px": 632.0,
+        "market_wide": false,
+        "reason": "New gold-purchase tax seen raising raw-material costs ~6%; rival 'ancient-gold' brands raised fresh funding",
+        "source": "Sina Finance",
+        "checked": true
+      },
+      {
+        "d": "2025-11-10",
+        "pct": 5.2,
+        "px": 641.5,
+        "market_wide": true,
+        "reason": "HK 'new consumption' stocks surged (Pop Mart +8%) after MOF pledged more consumption-stimulus support",
+        "source": "hexun.com",
+        "checked": true
+      },
+      {
+        "d": "2025-11-03",
+        "pct": -7.2,
+        "px": 635.5,
+        "market_wide": true,
+        "reason": "Beijing scrapped VAT exemption on standard gold via exchanges, hitting Laopu, Chow Tai Fook, Lukfook, Chow Sang Sang",
+        "source": "sina.com.cn",
+        "checked": true
+      },
+      {
+        "d": "2025-10-22",
+        "pct": -8.2,
+        "px": 704.0,
+        "market_wide": false,
+        "reason": "Stock fell 3rd day straight as spot gold crashed >6% (12-yr biggest drop) and Laopu priced a HK$2.7B placement at 4.5% discount",
+        "source": "sina.com.cn",
+        "checked": true
+      },
+      {
+        "d": "2025-10-16",
+        "pct": 6.2,
+        "px": 803.5,
+        "market_wide": false,
+        "reason": "JPMorgan reiterated Overweight rating with HK$1,296 target",
+        "source": "sina.com.cn",
+        "checked": true
+      },
+      {
+        "d": "2025-10-15",
+        "pct": 9.2,
+        "px": 756.5,
+        "market_wide": true,
+        "reason": "International gold hit fresh record high, lifting Laopu and gold jewelry retailers sector-wide",
+        "source": "sina.com.cn",
+        "checked": true
+      },
+      {
+        "d": "2025-10-08",
+        "pct": 5.9,
+        "px": 717.0,
+        "market_wide": false,
+        "reason": "Opened third Hong Kong store, advancing international brand expansion",
+        "source": "sina.com.cn",
+        "checked": true
+      },
+      {
+        "d": "2025-09-10",
+        "pct": -7.6,
+        "px": 755.0,
+        "market_wide": false,
+        "reason": "Fell as rising gold prices were seen compressing gross margin despite planned price hikes",
+        "source": "sina.com.cn",
+        "checked": true
+      },
+      {
+        "d": "2025-08-20",
+        "pct": 8.8,
+        "px": 782.0,
+        "market_wide": false,
+        "reason": "H1 results: revenue +250.9% YoY to RMB12.35bn, net profit +285.8% YoY to RMB2.27bn",
+        "source": "sina.com.cn",
+        "checked": true
+      },
+      {
+        "d": "2025-08-11",
+        "pct": -5.5,
+        "px": 758.5,
+        "market_wide": false,
+        "reason": null,
+        "source": null,
+        "checked": true
+      },
+      {
+        "d": "2025-08-06",
+        "pct": 5.9,
+        "px": 768.0,
+        "market_wide": false,
+        "reason": "Dongwu Securities bullish note on H2 new-store contribution after new Shanghai Xintiandi store opening",
+        "source": "sina.com.cn",
+        "checked": true
+      },
+      {
+        "d": "2025-08-04",
+        "pct": 6.2,
+        "px": 733.0,
+        "market_wide": false,
+        "reason": "Profit alert: H1 revenue +241-255%, net profit +279-288% YoY; BofA raised profit forecasts",
+        "source": "sina.com.cn",
+        "checked": true
+      },
+      {
+        "d": "2025-07-31",
+        "pct": -8.4,
+        "px": 708.5,
+        "market_wide": false,
+        "reason": "Ninth straight down session as investors took profits post-guidance and reassessed valuation amid falling gold prices",
+        "source": "sina.com.cn",
+        "checked": true
+      },
+      {
+        "d": "2025-07-23",
+        "pct": -5.8,
+        "px": 786.5,
+        "market_wide": false,
+        "reason": "UBS said market profit expectations still too high, stock fell toward 8% intraday, >30% below July peak",
+        "source": "sina.com.cn",
+        "checked": true
+      },
+      {
+        "d": "2025-07-11",
+        "pct": -11.4,
+        "px": 900.0,
+        "market_wide": false,
+        "reason": "Extended sell-off after July 8 record high; profit-taking and UBS caution on stretched 2025 growth forecasts",
+        "source": "Sina",
+        "checked": true
+      },
+      {
+        "d": "2025-07-10",
+        "pct": -5.9,
+        "px": 1016.0,
+        "market_wide": false,
+        "reason": "Stock led Hang Seng decliners as post-peak profit-taking continued after the July 8 record high",
+        "source": "Eastmoney",
+        "checked": true
+      },
+      {
+        "d": "2025-06-30",
+        "pct": 14.9,
+        "px": 1008.0,
+        "market_wide": false,
+        "reason": "Lock-up expiry freed 40% of shares, absorbed by buyers; new Shanghai/Singapore stores beat forecasts, JPMorgan lifted target",
+        "source": "SCMP",
+        "checked": true
+      },
+      {
+        "d": "2025-06-23",
+        "pct": 7.2,
+        "px": 881.0,
+        "market_wide": false,
+        "reason": "BofA Securities upgraded to Buy from Neutral, raised target price to HK$999 from HK$932",
+        "source": "Sina",
+        "checked": true
+      },
+      {
+        "d": "2025-06-19",
+        "pct": -6.4,
+        "px": 816.5,
+        "market_wide": false,
+        "reason": "Fell as investors grew cautious ahead of June 28 mega share unlock (~40% of shares becoming free float)",
+        "source": "Sina",
+        "checked": true
+      },
+      {
+        "d": "2025-06-17",
+        "pct": -6.7,
+        "px": 881.5,
+        "market_wide": false,
+        "reason": null,
+        "source": null,
+        "checked": true
+      },
+      {
+        "d": "2025-06-12",
+        "pct": 5.7,
+        "px": 914.0,
+        "market_wide": true,
+        "reason": "Rebounded along with broader gold-related stocks after the prior week's sharp declines",
+        "source": "Sina",
+        "checked": true
+      },
+      {
+        "d": "2025-06-05",
+        "pct": -9.1,
+        "px": 904.0,
+        "market_wide": false,
+        "reason": "Dropped on investor caution as stock neared its 12-month post-IPO lock-up expiry period",
+        "source": "Sina",
+        "checked": true
+      },
+      {
+        "d": "2025-06-03",
+        "pct": 6.1,
+        "px": 964.5,
+        "market_wide": true,
+        "reason": "Hit record high amid a broad HK rally in 'new consumption' stocks (Laopu, Mixue, Pop Mart) on foreign inflows",
+        "source": "Sina",
+        "checked": true
+      },
+      {
+        "d": "2025-05-29",
+        "pct": 8.2,
+        "px": 900.0,
+        "market_wide": false,
+        "reason": null,
+        "source": null,
+        "checked": true
+      },
+      {
+        "d": "2025-05-22",
+        "pct": 5.4,
+        "px": 844.0,
+        "market_wide": false,
+        "reason": null,
+        "source": null,
+        "checked": true
+      },
+      {
+        "d": "2025-05-21",
+        "pct": 7.4,
+        "px": 801.0,
+        "market_wide": false,
+        "reason": null,
+        "source": null,
+        "checked": true
+      },
+      {
+        "d": "2025-05-20",
+        "pct": 9.4,
+        "px": 745.5,
+        "market_wide": false,
+        "reason": null,
+        "source": null,
+        "checked": true
+      },
+      {
+        "d": "2025-05-12",
+        "pct": -7.7,
+        "px": 645.5,
+        "market_wide": true,
+        "reason": "Spot gold sank ~3% as US-China Geneva tariff truce cut haven demand, dragging gold/jewelry stocks lower",
+        "source": "Tencent News (qq.com)",
+        "checked": true
+      },
+      {
+        "d": "2025-05-07",
+        "pct": -7.4,
+        "px": 685.0,
+        "market_wide": false,
+        "reason": "UBS flagged share overhang ahead of June lock-up expiry and said 2025 profit expectations looked too high",
+        "source": "Sina Finance/Zhitong Finance",
+        "checked": true
+      },
+      {
+        "d": "2025-04-30",
+        "pct": -5.3,
+        "px": 719.5,
+        "market_wide": false,
+        "reason": null,
+        "source": null,
+        "checked": true
+      },
+      {
+        "d": "2025-04-29",
+        "pct": 6.6,
+        "px": 760.0,
+        "market_wide": false,
+        "reason": null,
+        "source": null,
+        "checked": true
+      },
+      {
+        "d": "2025-04-23",
+        "pct": -7.4,
+        "px": 741.0,
+        "market_wide": false,
+        "reason": null,
+        "source": null,
+        "checked": true
+      },
+      {
+        "d": "2025-04-14",
+        "pct": 7.2,
+        "px": 796.5,
+        "market_wide": false,
+        "reason": null,
+        "source": null,
+        "checked": true
+      },
+      {
+        "d": "2025-04-08",
+        "pct": 6.9,
+        "px": 685.0,
+        "market_wide": true,
+        "reason": "HK market rebounded (HSI +1.5%, HSTech +4.5%) as Asia bounced from prior day's tariff-driven rout",
+        "source": "CNBC",
+        "checked": true
+      },
+      {
+        "d": "2025-04-07",
+        "pct": -19.9,
+        "px": 640.5,
+        "market_wide": true,
+        "reason": "HSI plunged 13.2%, worst since 1997, after China's 34% retaliatory tariff on Trump's 'Liberation Day' levies",
+        "source": "Bloomberg",
+        "checked": true
+      },
+      {
+        "d": "2025-04-02",
+        "pct": -7.9,
+        "px": 799.0,
+        "market_wide": false,
+        "reason": "Stock hit a record intraday high then reversed on profit-taking amid H-share full-circulation overhang concerns",
+        "source": "Guancha.cn",
+        "checked": true
+      },
+      {
+        "d": "2025-04-01",
+        "pct": 19.1,
+        "px": 868.0,
+        "market_wide": false,
+        "reason": "Surged to a record high after FY2024 results showed net profit up 254% YoY",
+        "source": "Sina Finance",
+        "checked": true
+      },
+      {
+        "d": "2025-03-27",
+        "pct": 9.2,
+        "px": 722.0,
+        "market_wide": false,
+        "reason": "Rose on anticipation of FY2024 results due that week, expected to show up to 260% YoY profit growth",
+        "source": "Tencent News (qq.com)",
+        "checked": true
+      },
+      {
+        "d": "2025-03-25",
+        "pct": -9.0,
+        "px": 631.5,
+        "market_wide": false,
+        "reason": null,
+        "source": null,
+        "checked": true
+      },
+      {
+        "d": "2025-03-11",
+        "pct": 12.9,
+        "px": 693.0,
+        "market_wide": false,
+        "reason": null,
+        "source": null,
+        "checked": true
+      },
+      {
+        "d": "2025-03-05",
+        "pct": 11.7,
+        "px": 600.0,
+        "market_wide": false,
+        "reason": null,
+        "source": null,
+        "checked": true
+      },
+      {
+        "d": "2025-02-28",
+        "pct": -8.0,
+        "px": 498.8,
+        "market_wide": true,
+        "reason": "Broad HK tech selloff (HSI -3.28%, HSTech -5.32%) after Trump's new tariffs on EU/Canada/Mexico and Nvidia's Q4 growth deceleration",
+        "source": "Sina Finance/jrj.com.cn",
+        "checked": true
+      },
+      {
+        "d": "2025-02-21",
+        "pct": 17.1,
+        "px": 548.5,
+        "market_wide": false,
+        "reason": "Positive FY2024 profit alert after Feb 20 close: net profit up 236-260% YoY to RMB1.4-1.5bn",
+        "source": "Reuters/Sina Finance",
+        "checked": true
+      },
+      {
+        "d": "2025-02-17",
+        "pct": -8.9,
+        "px": 449.0,
+        "market_wide": false,
+        "reason": null,
+        "source": null,
+        "checked": true
+      },
+      {
+        "d": "2025-02-14",
+        "pct": 11.0,
+        "px": 493.0,
+        "market_wide": false,
+        "reason": "Long store queues (2-7hr waits) reported amid buying frenzy; Goldman/Citi reiterated bullish price targets",
+        "source": "Zhitong Finance/Investing.com",
+        "checked": true
+      },
+      {
+        "d": "2025-02-13",
+        "pct": 5.2,
+        "px": 444.0,
+        "market_wide": false,
+        "reason": null,
+        "source": null,
+        "checked": true
+      },
+      {
+        "d": "2025-02-07",
+        "pct": 5.9,
+        "px": 429.6,
+        "market_wide": false,
+        "reason": null,
+        "source": null,
+        "checked": true
+      },
+      {
+        "d": "2025-02-05",
+        "pct": -12.1,
+        "px": 396.0,
+        "market_wide": false,
+        "reason": null,
+        "source": null,
+        "checked": true
+      },
+      {
+        "d": "2025-02-04",
+        "pct": 5.3,
+        "px": 450.4,
+        "market_wide": true,
+        "reason": "Broad HK market rally (HSI +2.83%, HSTech +5.06%) led by AI/tech stocks lifted sentiment market-wide",
+        "source": "Sina Finance",
+        "checked": true
+      },
+      {
+        "d": "2025-01-27",
+        "pct": 10.9,
+        "px": 407.6,
+        "market_wide": false,
+        "reason": "Shares hit record high ahead of Lunar New Year on seasonal gold demand and near record gold prices",
+        "source": "Investing.com",
+        "checked": true
+      },
+      {
+        "d": "2025-01-21",
+        "pct": 10.6,
+        "px": 337.2,
+        "market_wide": false,
+        "reason": null,
+        "source": null,
+        "checked": true
+      },
+      {
+        "d": "2025-01-20",
+        "pct": 6.1,
+        "px": 304.8,
+        "market_wide": false,
+        "reason": null,
+        "source": null,
+        "checked": true
+      },
+      {
+        "d": "2025-01-16",
+        "pct": 5.0,
+        "px": 295.0,
+        "market_wide": false,
+        "reason": "Board proposed a restricted share unit (RSU) incentive scheme to reward and retain employees",
+        "source": "TipRanks",
+        "checked": true
+      },
+      {
+        "d": "2025-01-09",
+        "pct": 11.1,
+        "px": 299.0,
+        "market_wide": false,
+        "reason": "New Year's Day promotion sparked 8-hour queues at Shanghai Yuyuan store; shoppers spent over RMB100k each",
+        "source": "Sina Finance",
+        "checked": true
+      },
+      {
+        "d": "2025-01-02",
+        "pct": 8.7,
+        "px": 264.2,
+        "market_wide": false,
+        "reason": "Guolian Securities report touted its differentiated high-end ancient-gold positioning and rising market share",
+        "source": "Sina Finance",
+        "checked": true
+      },
+      {
+        "d": "2024-12-30",
+        "pct": 15.0,
+        "px": 243.6,
+        "market_wide": false,
+        "reason": "Morgan Stanley named it industry top pick, called 19x forward P/E cheap given 55%/65% 2024-26 revenue/profit CAGR forecast",
+        "source": "Sina Finance",
+        "checked": true
+      },
+      {
+        "d": "2024-12-19",
+        "pct": -5.1,
+        "px": 217.4,
+        "market_wide": false,
+        "reason": null,
+        "source": null,
+        "checked": true
+      },
+      {
+        "d": "2024-12-12",
+        "pct": 12.9,
+        "px": 236.0,
+        "market_wide": true,
+        "reason": "Central Economic Work Conference pledged consumption stimulus; HK consumer stocks incl. Laopu Gold rallied",
+        "source": "Tencent News (qq.com)",
+        "checked": true
+      },
+      {
+        "d": "2024-12-09",
+        "pct": 5.0,
+        "px": 203.0,
+        "market_wide": true,
+        "reason": "HSI jumped 2.8% (7-week high) after Politburo pledged 'moderately loose' monetary policy for 2025, lifting consumer stocks",
+        "source": "SCMP",
+        "checked": true
+      },
+      {
+        "d": "2024-11-27",
+        "pct": 6.5,
+        "px": 201.8,
+        "market_wide": false,
+        "reason": "Guozheng International initiated coverage with a Buy rating and HK$235 price target",
+        "source": "futunn.com",
+        "checked": true
+      },
+      {
+        "d": "2024-11-21",
+        "pct": 5.1,
+        "px": 212.6,
+        "market_wide": true,
+        "reason": "Gold extended gains after Putin approved a revised nuclear doctrine amid Russia-Ukraine escalation, boosting gold/jewelry shares",
+        "source": "BullionVault",
+        "checked": true
+      },
+      {
+        "d": "2024-11-20",
+        "pct": 6.0,
+        "px": 202.2,
+        "market_wide": true,
+        "reason": "Spot gold hit a 1-week high (3rd straight up day) as Russia-Ukraine escalation drove safe-haven buying, lifting gold/jewelry stocks",
+        "source": "CNBC",
+        "checked": true
+      },
+      {
+        "d": "2024-11-12",
+        "pct": -7.0,
+        "px": 190.3,
+        "market_wide": true,
+        "reason": "Spot gold fell over 2% to ~$2,610 on dollar strength and $1B+ gold-ETF outflows after Trump win; domestic gold jewelry prices dropped in tandem",
+        "source": "Sina Finance",
+        "checked": true
+      },
+      {
+        "d": "2024-11-07",
+        "pct": -6.3,
+        "px": 199.1,
+        "market_wide": true,
+        "reason": "Gold and oil extended post-election slide as US stocks surged and dollar strengthened on Trump win",
+        "source": "Tencent News (qq.com)",
+        "checked": true
+      },
+      {
+        "d": "2024-11-06",
+        "pct": -5.5,
+        "px": 212.4,
+        "market_wide": true,
+        "reason": "Gold plunged ~2-3% as Trump's decisive election win drove a surge in the US dollar, hitting gold-linked stocks",
+        "source": "Reuters/Mining.com",
+        "checked": true
+      },
+      {
+        "d": "2024-11-04",
+        "pct": 6.0,
+        "px": 221.4,
+        "market_wide": true,
+        "reason": "Gold gained on US election-eve haven demand and Middle East tensions, lifting gold/jewelry-linked equities",
+        "source": "FXStreet",
+        "checked": true
+      },
+      {
+        "d": "2024-10-29",
+        "pct": 10.3,
+        "px": 215.0,
+        "market_wide": true,
+        "reason": "Gold hit fresh record high (~$2,773/oz) on election jitters, Fed-cut bets, Mideast tensions, lifting gold-linked stocks",
+        "source": "Business Standard",
+        "checked": true
+      }
+    ]
+  },
+  "1929": {
+    "label": "Chow Tai Fook",
+    "moves": [
+      {
+        "d": "2026-08-20",
+        "pct": 5.7,
+        "px": 13.39,
+        "market_wide": true,
+        "reason": "Gold broke $4,500/oz; gold jewellery and pharma stocks rallied broadly, HSI +0.91%",
+        "source": "The Standard",
+        "checked": true
+      },
+      {
+        "d": "2026-08-10",
+        "pct": 6.6,
+        "px": 13.03,
+        "market_wide": true,
+        "reason": "Gold rebounded after weak US jobs data; jewellery retailers rallied, Laopu Gold +9%",
+        "source": "Sina Finance",
+        "checked": true
+      },
+      {
+        "d": "2026-06-12",
+        "pct": 15.2,
+        "px": 12.81,
+        "market_wide": false,
+        "reason": "FY2026 results: net profit +52.2% to HK$9.0bn on record margins, gold price gains",
+        "source": "CNBC",
+        "checked": true
+      },
+      {
+        "d": "2026-06-01",
+        "pct": 5.6,
+        "px": 11.6,
+        "market_wide": false,
+        "reason": null,
+        "source": null,
+        "checked": true
+      },
+      {
+        "d": "2026-05-28",
+        "pct": -5.0,
+        "px": 10.86,
+        "market_wide": true,
+        "reason": "Gold fell below $4,500/oz on sticky US inflation data and easing Iran tensions; gold jewellery stocks fell sector-wide",
+        "source": "Sina Finance",
+        "checked": true
+      },
+      {
+        "d": "2026-05-07",
+        "pct": 7.3,
+        "px": 11.63,
+        "market_wide": false,
+        "reason": "Profit alert: FY26 net profit seen up 45-55% on higher gold prices and margin mix; launched gold home-goods line",
+        "source": "Sina Finance",
+        "checked": true
+      },
+      {
+        "d": "2026-04-08",
+        "pct": 5.1,
+        "px": 11.78,
+        "market_wide": true,
+        "reason": "US-Iran ceasefire sparked broad HK rally (HSI +2.4%) and gold rebound",
+        "source": "CNBC",
+        "checked": true
+      },
+      {
+        "d": "2026-01-30",
+        "pct": -6.7,
+        "px": 14.4,
+        "market_wide": true,
+        "reason": "Spot gold plunged >12% intraday, its biggest one-day drop in 40 years, dragging gold jewellers down",
+        "source": "Sina Finance",
+        "checked": true
+      },
+      {
+        "d": "2026-01-05",
+        "pct": 5.1,
+        "px": 13.11,
+        "market_wide": false,
+        "reason": "Stock rose on renewed gold-jewellery price hikes and Citi's bullish note on Q3 FY26 operations",
+        "source": "Sina Finance",
+        "checked": true
+      },
+      {
+        "d": "2025-11-26",
+        "pct": -6.1,
+        "px": 14.31,
+        "market_wide": false,
+        "reason": "H1 FY26 results missed estimates; net profit flat as gold-price gains failed to lift retail gross margin",
+        "source": "Sina Finance",
+        "checked": true
+      },
+      {
+        "d": "2025-11-03",
+        "pct": -8.7,
+        "px": 13.9,
+        "market_wide": true,
+        "reason": "New China VAT policy on standard gold raised costs; CTF hiked prices, whole gold jewellery sector sold off",
+        "source": "Sina Finance",
+        "checked": true
+      },
+      {
+        "d": "2025-10-22",
+        "pct": -5.7,
+        "px": 15.69,
+        "market_wide": false,
+        "reason": "Q2 FY25 retail value fell 21% YoY on weak demand amid surging gold prices; closed net 145 stores",
+        "source": "Sina Finance",
+        "checked": true
+      },
+      {
+        "d": "2025-10-17",
+        "pct": 5.0,
+        "px": 16.52,
+        "market_wide": false,
+        "reason": "Gold jewelry brands incl. CTF announced 10-35% price hikes on fixed-price gold items amid record gold rally",
+        "source": "Sina Finance",
+        "checked": true
+      },
+      {
+        "d": "2025-10-15",
+        "pct": 5.0,
+        "px": 15.34,
+        "market_wide": false,
+        "reason": null,
+        "source": null,
+        "checked": true
+      },
+      {
+        "d": "2025-06-17",
+        "pct": -7.3,
+        "px": 12.72,
+        "market_wide": false,
+        "reason": "CTF proposed HK$8.8bn convertible bonds due 2030 at 26% premium, sparking dilution concerns",
+        "source": "Investing.com (citing Zhitong Finance)",
+        "checked": true
+      },
+      {
+        "d": "2025-06-16",
+        "pct": 6.0,
+        "px": 13.72,
+        "market_wide": false,
+        "reason": "BofA raised FY2026 profit forecast 12% after FY2025 results beat, citing improving April-May same-store sales",
+        "source": "Sina Finance",
+        "checked": true
+      },
+      {
+        "d": "2025-06-13",
+        "pct": 5.4,
+        "px": 12.94,
+        "market_wide": false,
+        "reason": "FY2025 annual results: revenue +5.3% to HK$94.4bn, net profit record +52.2% to HK$9bn",
+        "source": "Sina Finance",
+        "checked": true
+      },
+      {
+        "d": "2025-05-12",
+        "pct": -5.9,
+        "px": 10.24,
+        "market_wide": true,
+        "reason": "Gold price fell ~3% after US-China tariff truce cut safe-haven demand, hurting gold jewelry name",
+        "source": "CNBC",
+        "checked": true
+      },
+      {
+        "d": "2025-05-06",
+        "pct": 5.7,
+        "px": 10.84,
+        "market_wide": false,
+        "reason": "Stock hit 1-yr high after CLSA, UBS and Macquarie hiked target prices on improving retail trends",
+        "source": "Sina Finance",
+        "checked": true
+      },
+      {
+        "d": "2025-04-30",
+        "pct": 8.5,
+        "px": 10.38,
+        "market_wide": false,
+        "reason": "Morgan Stanley raised target price to HK$11.4 citing narrowing Q4 retail-value decline",
+        "source": "Sina Finance",
+        "checked": true
+      },
+      {
+        "d": "2025-04-24",
+        "pct": 6.9,
+        "px": 9.63,
+        "market_wide": false,
+        "reason": "BofA upgraded to Buy from Neutral, target HK$7.3→HK$11.9, on same-store sales bottoming",
+        "source": "Sina Finance",
+        "checked": true
+      },
+      {
+        "d": "2025-04-23",
+        "pct": -7.0,
+        "px": 9.01,
+        "market_wide": false,
+        "reason": null,
+        "source": null,
+        "checked": true
+      },
+      {
+        "d": "2025-04-08",
+        "pct": 9.1,
+        "px": 8.65,
+        "market_wide": true,
+        "reason": "Hang Seng rebounded after prior day's tariff-driven crash",
+        "source": "Reuters",
+        "checked": true
+      },
+      {
+        "d": "2025-04-07",
+        "pct": -18.5,
+        "px": 7.93,
+        "market_wide": true,
+        "reason": "Hang Seng plunged 13.2%, worst since 1997, on Trump tariffs and China retaliation fears",
+        "source": "Bloomberg",
+        "checked": true
+      },
+      {
+        "d": "2025-04-02",
+        "pct": 10.1,
+        "px": 9.8,
+        "market_wide": false,
+        "reason": "UBS, JPMorgan, Macquarie raised price targets after FY25 Q4 RSV decline narrowed more than expected",
+        "source": "investing.com (智通财经)",
+        "checked": true
+      },
+      {
+        "d": "2025-03-05",
+        "pct": 11.2,
+        "px": 8.86,
+        "market_wide": false,
+        "reason": "China Merchants Securities: gold jewelry channel growth has peaked, CTF leads product-differentiation upgrade",
+        "source": "eastmoney.com",
+        "checked": true
+      },
+      {
+        "d": "2025-03-04",
+        "pct": 5.3,
+        "px": 7.97,
+        "market_wide": false,
+        "reason": "Daiwa says stock still severely undervalued as operating-strategy adjustments show results",
+        "source": "sina.com.cn",
+        "checked": true
+      },
+      {
+        "d": "2025-02-28",
+        "pct": -5.3,
+        "px": 7.51,
+        "market_wide": true,
+        "reason": "Broad HK selloff on Trump tariff threats vs EU/Canada/Mexico plus weak Nvidia guidance; HSI -3.3%, HSTech -5.3%",
+        "source": "jrj.com.cn",
+        "checked": true
+      },
+      {
+        "d": "2025-02-14",
+        "pct": 6.2,
+        "px": 7.85,
+        "market_wide": false,
+        "reason": "Guosen Securities: Q3 FY25 mainland retail sales decline narrowed to -13%, easing profit worries",
+        "source": "sina.com.cn",
+        "checked": true
+      },
+      {
+        "d": "2024-11-27",
+        "pct": 6.9,
+        "px": 7.33,
+        "market_wide": false,
+        "reason": "H1 FY25 net profit fell 44% but beat fears; ~79% interim dividend payout ratio reassured investors",
+        "source": "sina.com.cn",
+        "checked": true
+      }
+    ]
+  },
+  "0590": {
+    "label": "Luk Fook",
+    "moves": [
+      {
+        "d": "2026-08-20",
+        "pct": 7.1,
+        "px": 26.2,
+        "market_wide": true,
+        "reason": "Gold spiked ~4% (biggest 1-day gain since Feb) after Treasury surprise-expanded bond buybacks weakened the dollar, lifting HK jewelers.",
+        "source": "CNBC",
+        "checked": true
+      },
+      {
+        "d": "2026-06-26",
+        "pct": 6.8,
+        "px": 21.82,
+        "market_wide": false,
+        "reason": "Shares gapped up 6%+ after FY2026 results: net profit +88.7% YoY (nearly 90%), final dividend raised to HK$1.02/share.",
+        "source": "Zhitong Finance",
+        "checked": true
+      },
+      {
+        "d": "2026-06-12",
+        "pct": 5.1,
+        "px": 22.54,
+        "market_wide": true,
+        "reason": "HK jewelry stocks (incl. Luk Fook) rallied as peer Chow Tai Fook's shares jumped 15% on record profit from higher gold prices.",
+        "source": "CNBC",
+        "checked": true
+      },
+      {
+        "d": "2026-04-08",
+        "pct": 6.2,
+        "px": 25.0,
+        "market_wide": true,
+        "reason": "US-Iran ceasefire eased inflation fears; gold jumped above $4,800, lifting HK gold/jewellery stocks broadly (HSI +3.09%)",
+        "source": "Sina Finance",
+        "checked": true
+      },
+      {
+        "d": "2026-03-26",
+        "pct": -5.0,
+        "px": 23.04,
+        "market_wide": true,
+        "reason": "Spot gold fell below $4,500/oz on profit-taking, dragging down HK gold and jewellery stocks sector-wide",
+        "source": "Sina Finance",
+        "checked": true
+      },
+      {
+        "d": "2026-03-23",
+        "pct": -7.3,
+        "px": 23.34,
+        "market_wide": true,
+        "reason": "HSI plunged 3.5% (895 pts), worst drop in nearly a year, as Mideast escalation triggered a global gold-sector selloff",
+        "source": "South China Morning Post",
+        "checked": true
+      },
+      {
+        "d": "2026-02-26",
+        "pct": -6.0,
+        "px": 29.06,
+        "market_wide": true,
+        "reason": "HK gold/jewelry stocks fell sector-wide on Shenzhen gold-trading crackdown and high-price demand hit",
+        "source": "Sina Finance",
+        "checked": true
+      },
+      {
+        "d": "2026-01-21",
+        "pct": 5.3,
+        "px": 31.8,
+        "market_wide": true,
+        "reason": "Spot gold broke above $4,800/oz for first time; HK gold-sector stocks surged on safe-haven buying",
+        "source": "STCN",
+        "checked": true
+      },
+      {
+        "d": "2026-01-19",
+        "pct": 5.2,
+        "px": 28.88,
+        "market_wide": true,
+        "reason": "Spot gold hit record $4,689/oz, up 2%+; jewelry gold prices jumped, lifting HK gold-sector stocks",
+        "source": "SFC News (sfccn.com)",
+        "checked": true
+      },
+      {
+        "d": "2026-01-15",
+        "pct": 6.3,
+        "px": 27.3,
+        "market_wide": false,
+        "reason": "Q3 FY26 (Oct-Dec) trading update beat: retail sales value +26%, same-store sales +15% YoY",
+        "source": "Eastmoney",
+        "checked": true
+      },
+      {
+        "d": "2025-12-01",
+        "pct": 5.7,
+        "px": 25.78,
+        "market_wide": false,
+        "reason": "CICC reiterated Outperform, raised target price to HK$30.55 citing strong mainland wholesale growth",
+        "source": "Sina Finance",
+        "checked": true
+      },
+      {
+        "d": "2025-11-03",
+        "pct": -6.9,
+        "px": 23.16,
+        "market_wide": true,
+        "reason": "Sector-wide selloff after China ended gold VAT rebate for retailers; Chow Tai Fook, Chow Sang Sang, Laopu Gold also fell",
+        "source": "Yicai Global",
+        "checked": true
+      },
+      {
+        "d": "2025-09-17",
+        "pct": -5.1,
+        "px": 26.44,
+        "market_wide": false,
+        "reason": null,
+        "source": null,
+        "checked": false
+      },
+      {
+        "d": "2025-08-07",
+        "pct": 6.8,
+        "px": 22.42,
+        "market_wide": false,
+        "reason": null,
+        "source": null,
+        "checked": false
+      },
+      {
+        "d": "2025-06-17",
+        "pct": -6.4,
+        "px": 20.6,
+        "market_wide": false,
+        "reason": null,
+        "source": null,
+        "checked": false
+      },
+      {
+        "d": "2025-06-13",
+        "pct": 6.8,
+        "px": 21.35,
+        "market_wide": false,
+        "reason": null,
+        "source": null,
+        "checked": false
+      },
+      {
+        "d": "2025-04-22",
+        "pct": 11.8,
+        "px": 17.1,
+        "market_wide": true,
+        "reason": null,
+        "source": null,
+        "checked": false
+      },
+      {
+        "d": "2025-04-07",
+        "pct": -7.7,
+        "px": 14.22,
+        "market_wide": false,
+        "reason": null,
+        "source": null,
+        "checked": false
+      }
+    ]
+  },
+  "0116": {
+    "label": "Chow Sang Sang",
+    "moves": [
+      {
+        "d": "2026-08-20",
+        "pct": 10.0,
+        "px": 15.44,
+        "market_wide": false,
+        "reason": null,
+        "source": null,
+        "checked": false
+      },
+      {
+        "d": "2026-08-18",
+        "pct": 19.1,
+        "px": 14.38,
+        "market_wide": false,
+        "reason": null,
+        "source": null,
+        "checked": false
+      },
+      {
+        "d": "2026-08-10",
+        "pct": 6.4,
+        "px": 12.89,
+        "market_wide": false,
+        "reason": null,
+        "source": null,
+        "checked": false
+      },
+      {
+        "d": "2026-06-12",
+        "pct": 7.4,
+        "px": 10.76,
+        "market_wide": false,
+        "reason": null,
+        "source": null,
+        "checked": false
+      },
+      {
+        "d": "2026-03-23",
+        "pct": -5.7,
+        "px": 12.17,
+        "market_wide": false,
+        "reason": null,
+        "source": null,
+        "checked": false
+      },
+      {
+        "d": "2026-03-17",
+        "pct": 8.0,
+        "px": 13.96,
+        "market_wide": false,
+        "reason": null,
+        "source": null,
+        "checked": false
+      },
+      {
+        "d": "2026-02-23",
+        "pct": 5.3,
+        "px": 14.96,
+        "market_wide": false,
+        "reason": null,
+        "source": null,
+        "checked": false
+      },
+      {
+        "d": "2026-02-02",
+        "pct": -5.5,
+        "px": 13.86,
+        "market_wide": false,
+        "reason": null,
+        "source": null,
+        "checked": false
+      },
+      {
+        "d": "2025-11-03",
+        "pct": -6.1,
+        "px": 13.08,
+        "market_wide": false,
+        "reason": null,
+        "source": null,
+        "checked": false
+      },
+      {
+        "d": "2025-10-15",
+        "pct": 7.4,
+        "px": 14.6,
+        "market_wide": false,
+        "reason": null,
+        "source": null,
+        "checked": false
+      },
+      {
+        "d": "2025-10-10",
+        "pct": -6.3,
+        "px": 13.58,
+        "market_wide": true,
+        "reason": null,
+        "source": null,
+        "checked": false
+      },
+      {
+        "d": "2025-10-03",
+        "pct": 5.0,
+        "px": 14.54,
+        "market_wide": false,
+        "reason": null,
+        "source": null,
+        "checked": false
+      },
+      {
+        "d": "2025-09-25",
+        "pct": -6.6,
+        "px": 13.4,
+        "market_wide": false,
+        "reason": null,
+        "source": null,
+        "checked": false
+      },
+      {
+        "d": "2025-09-15",
+        "pct": 5.0,
+        "px": 15.57,
+        "market_wide": false,
+        "reason": null,
+        "source": null,
+        "checked": false
+      },
+      {
+        "d": "2025-09-01",
+        "pct": 8.7,
+        "px": 14.57,
+        "market_wide": false,
+        "reason": null,
+        "source": null,
+        "checked": false
+      },
+      {
+        "d": "2025-08-29",
+        "pct": 10.6,
+        "px": 13.4,
+        "market_wide": false,
+        "reason": null,
+        "source": null,
+        "checked": false
+      },
+      {
+        "d": "2025-08-28",
+        "pct": -5.9,
+        "px": 12.12,
+        "market_wide": false,
+        "reason": null,
+        "source": null,
+        "checked": false
+      },
+      {
+        "d": "2025-08-25",
+        "pct": 13.6,
+        "px": 13.33,
+        "market_wide": false,
+        "reason": null,
+        "source": null,
+        "checked": false
+      },
+      {
+        "d": "2025-08-21",
+        "pct": 7.7,
+        "px": 12.33,
+        "market_wide": false,
+        "reason": null,
+        "source": null,
+        "checked": false
+      },
+      {
+        "d": "2025-08-20",
+        "pct": 27.5,
+        "px": 11.45,
+        "market_wide": false,
+        "reason": null,
+        "source": null,
+        "checked": false
+      },
+      {
+        "d": "2025-07-02",
+        "pct": 5.2,
+        "px": 8.96,
+        "market_wide": false,
+        "reason": null,
+        "source": null,
+        "checked": false
+      },
+      {
+        "d": "2025-04-22",
+        "pct": 7.9,
+        "px": 7.65,
+        "market_wide": true,
+        "reason": null,
+        "source": null,
+        "checked": false
+      },
+      {
+        "d": "2025-04-07",
+        "pct": -9.7,
+        "px": 6.55,
+        "market_wide": false,
+        "reason": null,
+        "source": null,
+        "checked": false
+      }
+    ]
+  },
+  "002867": {
+    "label": "Chow Tai Seng",
+    "moves": [
+      {
+        "d": "2026-08-26",
+        "pct": -9.5,
+        "px": 11.2,
+        "market_wide": false,
+        "reason": "H1 2026 results: revenue -20.8%, net profit -24.2% YoY, Q2 profit -54.2% on weak gold jewelry demand",
+        "source": "Sina Finance",
+        "checked": true
+      },
+      {
+        "d": "2026-04-29",
+        "pct": 10.0,
+        "px": 13.38,
+        "market_wide": false,
+        "reason": "Limit-up on FY25 profit +9.2%, Q1'26 profit +16.4%, margin gains, ~90% dividend payout ratio",
+        "source": "Sohu",
+        "checked": true
+      },
+      {
+        "d": "2026-04-15",
+        "pct": 5.5,
+        "px": 13.05,
+        "market_wide": false,
+        "reason": "Continued rally after Apr 14 announcement doubling franchise gold brand-usage fee to 24rmb/g",
+        "source": "Jiemian",
+        "checked": true
+      },
+      {
+        "d": "2026-04-14",
+        "pct": 5.1,
+        "px": 12.37,
+        "market_wide": false,
+        "reason": "Announced doubling franchise brand-usage fee on gram-priced gold products from 12 to 24rmb/g",
+        "source": "Sina Finance",
+        "checked": true
+      },
+      {
+        "d": "2026-01-30",
+        "pct": -5.5,
+        "px": 12.74,
+        "market_wide": false,
+        "reason": null,
+        "source": null,
+        "checked": true
+      },
+      {
+        "d": "2026-01-28",
+        "pct": 8.2,
+        "px": 14.04,
+        "market_wide": false,
+        "reason": "Limit-up on Q4'25 store expansion (23 new self-run stores) and gross margin +9.2pp YoY",
+        "source": "Sohu",
+        "checked": true
+      },
+      {
+        "d": "2025-06-05",
+        "pct": -9.5,
+        "px": 14.55,
+        "market_wide": false,
+        "reason": "Fell on earnings/store-closure concerns: 2024 profit -23.3%, Q1'25 revenue -47.3%, net store closures",
+        "source": "Sina Finance",
+        "checked": true
+      },
+      {
+        "d": "2025-05-28",
+        "pct": 10.0,
+        "px": 16.34,
+        "market_wide": false,
+        "reason": "Limit-up on high dividend payout (2024 cumulative ratio 102%), e-commerce growth, store expansion",
+        "source": "Sina Finance",
+        "checked": true
+      },
+      {
+        "d": "2025-05-20",
+        "pct": 5.1,
+        "px": 14.23,
+        "market_wide": false,
+        "reason": null,
+        "source": null,
+        "checked": true
+      },
+      {
+        "d": "2025-04-07",
+        "pct": -7.8,
+        "px": 12.34,
+        "market_wide": true,
+        "reason": "Global selloff after Trump 'reciprocal tariffs'; SZSE Component -9.7%, ChiNext -12.5%",
+        "source": "Xinhua",
+        "checked": true
+      },
+      {
+        "d": "2025-03-20",
+        "pct": -5.4,
+        "px": 13.69,
+        "market_wide": false,
+        "reason": null,
+        "source": null,
+        "checked": true
+      },
+      {
+        "d": "2025-03-12",
+        "pct": 5.4,
+        "px": 13.93,
+        "market_wide": false,
+        "reason": null,
+        "source": null,
+        "checked": true
+      },
+      {
+        "d": "2025-03-05",
+        "pct": 5.7,
+        "px": 13.42,
+        "market_wide": true,
+        "reason": "Govt Work Report unveiled at NPC opening (2x consumption stimulus funding), consumption-sector stocks rallied broadly",
+        "source": "Sina Finance",
+        "checked": true
+      },
+      {
+        "d": "2025-01-03",
+        "pct": -5.4,
+        "px": 13.47,
+        "market_wide": true,
+        "reason": "A-share market-wide 'cold open' selloff on strong USD/hawkish Fed and profit-taking; Shanghai Composite -2.66%",
+        "source": "Sina Finance",
+        "checked": true
+      },
+      {
+        "d": "2024-11-07",
+        "pct": 6.0,
+        "px": 12.12,
+        "market_wide": true,
+        "reason": "A-share broad rally after US election result removed uncertainty and on expected large stimulus/bond package next day",
+        "source": "21jingji.com",
         "checked": true
       }
     ]
