@@ -23,8 +23,8 @@ GRAMS_PER_TROY_OZ = 31.1034768
 
 def main():
     source = YahooSource()
-    gold_bars, _ = source.fetch_bars({"id": "GC=F", "yahoo": "GC=F"}, lookback_days=730)
-    fx_bars, _ = source.fetch_bars({"id": "CNY=X", "yahoo": "CNY=X"}, lookback_days=730)
+    gold_bars, _ = source.fetch_bars({"id": "GC=F", "yahoo": "GC=F"}, lookback_days=20000)
+    fx_bars, _ = source.fetch_bars({"id": "CNY=X", "yahoo": "CNY=X"}, lookback_days=20000)
 
     fx_by_date = {b["date"]: b["close"] for b in fx_bars if b["close"] is not None}
 
