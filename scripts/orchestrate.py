@@ -5,7 +5,7 @@ Runs all data collection scripts sequentially with sensible checkpoints:
 - Stage 1: Fetch fundamentals (P/E, market cap, earnings dates)
 - Stage 2: Parallel web searches (catalysts, news, IV, macro)
 - Stage 3: Detect and research price movements
-- Stage 4: Merge all sources
+- Stage 4: Merge all sources, reprice forward P/E to today's close
 - Stage 5: Deploy to stock-monitor + ai-supply-chain GitHub Pages
 
 Run: .venv/bin/python scripts/orchestrate.py
@@ -63,6 +63,14 @@ def main():
 
     # Stage 4: Merge
     results['build'] = run_script('build')
+
+    # Stage 4b: Reprice forward P/E to today's close - cheap, no API calls,
+    # keeps "forward P/E" honest even though the underlying EPS estimates
+    # (forward_pe.py) are only researched occasionally, not daily.
+    if results['build']:
+        results['reprice_forward_pe'] = run_script('reprice_forward_pe')
+    else:
+        results['reprice_forward_pe'] = False
 
     # Stage 5: Deploy to both public GitHub Pages repos (stock-monitor + ai-supply-chain)
     if results['build']:
