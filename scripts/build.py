@@ -345,7 +345,13 @@ def main():
         for member in group["members"]:
             try:
                 bars, meta = source.fetch_bars(member)
-                minimum = settings.get("min_bars", 210)
+                # A per-member "min_bars" override lets a genuinely-recent
+                # IPO (e.g. CXMT, listed 2026-07-27) show up right away with
+                # whatever's computable - trend_signal() already degrades
+                # gracefully below 50 bars (sma50/trend fall back to
+                # None/"flat"), so this floor exists to catch a broken
+                # symbol mapping, not to gate every ticker at 100+ days.
+                minimum = member.get("min_bars", settings.get("min_bars", 210))
                 if len(bars) < minimum:
                     raise SourceError(
                         f"{member['id']}: only {len(bars)} bars, need {minimum} "

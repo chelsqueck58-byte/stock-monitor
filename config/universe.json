@@ -254,6 +254,18 @@
             "exchange": "SEHKNTL",
             "currency": "CNY"
           }
+        },
+        {
+          "id": "688825",
+          "label": "CXMT",
+          "yahoo": "688825.SS",
+          "ibkr": {
+            "symbol": "688825",
+            "sec_type": "STK",
+            "exchange": "SEHKNTL",
+            "currency": "CNY"
+          },
+          "min_bars": 20
         }
       ]
     },
