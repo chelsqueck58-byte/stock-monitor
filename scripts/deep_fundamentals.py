@@ -13,7 +13,7 @@ Not a daily stage - capex guidance and segment margins only move quarterly.
 Writes data/deep-fundamentals.json:
 {tid: {"segment_margins": [{"name":"...","margin_pct":0.0,"margin_type":"gross|operating"}],
        "trailing_capex": {"amount_usd_m":0.0,"period":"...","source":"..."},
-       "capex_guidance": {"text":"...","period":"...","source":"..."},
+       "capex_guidance": {"headline":"...","detail":"...","period":"...","source":"..."} or null,
        "fetched": "YYYY-MM-DD"}}
 
 Run:  .venv/bin/python scripts/deep_fundamentals.py [--tickers TID,TID,...]
@@ -79,24 +79,35 @@ def research_one(item):
         "(dollar figure and the period it covers), and (b) their most recent "
         "forward CAPEX GUIDANCE - what management said on the latest earnings "
         "call or investor presentation about planned capex (a number, range, "
-        "or % of revenue - whatever they actually stated, in their own terms). "
-        "If the company gave a concrete figure/range/%, lead with that - don't "
-        "just report a vague qualitative statement ('substantial increase') if "
-        "a specific number was also given on the same call; capture both if "
-        "both exist. capex_guidance.text MUST be concise: 2-3 sentences, no "
-        "more than ~350 characters - this renders in a fixed-height UI cell, "
-        "so a long paragraph gets cut off. Lead with the number/range, then "
-        "the one most important qualifier, not a rundown of every nuance.\n\n"
+        "or % of revenue - whatever they actually stated, in their own terms), "
+        "and whether that guidance was RAISED, CUT, or REAFFIRMED versus what "
+        "they said last quarter (state which, if you can tell).\n\n"
+        "capex_guidance ONLY exists if a concrete figure/range/% was actually "
+        "given - if management only said something vague like 'substantial "
+        "increase' with no number ANYWHERE (not this quarter, not a prior "
+        "multi-year plan being referenced), return capex_guidance as null "
+        "entirely. Do NOT return an object whose text just says guidance "
+        "wasn't given - null means null.\n"
+        "When capex_guidance exists, it has TWO fields:\n"
+        "  - headline: ONE short phrase, <= 12 words, just the number/range and "
+        "its trend - e.g. \"RMB380bn 3-year AI/cloud plan, being raised\" or "
+        "\"$4.5B FY2026 capex, reaffirmed\" or \"~35% of revenue, up from 30%\". "
+        "This is what renders by default in a narrow UI cell - it must stand "
+        "alone with no other context.\n"
+        "  - detail: 2-3 sentences, <= 350 characters, the fuller context "
+        "(what period, what qualifier matters most) - shown on hover only, "
+        "so it can be a bit richer than the headline but still concise.\n\n"
         "RULES: only report numbers you find real grounded evidence for. Never "
-        "invent or estimate. If capex guidance wasn't given or you can't find "
-        "it, say so.\n"
+        "invent or estimate.\n"
         "CRITICAL: reply with ONLY the JSON object, nothing else.\n"
         'Format: {"segment_margins":[{"name":"...","margin_pct":0.0,'
         '"margin_type":"gross or operating"}],'
         '"trailing_capex":{"amount_usd_m":0.0,"period":"...","source":"..."},'
-        '"capex_guidance":{"text":"...","period":"...","source":"..."}}\n'
-        'Use null for amount_usd_m or the whole trailing_capex/capex_guidance '
-        "object if genuinely not found."
+        '"capex_guidance":{"headline":"...","detail":"...","period":"...",'
+        '"source":"..."}}\n'
+        'Use null for amount_usd_m, trailing_capex, or capex_guidance if '
+        "genuinely not found - null the whole object, never a placeholder "
+        "explaining the absence."
     )
     raw = ask_claude(prompt)
     parsed = parse_obj(raw)
@@ -143,7 +154,7 @@ def main():
                 cg = out[tid]["capex_guidance"]
                 print(f"  {tid:8} segments={len(sm)} "
                       f"trailing_capex={tc.get('amount_usd_m') if tc else None} "
-                      f"guidance={'yes' if cg and cg.get('text') else 'no'}")
+                      f"guidance={cg.get('headline') if cg else 'no'}")
             else:
                 out[tid] = {"segment_margins": [], "trailing_capex": None,
                             "capex_guidance": None, "fetched": today}
