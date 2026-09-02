@@ -327,6 +327,17 @@
           }
         },
         {
+          "id": "2454",
+          "label": "MediaTek",
+          "yahoo": "2454.TW",
+          "ibkr": {
+            "symbol": "2454",
+            "sec_type": "STK",
+            "exchange": "TWSE",
+            "currency": "TWD"
+          }
+        },
+        {
           "id": "GFS",
           "label": "GlobalFoundries",
           "yahoo": "GFS",

@@ -91,12 +91,27 @@ def fetch(session, crumb, symbol):
     mkt_cap = raw(price_mod, "marketCap") or raw(ks, "marketCap") or raw(ks, "market_cap")
     fwd_pe = raw(ks, "forwardPE")
 
+    # Yahoo's own pegRatio is a black box - historically trailing P/E over a
+    # ~5-year forward growth estimate, NOT forward P/E over next-FY EPS
+    # growth specifically, so it can diverge meaningfully from what "PEG"
+    # usually means for a name with lumpy near-term growth (most of this
+    # cohort). Compute our own from the same earningsTrend module instead:
+    # the "+1y" period entry's earningsEstimate.growth is the real analyst-
+    # consensus NEXT fiscal year EPS growth rate, paired with the forward
+    # P/E already computed off that same next-FY EPS estimate.
+    fwd_y = next((t for t in trend if t.get("period") == "+1y"), None)
+    fwd_eps_growth = raw(fwd_y, "earningsEstimate", "growth") if fwd_y else None
+    peg = None
+    if fwd_pe is not None and fwd_eps_growth is not None and fwd_eps_growth > 0:
+        peg = round(fwd_pe / (fwd_eps_growth * 100), 2)
+
     return {
         "rev_growth": raw(fd, "revenueGrowth"),
         "eps_growth": raw(fd, "earningsGrowth"),
         "market_cap": mkt_cap,
         "fwd_pe": fwd_pe,
-        "peg": raw(ks, "pegRatio"),
+        "fwd_eps_growth": fwd_eps_growth,
+        "peg": peg,
         "gross_margin": raw(fd, "grossMargins"),
         "operating_margin": raw(fd, "operatingMargins"),
         "net_margin": raw(fd, "profitMargins"),

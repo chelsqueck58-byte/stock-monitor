@@ -16,6 +16,7 @@ nearest each fiscal year-end date.
 
 Run:  .venv/bin/python scripts/historical_pe.py
 """
+import argparse
 import datetime
 import json
 import os
@@ -186,6 +187,10 @@ def process_one(item, session):
 
 
 def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--tickers", help="comma-separated ticker ids to (re)research; default all in scope")
+    args = ap.parse_args()
+
     universe = json.loads(UNIVERSE.read_text())
     data = json.loads(DATA.read_text())
     currency_by_id = {i["id"]: i.get("currency", "USD") for i in data["instruments"]}
@@ -193,9 +198,13 @@ def main():
     yahoo_by_id = {m["id"]: m.get("yahoo", m["id"]) for g in universe["groups"] for m in g["members"]}
     label_by_id = {m["id"]: m["label"] for g in universe["groups"] for m in g["members"]}
 
+    if args.tickers:
+        want = {t.strip() for t in args.tickers.split(",")}
+        scmap = {tid: m for tid, m in scmap.items() if tid in want}
+
     todo = []
     for tid, m in scmap.items():
-        if m.get("category") in COHORT_CATEGORIES or tid in EXTRA_TICKERS:
+        if args.tickers or m.get("category") in COHORT_CATEGORIES or tid in EXTRA_TICKERS:
             todo.append((tid, label_by_id.get(tid, tid), yahoo_by_id.get(tid, tid),
                          currency_by_id.get(tid, "USD")))
     print(f"{len(todo)} tickers in cohort")
@@ -215,6 +224,16 @@ def main():
         futures = [ex.submit(process_one, item, session) for item in todo]
         for fut in futures:
             tid, result = fut.result()
+            # A failed research call (timeout/rate-limit under concurrent
+            # load) must never clobber a previously-good cached entry with
+            # an empty one - confirmed live on Meituan (3690), which had 5
+            # good years before a refresh silently zeroed it out because
+            # this loop always overwrote regardless of the new result's
+            # quality. Keep the old entry and flag it instead.
+            if not result["years"] and tid in out and out[tid].get("years"):
+                print(f"  {tid:8} research failed - keeping previous {len(out[tid]['years'])} years")
+                flags.append(f"{tid}: research failed this run, kept stale cached data")
+                continue
             out[tid] = result
             n_years = len(result["years"])
             n_flagged = sum(1 for y in result["years"] if y["flag"])
