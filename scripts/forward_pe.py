@@ -184,6 +184,18 @@ def process_one(item, session, crumb, price_by_id):
             "flag": flag,
         })
 
+    # A P/E can look individually plausible while still resting on an
+    # implausible YoY EPS jump between the two Yahoo-sourced years -
+    # confirmed live on MediaTek, where "+1y" consensus EPS was ~2.1x
+    # "0y" (110% growth) for a mature semiconductor name, silently passing
+    # the P/E-range check alone. Flag anything outside a sane growth band.
+    if len(years) == 2 and all(y["eps_estimate"] not in (None, 0) for y in years):
+        growth = years[1]["eps_estimate"] / years[0]["eps_estimate"] - 1
+        if not (-0.6 < growth < 0.75):
+            note = f"consensus EPS jumps {growth*100:+.0f}% YoY between the two forward years - check for a data/units issue"
+            for y in years[:2]:
+                y["flag"] = y["flag"] or note
+
     latest_end = max((y["period_end"] for y in years if y.get("period_end")), default=None)
     ref_end = latest_end or "the most recently completed fiscal year"
     parsed = research_fy3(tid, label, symbol, currency, ref_end)
