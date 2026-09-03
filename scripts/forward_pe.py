@@ -27,6 +27,7 @@ the standard convention (never a projected future price).
 
 Run:  .venv/bin/python scripts/forward_pe.py
 """
+import argparse
 import datetime
 import json
 import os
@@ -217,6 +218,10 @@ def process_one(item, session, crumb, price_by_id):
 
 
 def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--tickers", help="comma-separated ticker ids to (re)research; default all in scope")
+    args = ap.parse_args()
+
     universe = json.loads(UNIVERSE.read_text())
     data = json.loads(DATA.read_text())
     currency_by_id = {i["id"]: i.get("currency", "USD") for i in data["instruments"]}
@@ -225,9 +230,13 @@ def main():
     yahoo_by_id = {m["id"]: m.get("yahoo", m["id"]) for g in universe["groups"] for m in g["members"]}
     label_by_id = {m["id"]: m["label"] for g in universe["groups"] for m in g["members"]}
 
+    if args.tickers:
+        want = {t.strip() for t in args.tickers.split(",")}
+        scmap = {tid: m for tid, m in scmap.items() if tid in want}
+
     todo = []
     for tid, m in scmap.items():
-        if m.get("category") in COHORT_CATEGORIES or tid in EXTRA_TICKERS:
+        if args.tickers or m.get("category") in COHORT_CATEGORIES or tid in EXTRA_TICKERS:
             todo.append((tid, label_by_id.get(tid, tid), yahoo_by_id.get(tid, tid),
                          currency_by_id.get(tid, "USD")))
     print(f"{len(todo)} tickers in cohort")
