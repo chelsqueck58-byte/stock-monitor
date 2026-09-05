@@ -101,13 +101,18 @@ def research(tid, label, next_earn):
         f"4. preview: for the next earnings ({next_earn or 'date TBC'}): {{\"expects\":"
         "\"consensus rev/EPS + the bar, <=220 chars\", \"watch\":[\"2-4 items, <=90 chars "
         "each\"], \"read\":\"one-line trader read on the asymmetry, <=160 chars\"}}.\n\n"
+        "5. segment_explainers: for each CURRENT reportable revenue segment, what it "
+        "actually sells, in investor terms with the flagship products/customers named - "
+        "e.g. Broadcom Semiconductor Solutions = 'networking/custom AI chips (Tomahawk "
+        "switches, XPUs for Google/Meta), broadband, wireless'. Each {\"segment\":"
+        "\"exact segment name as reported\", \"sells\":\"<=140 chars\"}.\n\n"
         f"{feed_block}"
         f"{CHINA_HINT if tid in CHINA_TIDS else ''}"
         f"{feed.SOURCE_HINT}\n"
         "RULES: never invent dates/numbers; '(est.)' for estimates; every block cites "
         "sources. CRITICAL: reply with ONLY the JSON object:\n"
         '{"past_events":[...],"pe_narrative":"...","guidance_revisions":[...],'
-        '"preview":{...}}'
+        '"preview":{...},"segment_explainers":[...]}'
     )
     raw = ask_claude(prompt)
     obj = parse_obj(raw)
@@ -184,6 +189,9 @@ def main():
                     [e for e in obj["past_events"] if e.get("date") and e.get("title")],
                     inst.get("bars") or [])
                 obj["fetched"] = today.isoformat()
+                obj["segment_explainers"] = [
+                    s for s in obj.get("segment_explainers") or []
+                    if s.get("segment") and s.get("sells")]
                 out[tid] = obj
                 print(f"  {tid:8} {len(obj['past_events'])} events, "
                       f"{len(obj.get('guidance_revisions') or [])} guide revisions, "
