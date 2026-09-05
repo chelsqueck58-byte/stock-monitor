@@ -43,8 +43,11 @@ def collect_x():
         posts = json.loads(X_DIGEST.read_text())
     except (json.JSONDecodeError, OSError):
         return []
+    # cap keeps news.py's LLM prompt bounded; x_scrape.py's HANDLES list is
+    # ordered analysts-first so truncation drops official-account PR posts,
+    # not analyst signal
     return [f"[X @{p['handle']}] {' '.join(p['text'].split())}"
-            for p in posts if "error" not in p][:80]
+            for p in posts if "error" not in p][:160]
 
 
 def _email_body(payload):

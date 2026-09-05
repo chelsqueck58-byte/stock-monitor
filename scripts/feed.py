@@ -18,7 +18,9 @@ MAX_CHARS = 1500
 SOURCE_HINT = (
     " Beyond mainstream English-language outlets, also consider: official filings/IR pages "
     "(sec.gov 8-K/10-Q, company investor-relations sites) as the most authoritative when "
-    "available; Chinese-language financial media (qq.com, stcn.com, aastocks.com, sina.com.cn, "
+    "available; Chinese-language tech/financial media - 36kr.com, LatePost (latepost.com / "
+    "晚点), Caixin, ijiwei.com/JW Insights for semis, plus analyst Poe Zhao's China tech "
+    "coverage - for China AI/internet names; Chinese-language financial media (qq.com, stcn.com, aastocks.com, sina.com.cn, "
     "toutiao.com, ainvest.com, futunn.com, news.cn, 10jqka.com, 163.com, eastmoney.com, "
     "stockstar.com) for China/HK-listed names; major wire/financial media (reuters.com, "
     "bloomberg.com, wsj.com, marketwatch.com, nasdaq.com, scmp.com for HK/China regional); "
