@@ -1,26 +1,488 @@
-[X @fxtrader] 外汇交易员 @fxtrader · 2m 特朗普：2028继续赢。 1 428
+[X @firstadopter] tae kim @firstadopter · 55m This is a silly take. Recreating and remixing older games in clunky fashion is not going to sell anything. Human product taste in gameplay, worlds, and story still rules the day. What AI will accelerate is the polish/creation of art/graphics, sound, and gameplay assets. A Show more Quote Ben Pielstick @BenPielstick · 4h Gamedev is doomed. We haven't reached single-prompt AAA level yet, but indie games are already at risk. At this point the trajectory and rate of progress are unignorable. This isn't even close to what AI will be able to deliver by the end of this year. 2 13 3K
 
-[X @fxtrader] 外汇交易员 @fxtrader · 12h Translated from Chinese Show original Reporter: On the day marking Japan's surrender in defeat during World War II, Japanese Prime Minister Sanae Takaichi offered a sacrificial fee to the Yasukuni Shrine, and Japan's Defense Minister Shinjiro Koizumi and others visited to pay respects. What are your comments on this? Show more 31 2 54 37K
+[X @firstadopter] tae kim @firstadopter · 1h I don’t know how you can use these new models and not realize we are in the super early innings. We’re nowhere near the overcapacity bubble phase. We’re just getting started. Computer use is going to be the FOURTH exponential demand wave in FOUR years (chatbots → reasoning → Show more Quote tae kim @firstadopter · 1h Read this thread. Astra is a computer tool use milestone. GPUs (and CPUs) go brrrrrr x.com/dimillian/stat… 5 24 5K
 
-[X @aleabitoreddit] Serenity @aleabitoreddit · 17h Translated from Chinese Show original The rumors saying I've been wiped out are way too exaggerated, haha. After experiencing the crash of the AI sector in July, my YTD return is still at +2,411.84%. Quote 比特欧 Elvin @DRbitcoin36 · Jul 30 Translated from Chinese Of last month's list of stock market wizards, only one remains alive today. 469 192 4.8K 1.3M
+[X @firstadopter] tae kim @firstadopter · 56m This is a silly take. Recreating and remixing older games in clunky fashion is not going to sell anything. Human product taste in gameplay, worlds, and story still rules the day. What AI will accelerate is the polish/creation of art/graphics, sound, and gameplay assets. A Show more Quote Ben Pielstick @BenPielstick · 4h Gamedev is doomed. We haven't reached single-prompt AAA level yet, but indie games are already at risk. At this point the trajectory and rate of progress are unignorable. This isn't even close to what AI will be able to deliver by the end of this year. 2 13 3K
 
-[X @aleabitoreddit] Serenity @aleabitoreddit · 20h US Government urges $AAPL not to buy Chinese memory chips. $MU , $SKHY , and Samsung are happy to hear this... Hilariously enough, CXMT/YMTC is price hiking too, so it's not exactly "cheap Chinese memory that floods the market". Apple once upon a time actually had extreme Show more 121 192 1.9K 308K
+[X @firstadopter] tae kim @firstadopter · 1h Astra is the next step in the evolution from abacus to calculator to PC. It still requires human taste and steering, but it will enable incredible innovation, rapid iteration/experimentation of ideas, efficiency, productivity gains. NO ALIEN CIVILIZATIONS ARE DYING either, ok? Quote OpenAI Developers @OpenAIDevs · 8h Our best model yet: GPT-6 Astra. – Build agents for complex long-running work. – Solve engineering problems with less rework. – Create well-designed functional interfaces. – Take on harder questions with confidence. GPT-6 Astra combines computer use, asynchronous tool calling, 7 4K
 
-[X @jimcramer] Jim Cramer @jimcramer · 2h What an unbelievable trip we had! Michael Cembalest (@michaelcembalest) • Instagram reel From instagram.com 13 2 51 36K
+[X @firstadopter] tae kim @firstadopter · 1h Read this thread. Astra is a computer tool use milestone. GPUs (and CPUs) go brrrrrr Quote Thomas Ricouard @Dimillian · Sep 4 Astra is very good at 3D modeling, and I can't wait for all of you to experience it, for now here is a little walkthrough on how I built the demo house for our launch blog post. From a Blender scene to a Unreal Engine 5 walkable experience. 🧵 0:28 3 23 12K
 
-[X @jimcramer] Jim Cramer @jimcramer · 8h good day for saucing! 99 17 646 73K
+[X @firstadopter] tae kim @firstadopter · 2h With the release of GPT-6 Astra "computer use" AI has finally become real. AI can now do actual software knowledge work tasks better and faster than most humans. AI compute demand is going to go exponential again. CPU, HBM memory, and GPU shortages will get dramatically worse. Quote Stefan 3D AI @Stefan_3D_AI · Sep 4 GPT-6 changes 3D modeling forever. It works inside Blender completely autonomously, like an artist: gathers reference photos on its own, builds the scene, renders test frames, checks them against the references, then fixes what's off. When the scene holds up, it ships it to 8 6 103 10K
 
-[X @jimcramer] Jim Cramer @jimcramer · 20h this is what it is really like off Trinidad 55 12 222 83K
+[X @firstadopter] tae kim @firstadopter · 3h It's kind of insane that we now all have an expert with top-decile intelligence on any topic at our fingertips any time for a modest monthly fee. Quote tae kim @firstadopter · 3h Now witness the firepower of this fully armed and operational battle station 3 1 47 7.4K
 
-[X @jukan05] Jukan @jukan05 · 1h I came to Hong Kong for vacation and tried Sichuan food for the first time. It was so spicy that I really struggled, and my stomach hurt so much afterward. 66 7 262 24K
+[X @firstadopter] tae kim @firstadopter · 3h Now witness the firepower of this fully armed and operational battle station 4 2 55 11K
 
-[Telegram @tradehaven] === @tradehaven: no new posts since last check ===
+[X @firstadopter] tae kim @firstadopter · 3h AA updates their flagship index: "Announcing Artificial Analysis Intelligence Index v4.2. We are accelerating elements of our upcoming v5 release with interim updates to keep pace with the frontier. Index v4.2 has more complex and realistic tasks, and more private test sets to Show more Quote Artificial Analysis @ArtificialAnlys · 6h Announcing Artificial Analysis Intelligence Index v4.2. We are accelerating elements of our upcoming v5 release with interim updates to keep pace with the frontier. Index v4.2 has more complex and realistic tasks, and more private test sets to prevent gaming Intelligence Index 2 8 6.1K
+
+[X @firstadopter] tae kim @firstadopter · 4h Half my feed right now is people gushing over GPT-6 Astra’s capabilities and the intelligence of its output. The two top AI frontier labs OpenAI and Anthropic are way way ahead. It’s not even close. Benchmaxxed models like Gemini are going to be in a world of hurt. 22 7 139 11K
+
+[X @firstadopter] tae kim @firstadopter · 9h CHIPS CHIPS CHIPS Quote tae kim @firstadopter · 9h ANTHROPIC S-1 NEXT WEEK?!! FT: "The AI lab behind the Claude chatbot is expected to publicly file its IPO prospectus as soon as next week" "Anthropic is close to awarding Morgan Stanley and Goldman Sachs the most coveted roles in its blockbuster Wall Street debut, as the AI 77 17K
+
+[X @firstadopter] tae kim @firstadopter · 9h ANTHROPIC S-1 NEXT WEEK?!! FT: "The AI lab behind the Claude chatbot is expected to publicly file its IPO prospectus as soon as next week" "Anthropic is close to awarding Morgan Stanley and Goldman Sachs the most coveted roles in its blockbuster Wall Street debut, as the AI Show more 9 16 157 38K
+
+[X @firstadopter] tae kim @firstadopter · 9h Anthropic close to awarding Morgan Stanley and Goldman Sachs top roles in $2tn IPO From ft.com 3.4K
+
+[X @firstadopter] tae kim @firstadopter · 9h I agree. LTAs make the earnings stream more durable, which deserves a MUCH higher P/E multiple — not a P/E of 3 to 6, especially with solid multi-year revenue growth ahead along with non-commodity characteristics (it requires real proprietary R&D and tech leadership). It reminds Show more Quote Paradis @ParadisLabs · 9h I spoke to an institutional investor today who's bearish on memory companies. The crux of his argument was that LTAs put a limit on ASPs, so earnings will be less "spectacular" going forwards. This is completely wrong in my opinion. Memory fundamentals seem to be strong for 5 9 116 21K
+
+[X @firstadopter] tae kim @firstadopter · 16h Wow. Rick Santelli is retiring. Helluva run Rick. Respect. 8 3 148 12K
+
+[X @firstadopter] tae kim @firstadopter · 16h USA! USA! Quote LiveSquawk @LiveSquawk · 16h US Change in Nonfarm Payrolls Aug: 162K (est 55K; prev -23K, prevR 21K) - Unemployment Rate: 4.1% (est 4.1%; prev 4.1%) - Avg Hourly Earnings (M/M): 0.3% (est 0.3%; prev 0.1%) - Avg Hourly Earnings (Y/Y): 3.1% (est 3.1%; prev 3.2%) 2 1 25 10K
+
+[X @firstadopter] tae kim @firstadopter · 17h Chip Island: "The mood at Semicon Taiwan 2026 was unmistakably buoyant. Driving rain did little to discourage the crowds. The exhibition halls remained packed each day, while panel discussions drew large audiences and generated a level of excitement more commonly associated with Show more 7 13 63 9.9K
+
+[X @firstadopter] tae kim @firstadopter · 17h https:// richard367.substack.com/p/semicon-taiw an-2026-confidence-meets … 1 2.3K
+
+[X @Beth_Kindig] Beth Kindig @Beth_Kindig · 8h Nvidia $NVDA is acquiring Hugging Face for $12.9 billion, though Hugging Face will remain an open platform and will not be required to use Nvidia compute. 6 5 110 13K
+
+[X @Beth_Kindig] Beth Kindig @Beth_Kindig · 8h AMD $AMD and Cisco $CSCO recently launched a live deployment of MI335X GPUs and EPYC CPUs with Cisco’s Silicon One AI networking in partnership with Saudi Arabia’s HUMAIN, with the trio planning to deploy up to 250MW as part of the next buildout beginning in 2027. 4 9 74 13K
+
+[X @Beth_Kindig] Beth Kindig @Beth_Kindig · 11h Depending on how you model the two-quarter lumpiness, Nvidia's $NVDA ACIE can conservatively overtake hyperscalers in 5-6 quarters at a 14% QoQ growth rate versus 10% QoQ growth rate for hyperscalers, or as soon as 2 quarters if the Q2 pace continues. https:// io-fund.com/ai-stocks/nvid ia-fiscal-q2-answer-to-losing-market-share … 5 17 109 13K
+
+[X @StockSavvyShay] Shay Boloor @StockSavvyShay · 6h DAILY PORTFOLIO UPDATE | SEP 4, 2026 • Daily Chan… Subscribe to unlock 2 6 1.7K
+
+[X @StockSavvyShay] Shay Boloor @StockSavvyShay · 7h $BE is back above $270 following its addition to the S&P 500. That inclusion adds another tailwind to a story already being driven by AI’s growing power bottleneck and Bloom’s speed to power is built to fill that gap. Quote Shay Boloor @StockSavvyShay · 7h $BE IS SET TO JOIN THE S&P 500 19 44 490 64K
+
+[X @StockSavvyShay] Shay Boloor @StockSavvyShay · 7h $TTD WAS JUST REMOVED FROM S&P 500 32 32 280 74K
+
+[X @StockSavvyShay] Shay Boloor @StockSavvyShay · 7h $SNDK TO BE ADDED TO S&P 100 20 109 1.5K 109K
+
+[X @StockSavvyShay] Shay Boloor @StockSavvyShay · 7h $BE IS SET TO JOIN THE S&P 500 29 83 955 124K
+
+[X @StockSavvyShay] Shay Boloor @StockSavvyShay · 7h Source: 1 3 33 9.7K
+
+[X @StockSavvyShay] Shay Boloor @StockSavvyShay · 9h President Trump is now openly framing data centers as a path to state-level wealth,l by saying “if you want to get rich as a state, you will want data centers.” 33 76 967 72K
+
+[X @StockSavvyShay] Shay Boloor @StockSavvyShay · 11h $MU JUST BROKE ABOVE $1,000 Quote Shay Boloor @StockSavvyShay · Jun 26 1:50 I still think $MU is cheap because the SCAs should force investors to rethink the multiple. Over time, Micron expects more than 50% of total revenue to be covered by these agreements giving the business a level of visibility memory companies historically never had. A memory 23 40 581 57K
+
+[X @StockSavvyShay] Shay Boloor @StockSavvyShay · 12h $TSLA doesn't need Cybercab rides to reach $0.25 per mile to change transportation since the real threshold is $0.77 which is the all in cost of owning a personal car. China already supports human driven ride hail near $0.50 per mile which tells me Tesla can become disruptive Show more 26 42 386 46K
+
+[X @StockSavvyShay] Shay Boloor @StockSavvyShay · 13h $META has confirmed Meta Connect will take place September 23 and 24. That sets the date for Meta’s next major product showcase as Zuckerberg continues pushing AI and wearables deeper into the company’s roadmap. 16 35 408 42K
+
+[X @StockSavvyShay] Shay Boloor @StockSavvyShay · 13h There's no chance we see a rate hike this month 😅 Quote Polymarket Money @PolymarketMoney · 15h JUST IN: September Fed hike odds climbs to 52% after the stronger-than-expected jobs report. Paid partnership 21 10 250 58K
+
+[X @StockSavvyShay] Shay Boloor @StockSavvyShay · 14h $SNOW is becoming data layer for the new agentic AI economy because agents need secure access to proprietary enterprise data and business context before they can do anything useful. That makes Snowflake even more valuable as models get cheaper and more interchangeable because it Show more Futurum Equities 17 19 144 40K
+
+[X @StockSavvyShay] Shay Boloor @StockSavvyShay · 14h Here’s where you can find my full $SNOW earnings breakdown: Snowflake finally put a number on AI. SNOW rose 20% on the report. From youtube.com 16 16K
+
+[X @StockSavvyShay] Shay Boloor @StockSavvyShay · 14h $TSLA is down over 6% a day after Tesla officially opened fully driverless Cybercab rides with no steering wheel to the public. Quote Shay Boloor @StockSavvyShay · Sep 4 0:28 $TSLA just put its steering-wheel-free Cybercab into public Robotaxi service in Austin with Starlink and a dedicated theater mode built in. Wild seeing how Tesla is starting to design the car around what passengers do once nobody has to drive it. 64 44 397 143K
+
+[X @StockSavvyShay] Shay Boloor @StockSavvyShay · 15h $NVDA JUST BROKE OVER $230 Quote Shay Boloor @StockSavvyShay · Aug 26 1:29 I think today’s $NVDA surprise factor could be memory driven price hikes expected in early 2027 pulling Vera Rubin orders forward and accelerating the next AI infrastructure upgrade cycle. That demand would hit just as Rubin ramps with higher rack density and better energy 52 92 1K 85K
+
+[X @StockSavvyShay] Shay Boloor @StockSavvyShay · 16h $RKLB just cleared a key design review for the 18 satellites it is building for the U.S. Space Development Agency’s Tracking Layer. That moves Rocket Lab another step closer to deploying satellites designed to detect and track missile threats for the U.S. and its allies. 27 94 1K 67K
+
+[X @StockSavvyShay] Shay Boloor @StockSavvyShay · 16h Source: Quote Rocket Lab @RocketLab · Sep 4 We’ve successfully passed our Preliminary Design Review (PDR) for the 18 satellites we're building for @SemperCitiusSDA's Tracking Layer Tranche 3 (TRKT3) constellation. A big step forward in delivering advanced missile warning & defense capabilities for the U.S. and its allies. 3 47 21K
+
+[X @StockSavvyShay] Shay Boloor @StockSavvyShay · 17h $MU is doubling HBM capacity to roughly 100,000 wafers per month by year-end. The ramp is increasingly shifting to HBM4 for $NVDA Vera Rubin as Micron starts closing the capacity gap with $SKHY and Samsung. 38 146 1.3K 95K
+
+[X @StockSavvyShay] Shay Boloor @StockSavvyShay · 17h Source: US Micron to Double HBM Capacity, Closing Gap with Samsung and SK From en.etnews.com 1 6 33 13K
+
+[X @StockSavvyShay] Shay Boloor @StockSavvyShay · 18h $SOFI CEO Anthony Noto says “85% of our products are non lending” as SoFi continues moving beyond its roots as a lender. That mix is what could ultimately push the market to value SoFi more like a financial platform than a lending business. 25 36 616 73K
+
+[X @damnang2] Damnang @damnang2 · 14m Yes these are monsters Quote LT Jonathan Kendrick @PlisskenPatriot · Sep 4 This white monster needs to chill bro wtf 1 1.1K
+
+[X @damnang2] Damnang @damnang2 · 1h Translated from Korean Show original OMG, I'm done now.... Quote admi_alts @admi_alts · 1h Translated from Korean Oh, I just now found out if this works in bold on X mobile too... 3 8 3.1K
+
+[X @damnang2] Damnang @damnang2 · 5h One of the warning signs to watch out for Quote Kevin Xu @kevinxu · 6h seeing a lot of gain screenshots on the timeline today 🤔 1 6 4.9K
+
+[X @damnang2] Damnang @damnang2 · 6h Looking at the comments, I guess I’ll have to write a follow-up article on $CBRS soon… Quote Damnang @damnang2 · 10h I genuinely think calling $CBRS garbage is something only someone who understands nothing about AI or semiconductors would say. Seriously. x.com/jkeynesalpha/s… 2 25 5.8K
+
+[X @damnang2] Damnang @damnang2 · 7h I’ve been seeing a lot of posts lately that summarize other posts and then recommend specific accounts in this kind of formulaic way. These are basically all bots, right? Quote David Miller @jayjay1648 · 7h Replying to @damnang2 Great perspective on $SNDK. Buying around $1,000 during the last memory selloff clearly paid off, and keeping cash ready for the next irrational dip makes sense. You and @thectspot are two of my favorite follows for spotting opportunities like this. 4 5 5.3K
+
+[X @damnang2] Damnang @damnang2 · 7h Awesome I really love his insight Quote Gavin Baker @GavinSBaker · 15h The Hugging Face acquisition is important for America and I think Nvidia will be a good steward for the ecosystem. The Poolside transaction may end up mattering even more. I think Jensen is likely to bring American open-weight AI to the frontier, which is going to be awesome for x.com/jensenhuang/st… 1 10 6.1K
+
+[X @damnang2] Damnang @damnang2 · 8h Yes!!!! Jealousy and admiration are not the same. Don’t be jealous of successful people. Admire them instead. Genuinely celebrate their success, then use that feeling as motivation to become someone like them. Keep doing that, and one day, you may become the person others Show more Quote Ashley @AshleyDCan · 9h being mad that someone else is winning does not make you a winner be happy for people, celebrate their wins, ask for advice and get inspired to win that is the way to financial and spiritual wealth 3 2 20 5.1K
+
+[X @damnang2] Damnang @damnang2 · 8h Honestly, I don’t think $CRDO is going to be the one… but let’s see. If anything, I think it might be $BE instead..?? Quote StockEdge @stockedgeN · 9h Imagine S&P choose to include $CRDO after hours, what a roller coaster of a week that would be. 4 1 44 11K
+
+[X @damnang2] Damnang @damnang2 · 8h The answer was “Everyone” 😄 Quote Damnang @damnang2 · 10h Memory stocks are ripping again, and suddenly everyone’s posting bullish takes. But tell me this. Who’s been bullish on memory since the beginning of the year without wavering even once? Even through that insane selloff in July. Go ahead, anon. Say it. x.com/damnang2/statu… 2 13 7.6K
+
+[X @damnang2] Damnang @damnang2 · 8h Now that the market’s looking better, maybe give this another read before it’s too late…?? It’s even free. 😁 Quote Damnang @damnang2 · Sep 2 Article The AI Investment Map: From Tokens to Megawatts A lot of my research is published on my Substack. If you’re interested, feel free to check it out. damnang.com TL;DR Capex by the four largest hyperscalers is on track to exceed $700B... 1 5 5K
+
+[X @damnang2] Damnang @damnang2 · 9h Seeing people I really respect and learn from subscribe to my paid research makes me feel both incredibly grateful and a real sense of responsibility. It makes me want to work even harder and keep pushing the research further🫡 2 35 6K
+
+[X @damnang2] Damnang @damnang2 · 10h Memory stocks are ripping again, and suddenly everyone’s posting bullish takes. But tell me this. Who’s been bullish on memory since the beginning of the year without wavering even once? Even through that insane selloff in July. Go ahead, anon. Say it. Quote Damnang @damnang2 · Jul 29 Article What Would Stop This Selloff? The real meaning of the SK hynix print You can read the full article with the complete analysis on my Substack. Full article: https://open.substack.com/pub/damnang2/p/what-would-stop-this-selloff?r=5ggurd&utm_campaign=post-expanded-share&utm_medium=web Many investors are worried that the sharp rally in semiconductor stocks that began... 18 4 66 23K
+
+[X @damnang2] Damnang @damnang2 · 10h I genuinely think calling $CBRS garbage is something only someone who understands nothing about AI or semiconductors would say. Seriously. Quote J Keynes @JKeynesAlpha · 13h $CBRS Oh no, what a disaster. Tae Kim and @SemiAnalysis_ told me Cerebras was trash, so naturally I increased my position at $180 and made it my largest holding. Absolutely devastating mistake. I’m completely ruined by owning this obviously terrible company😂 Please keep warning x.com/jkeynesalpha/s… 11 2 54 18K
+
+[X @damnang2] Damnang @damnang2 · 10h What if he has to wear $LULU underwear or something? Lululemon Athletica Inc LULU $100.61 -17.38% Quote Heisenberg @Mr_Derivatives · 13h I like Michael Burry I really do. A lot of times I like to wear the contrarian hat just like he does. But one thing I’m so baffled by…. Why is he so obsessed with $LULU? A brilliant (arguably) mind like his and then Lululemon…. Iono man. Please don’t block me! Just imo. 3 4 5.3K
+
+[X @damnang2] Damnang @damnang2 · 10h 🚀🚀🚀🚀 Quote Diligent Plane @DiligentPlane · 16h $CRDO Credo is among the stocks being considered for S&P 500 inclusion Announcement expected after the close today 20 7.1K
+
+[X @damnang2] Damnang @damnang2 · 11h $CRDO Last chance to get on board 🤛 Credo Technology Group Holding Ltd CRDO $170.57 +3.90% Quote Diligent Plane @DiligentPlane · 16h $CRDO Credo is among the stocks being considered for S&P 500 inclusion Announcement expected after the close today 3 37 4.9K
+
+[X @damnang2] Damnang @damnang2 · 11h You should’ve asked the next question: “I don’t think so, but honestly, you feel the same way too, right?” He’s 100% going to say YES. Quote retardedinvestor @retard3dinvst0r · 13h ChatGPT says $AAOI is going to $500 2 1 15 9.5K
+
+[X @damnang2] Damnang @damnang2 · 12h If you really believe there is a second leg coming in the optical rally, and you were buying optical stocks today, which names would you actually choose? I broke them into three buckets: Stocks that still look attractively priced and could offer the strongest upside Stocks that Show more Quote Damnang @damnang2 · 20h Article Optical, Round Two: The Mispriced, the Conditional, and the Worth Paying Up For Redrawing the optical investment map with technology direction, valuation, and market expectation all converted into factors. The last Optical Investing Round Two piece covered why this is a good... 1 2 15 5.4K
+
+[X @damnang2] Damnang @damnang2 · 12h I think I can survive another three weeks! Quote Damnang @damnang2 · 21h This week has been absolutely insane. Full-time job + X + Substack + an exciting project + networking + online calls…!! I think I’ve been sleeping like 3 hours a night 😅 Can AI please start doing some of this for me? 6 16 6.6K
+
+[X @damnang2] Damnang @damnang2 · 12h Cybercab’s incredible technology apparently, it can even make wheelchair users walk!!! Quote Tesla @Tesla · Sep 4 Cybercab is designed to be a great experience for every rider 4 1 26 7.2K
+
+[X @damnang2] Damnang @damnang2 · 12h Was everyone thinking the same thing as me? lol Quote Damnang @damnang2 · 23h What I’ve learned from spending $1,000+ a month on AI: I should probably buy $CBRS Cerebras Systems Inc CBRS $210.05 +10.30% 5 42 8.2K
+
+[X @damnang2] Damnang @damnang2 · 13h 🙇🏻‍♂️ Quote Trade Whisperer @TradexWhisperer · Sep 4 $MU $SKHY $DRAM High Bandwidth Memory (HBM) is going to change the world. I've spoken. 12 5.2K
+
+[X @damnang2] Damnang @damnang2 · 14h 👀 Quote Damnang @damnang2 · Sep 3 My year-end price targets: $SNDK = $3,000 $MU = $2,000 Source: trust me bro 😎 NFA DYOR 4 49 8.8K
+
+[X @damnang2] Damnang @damnang2 · 20h Seeing stuff like this really makes me think @elonmusk might actually pull off TeraFab too. Geniuses really are built different. Quote Elon Musk @elonmusk · Sep 4 The future of transportation x.com/tesla/status/2… 2 18 5.7K
+
+[X @damnang2] Damnang @damnang2 · 20h That’s the framework I keep coming back to when I think about optical investing. At this point, saying that InP or light sources are the bottleneck is something everyone already knows. What matters more to me is going layer by layer: lead times, revenue timing, the importance Show more Quote Atlas Frontier @AtlasFrontier_ · 20h Replying to @damnang2 Optics sit in the critical path as cluster density rises. Bandwidth, lasers, and packaging all have to scale with accelerators. Finding who captures the economics is harder than naming the constraint. 2 4 38 10K
+
+[X @damnang2] Damnang @damnang2 · 20h If I were getting back into optical stocks today, what would I buy? I looked at three categories: • The stocks with the most upside potential • The stocks I would wait for certain conditions before buying • The stocks worth paying up for, even at a higher valuation I Show more Quote Damnang @damnang2 · 20h Article Optical, Round Two: The Mispriced, the Conditional, and the Worth Paying Up For Redrawing the optical investment map with technology direction, valuation, and market expectation all converted into factors. The last Optical Investing Round Two piece covered why this is a good... 4 3 49 16K
+
+[X @damnang2] Damnang @damnang2 · 20h You guys are even crazier than me, huh? 😂 Quote 북극성 @PolarisLog · Sep 4 Translated from Korean Nomura “Samsung Electronics, SK Hynix at the Bottom Now, Will Rise Again” - Nomura Securities forecasts that Samsung Electronics and SK Hynix, which have been adjusted due to volatility in the global stock market, will rise again based on solid fundamentals - Maintains a Buy 2 53 14K
+
+[X @PhotonCap] Photon Capital @PhotonCap · 36m Translated from Korean Show original I also bought following Nancy Pelosi, and it seems a lot of people are handling it. Many trustworthy people are covering it, so there must be a good reason for that :) Quote TheoDore @theodore_invest · 51m Translated from Korean Wow~ No wonder the chart looked so good somehow, it's breaking through with Nancy Pelosi's buy signal as a positive catalyst, and now the S&P 500 boost piling on top. That's why^^ x.com/RealChickenBoy… 1 1 6 2.3K
+
+[X @PhotonCap] Photon Capital @PhotonCap · 1h - $AEHR jumped roughly over 13% today, but there does not appear to be a single new major order or earnings announcement driving the move. Same-day coverage largely points to renewed attention around its existing AI order story and institutional interest. - The broader market Show more Quote Photon Capital @PhotonCap · 14h $AEHR Happy Firday with AEHR! x.com/PhotonCap/stat… 3 1 24 4.6K
+
+[X @PhotonCap] Photon Capital @PhotonCap · 2h Translated from Korean Show original I hope this kind of luck continues 😊😊😊 Quote Semiconsight_ @Semiconsight · 7h Replying to @PhotonCap Translated from Korean I was startled—are you riding a hobbyhorse...? lol 1 5 3.5K
+
+[X @PhotonCap] Photon Capital @PhotonCap · 7h $INTC : 87.8 -> 95.8 :) $BE : 208.2 -> 270.0 :) $AEHR : 97.0 -> 86.26 :( Bloom Energy Corp BE $252.87 +7.35% Aehr Test Systems AEHR $86.26 +13.10% Quote Photon Capital @PhotonCap · Aug 27 A few days ago, I shared with paid subscribers that I had opened three new positions: $BE, $INTC, and $AEHR. 5 1 41 8.5K
+
+[X @PhotonCap] Photon Capital @PhotonCap · 8h Summoning the courage to act is not easy, but the rewards will be equally great. Quote Kevin Xu @kevinxu · 12h "wish i had bought more" is a feeling you'll never have if you go all in 5 3.8K
+
+[X @PhotonCap] Photon Capital @PhotonCap · 8h Marvell announced the Polariton acquisition on April 22. A paper carrying that company's name ran four days earlier. On a Swiss airfield, 1.4 km linked over a 226 GHz carrier. The thing that caught it at the receive end and put it back onto light was a plasmonic modulator Show more Quote Photon Capital @PhotonCap · 8h Article Marvell Drew Its Own Plasmonics Map in June: Two Overlapping Targets and an Unnamed Material Read this on Substack: Marvell Drew Its Own Plasmonics Map in June: Two Overlapping Targets and an Unnamed Material $MRVL $LWLG | Where POH actually points, the overlap with Celestial AI, and what to... 3 1 26 5.4K
+
+[X @PhotonCap] Photon Capital @PhotonCap · 8h - I have not found a new $LWLG contract, named customer, 8-K, or company press release today that would clearly explain the move. There does not appear to be a single confirmed fundamental catalyst yet. - A headline circulated today saying Bank of America increased its LWLG Show more Lightwave Logic Inc LWLG $5.35 +4.49% Quote Photon Capital @PhotonCap · 23h > $MRVL Marvell itself does not mention $LWLG or Perkinamine in the blog. > But the 1 THz plasmonic-modulator result Marvell chose to highlight traces directly to the Polariton/ETH paper that explicitly thanks Lightwave Logic for supplying Perkinamine Series 3 EO material. x.com/PhotonCap/stat… 2 2 17 7.1K
+
+[X @PhotonCap] Photon Capital @PhotonCap · 8h Quote Photon Capital @PhotonCap · 8h Article Marvell Drew Its Own Plasmonics Map in June: Two Overlapping Targets and an Unnamed Material Read this on Substack: Marvell Drew Its Own Plasmonics Map in June: Two Overlapping Targets and an Unnamed Material $MRVL $LWLG | Where POH actually points, the overlap with Celestial AI, and what to... 1.5K
+
+[X @PhotonCap] Photon Capital @PhotonCap · 8h Article Marvell Drew Its Own Plasmonics Map in June: Two Overlapping Targets and an Unnamed Material Read this on Substack: Marvell Drew Its Own Plasmonics Map in June: Two Overlapping Targets and an Unnamed Material $MRVL $LWLG | Where POH actually points, the overlap with Celestial AI, and what to... 2 7 8.8K
+
+[X @PhotonCap] Photon Capital @PhotonCap · 9h genius Quote Damnang @damnang2 · 11h You should’ve asked the next question: “I don’t think so, but honestly, you feel the same way too, right?” He’s 100% going to say YES. x.com/retard3dinvst0… 1 6 4.7K
+
+[X @PhotonCap] Photon Capital @PhotonCap · 9h If OpenAI really is the customer, this could be much bigger than another Samsung Foundry win. - Arm: AIC architecture + RTL - Samsung System LSI: custom SoC design - Samsung Foundry: 2nm manufacturing - OpenAI is reportedly being discussed as a leading end-customer candidate. Show more 5 7 4.3K
+
+[X @PhotonCap] Photon Capital @PhotonCap · 9h Samsung Teams Up With Arm to Develop 2nm On-Device AI Custom Chips, OpenAI Reportedly a Key Customer From tradingkey.com 4 1.3K
+
+[X @PhotonCap] Photon Capital @PhotonCap · 12h - $INTC raised $20B at $95/share; U.S. government holds 10% equity stake via CHIPS Act conversion. - $NVDA disclosed ~$30B stake in $INTC , signaling confidence in foundry and AI infrastructure role. - SK Hynix considering $INTC Foundry for HBM4E base dies; validates advanced Show more Intel Stock Draws Big-Money Backing As AI Bets Escalate From timothysykes.com 1 3 7 4.4K
+
+[X @PhotonCap] Photon Capital @PhotonCap · 13h $BE great. so far +17.40% Quote Photon Capital @PhotonCap · Aug 27 Replying to @PhotonCap As of the time of writing on August 26: $BE: +9.29% 2 17 6.2K
+
+[X @PhotonCap] Photon Capital @PhotonCap · 13h 🤩 Quote Daniel | LEAPS Trading @LEAPSTrading · 18h Replying to @PhotonCap $MRVL is making moves to drive future growth. The $NVDA and MediaTek partnership is also bullish for $MRVL. Remember, it was in Taiwan when Jensen Huang introduced the $MRVL CEO on stage and said Marvell will be the next Trillion Dollar company. The two of them and their teams 1 2 5.8K
+
+[X @PhotonCap] Photon Capital @PhotonCap · 14h $AEHR Happy Firday with AEHR! Aehr Test Systems AEHR $86.26 +13.10% Quote Photon Capital @PhotonCap · 22h $AEHR my fault but still holding and buying.... x.com/PhotonCap/stat… 1 36 8.6K
+
+[X @PhotonCap] Photon Capital @PhotonCap · 14h $CIEN Okay, I made it. Just added for the first time since I last traded it in December 2025. Quote Photon Capital @PhotonCap · Sep 4 Translated from Korean $CIEN I wanted to buy CIENA again, but should I buy or not? It's dropped even more than the late July low. x.com/PhotonCap/stat… 2 1 24 7.6K
+
+[X @PhotonCap] Photon Capital @PhotonCap · 22h 2 win 1 lose https… Subscribe to unlock 229
+
+[X @PhotonCap] Photon Capital @PhotonCap · 22h $AEHR my fault but still holding and buying.... Aehr Test Systems AEHR $86.26 +13.10% Quote Photon Capital @PhotonCap · Aug 27 Replying to @PhotonCap $AEHR: +0.77% 6 2 42 23K
+
+[X @PhotonCap] Photon Capital @PhotonCap · 22h $INTC it was also a good call Quote Photon Capital @PhotonCap · Aug 27 Replying to @PhotonCap $INTC: +2.37% 1 24 8.7K
+
+[X @PhotonCap] Photon Capital @PhotonCap · 22h $BE not bad Bloom Energy Corp BE $252.87 +7.35% Quote Photon Capital @PhotonCap · Aug 27 Replying to @PhotonCap As of the time of writing on August 26: $BE: +9.29% 18 5.1K
+
+[X @PhotonCap] Photon Capital @PhotonCap · 22h - ChangXin Memory (CXMT) captured 10% global DRAM market share by revenue in Q2 2026 - Market share surged from 4% year-over-year and 8% previous quarter, fastest-growing supplier - Top three (Samsung 39%, SK hynix 26%, $MU 25%) combined share fell to 87% from 94% CXMT's rapid Show more 2 9 5.3K
+
+[X @PhotonCap] Photon Capital @PhotonCap · 22h https:// ithome.com/0/998/299.htm 1.6K
+
+[X @PhotonCap] Photon Capital @PhotonCap · 22h $LWLG may not be just a ZR/ZR+ story. The more interesting signal at ECOC 2026 may be the opposite end of the network: Low-power IM/DD. 400G/lane. Short-reach AI interconnects. > If plasmonic EO polymers can move from coherent into low-power IM/DD, the opportunity starts to Show more Lightwave Logic Inc LWLG $5.35 +4.49% Quote Photon Capital @PhotonCap · 23h > $MRVL Marvell itself does not mention $LWLG or Perkinamine in the blog. > But the 1 THz plasmonic-modulator result Marvell chose to highlight traces directly to the Polariton/ETH paper that explicitly thanks Lightwave Logic for supplying Perkinamine Series 3 EO material. x.com/PhotonCap/stat… 3 6 32 6.9K
+
+[X @imnotharsh] ImNotHarsh | 📈💸 @imnotharsh · 6h *ANTHROPIC IS EXPECTED TO MAKE ITS IPO PROSPECTUS PUBLIC IN LATE SEPTEMBER *ANTHROPIC IS EXPECTED TO BEGIN MARKETING ITS IPO IN MID-OCTOBER AT THE EARLIEST wow $AMZN $MSFT Amazon.com Inc AMZN $258.51 -0.15% Microsoft Corp MSFT $499.70 -2.04% 1 676
+
+[X @imnotharsh] ImNotHarsh | 📈💸 @imnotharsh · 6h beat my cost basis on $TSLA and $MSFT Tesla Inc TSLA $354.08 -5.92% Microsoft Corp MSFT $499.70 -2.04% 1 496
+
+[X @imnotharsh] ImNotHarsh | 📈💸 @imnotharsh · 6h 2 weeks ago, Nancy Pelosi discloses her July buys of $BE Bloom Energy and $INTC Intel. BE, today, gets into the S&P 500. - Stock is now up +6% after hours and up +30% since her disclosure. Intel, time to show us what trick you got under your sleeves. Bloom Energy Corp BE $252.87 +7.35% Intel Corp INTC $95.80 +4.51% Quote ImNotHarsh | 📈💸 @imnotharsh · Aug 25 If you think she has no information, I have a bag of peanuts to sell you x.com/imnotharsh/sta… 3 17 2.6K
+
+[X @imnotharsh] ImNotHarsh | 📈💸 @imnotharsh · 6h you know what else she just bought? Quote TrendSpider @TrendSpider · 7h Less than 2 weeks ago, Nancy Pelosi disclosed a massive position in Bloom Energy, including both common stock and call options. Today, $BE got the call to join the S&P 500. x.com/TrendSpider/st… 2 927
+
+[X @imnotharsh] ImNotHarsh | 📈💸 @imnotharsh · 8h $INTC 🤷‍♂️ 4 1 36 2.7K
+
+[X @imnotharsh] ImNotHarsh | 📈💸 @imnotharsh · 10h *TRUMP: HORMUZ MAY EVENTUALLY NOT BE NECESSARY, W/ PIPELINES chess, not checkers 1 11 932
+
+[X @imnotharsh] ImNotHarsh | 📈💸 @imnotharsh · 10h UBS just nudged semiconductor sell-in to $1.63 trillion in 2026 and $2.43 trillion in 2027 while adding a first $2.72 trillion print for 2028, a modest lift that still leaves memory as the overwhelming driver at $955 billion then $1.65 trillion. LTAs have slowed the pace of Show more Advanced Micro Devices Inc AMD $477.57 +4.69% 6 1K
+
+[X @imnotharsh] ImNotHarsh | 📈💸 @imnotharsh · 13h $INTC 3 3 102 6.4K
+
+[X @imnotharsh] ImNotHarsh | 📈💸 @imnotharsh · 13h no, this is not real 1 5 834
+
+[X @imnotharsh] ImNotHarsh | 📈💸 @imnotharsh · 13h In case you need the timeline on the $AAPL and $INTC saga. 2025 The Trump admin used tariffs and exemptions as leverage for onshoring. Apple announced and expanded major US investment commitments. Reports put the add ons around $100B and the broader programs around $500B to Show more Quote Jukan @jukan05 · Jul 11 WSJ: Apple secured an exemption from semiconductor tariffs in exchange for committing to use Intel’s fabs. WSJ: Apple will manufacture not only Mac chips but also iPhone chips at Intel. $AAPL $INTC 4 26 4.6K
+
+[X @imnotharsh] ImNotHarsh | 📈💸 @imnotharsh · 14h GIF Quote ImNotHarsh | 📈💸 @imnotharsh · Aug 12 $INTC Intel CEO Lip-Bu Tan Purchased $12M of shares at the $95 public share offering price ($20B equity). The prospectus supplement explicitly states: “Lip-Bu Tan, our Chief Executive Officer, and one of his family members have agreed to purchase $12 million of the shares being 1 15 1.5K
+
+[X @imnotharsh] ImNotHarsh | 📈💸 @imnotharsh · 14h yes, we know Quote unusual_whales @unusual_whales · 14h Morgan Stanley says the Fed will hold rates at next meeting. 11 927
+
+[X @imnotharsh] ImNotHarsh | 📈💸 @imnotharsh · 14h I published this back in February on $INTC Intel's Memory Endgame. Since then, a lot has changed - more patents, more hints at their workings - this does not include anything regarding their likely $SKHY SK hynix partnership - Urge a read if you have time. Show more Quote ImNotHarsh | 📈💸 @imnotharsh · Feb 15 Article Intel: Remembering Memory Reviving Intel’s Memory Business: Next-Gen Memory for AI and HPC. The Underdog’s Return Intel has historically navigated complex dynamics within the semiconductor memory market, marked by periods... 1 1 9 2.1K
+
+[X @imnotharsh] ImNotHarsh | 📈💸 @imnotharsh · 14h early, but right Quote ImNotHarsh | 📈💸 @imnotharsh · Aug 26 early, but right 1 9 1.3K
+
+[X @imnotharsh] ImNotHarsh | 📈💸 @imnotharsh · 15h *U.S. TREASURY'S BESSENT: JOBS DATA SHOW THAT ECONOMY NOT JUST BEING DRIVEN BY AI BUILDING BOOM 2 571
+
+[X @imnotharsh] ImNotHarsh | 📈💸 @imnotharsh · 15h im saying nothing 10 42 2.5K
+
+[X @imnotharsh] ImNotHarsh | 📈💸 @imnotharsh · 15h *TRUMP SAYS HIGH RATES PUT US AT 'UNFAIR DISADVANTAGE' AND I WON'T ALLOW THAT TO HAPPEN *TRUMP: LOWER RATE OR I'LL STOP TRADING WITH COUNTRIES WITH WHICH WE HAVE A DEFICIT 2 1 18 2K
+
+[X @imnotharsh] ImNotHarsh | 📈💸 @imnotharsh · 15h TRUMP: LOWER RATE OR I'LL STOP TRADING WITH COUNTRIES WITH WHICH WE HAVE A DEFICIT. 8 644
+
+[X @imnotharsh] ImNotHarsh | 📈💸 @imnotharsh · 15h *TRUMP: JOB NUMBERS GREAT *TRUMP: TIME TO LOWER INTEREST RATES 3 545
+
+[X @imnotharsh] ImNotHarsh | 📈💸 @imnotharsh · 15h 🤭 2 12 1K
+
+[X @XYang2023] Xiao Yang @XYang2023 · 2h $INTC Mentioned in the video: "Intel is almost there to make an announcement". What's next for Intel in Ohio? Sen. Bernie Moreno sheds light From dispatch.com 1 1 25 1.1K
+
+[X @XYang2023] Xiao Yang @XYang2023 · 4h Intel should support FP4 on Razer Lake AX, provide faster memory bandwidth, and offer high-speed links that enable several systems to be stacked together. @intel https:// chatgpt.com/share/6a9b6689 -4ca4-83ec-b82c-48c8ac623507 … 5 412
+
+[X @XYang2023] Xiao Yang @XYang2023 · 4h My Parents came to USE the Hospital in China! (UK don't have this) https:// youtu.be/AvU6R-Kg38E?si =D-ZMOfmbb1vTCZkJ … via @YouTube youtube.com My Parents came to USE the Hospital in China! (UK don't have this) My British Parents Came to China to use THEIR Hospital!Take a loo... 1 178
+
+[X @XYang2023] Xiao Yang @XYang2023 · 5h IMO, affordability should be considered at the government level, in terms of the cost relative to tax revenue or GDP, rather than purely at the individual level. The fundamental difference is between a mindset that relentlessly pursues efficiency and minimises waste, and one that Show more Quote Anthony Albanese @AlboMP · 5h No matter where you live. How much you earn. Or your background. We’ll always fight for that. 1 152
+
+[X @XYang2023] Xiao Yang @XYang2023 · 4h Quote Xiao Yang @XYang2023 · 4h My Parents came to USE the Hospital in China! (UK don't have this) https:// youtu.be/AvU6R-Kg38E?si =D-ZMOfmbb1vTCZkJ … via @YouTube 62
+
+[Telegram @tradehaven] === @tradehaven - 68 new posts, 2026-09-03 11:01 to 2026-09-05 09:43 UTC ===
+
+[2026-09-03 11:01 UTC] #77600
+India drew a record $127 billion from its vast diaspora, surpassing even the most optimistic estimates
+https://www.bloomberg.com/news/articles/2026-09-03/india-s-record-diaspora-inflows-swamp-banks-test-rbi-tools
+
+[2026-09-03 11:10 UTC] #77601
+Eduardo Saverin tops Forbes’ Singapore’s 50 richest for 4th year, even as tech tycoons’ fortunes slide
+https://www.straitstimes.com/business/eduardo-saverin-tops-forbes-list-of-singapores-50-richest-for-4th-year-but-tech-tycoons-fortunes
+
+[2026-09-03 12:41 UTC] #77602
+Blackstone Private Credit Fund To Cap Redemptions At 5% Again
+https://www.reuters.com/legal/transactional/blackstone-private-credit-fund-maintains-5-cap-redemption-requests-remain-high-2026-09-03/
+
+[2026-09-03 12:41 UTC] #77603
+SPOT GOLD EXTENDS GAINS, RISES NEARLY 2% TO $4,472.85/OZ
+
+[2026-09-03 12:42 UTC] #77604
+TRADERS PARE FED HIKE BETS AFTER WALLER POINTS TO DISINFLATION
+
+[2026-09-03 12:44 UTC] #77605
+Almost Anyone Can Make Money Selling Electricity With AI and Batteries
+More homeowners are taking advantage of volatile prices to buy power when rates are low, store it and sell excess energy back to their utility.
+https://www.bloomberg.com/news/features/2026-09-03/consumers-profit-off-solar-batteries-selling-excess-energy-back-to-grid
+
+[2026-09-03 12:55 UTC] #77606
+Woman loses suit against Prudential for brain surgery payout as judge rejects 'buried clause' argument
+https://www.channelnewsasia.com/singapore/woman-loses-prudential-suit-brain-surgery-reject-buried-clause-6360136
+
+[2026-09-03 12:57 UTC] #77607
+Netherlands moves billions in gold to London in 'crisis preparedness' move
+The Dutch central bank (DNB) has confirmed that billions of dollars in gold has been taken out of north America and relocated to London, citing "increasing geopolitical unrest".
+https://www.bbc.com/news/articles/cvgy51xlz39o
+
+[2026-09-03 14:00 UTC] #77610
+$JPY <156
+
+[2026-09-03 22:38 UTC] #77611
+The Daily Morning Brew - The Market Sip Test
+https://caffeinatedcaptial.substack.com/p/the-daily-morning-brew-the-sip-test?utm_source=share&utm_medium=android&r=5dyxxv
+
+[2026-09-03 22:53 UTC] #77612
+BBG - Stocks rose the most in a month as Federal Reserve Governor Christopher Waller said he’d be willing to support holding rates steady if price pressures continue to show signs of easing.
+Money markets pared bets on a September hike. Short-dated Treasuries outperformed. The S&P 
+
+[Telegram @Fin_Watch] === @Fin_Watch - 16 new posts, 2026-09-03 15:21 to 2026-09-05 02:20 UTC ===
+
+[2026-09-03 15:21 UTC] #11884
+🇯🇵
+Japanese companies are now selling off assets just to survive their own borrowing costs.
+@Fin_Watch
+
+[2026-09-03 17:55 UTC] #11885
+🇮🇷
+Iranian rial just hit a new all time low against the US dollar.
+It has now crashed 99.15% in the last 13 years, since 2013.
+@Fin_Watch
+
+[2026-09-03 20:27 UTC] #11886
+🇮🇳
+🇷🇺
+India and Russia now settle 96% of bilateral trade through a Rupee-Rouble payments system.
+@Fin_Watch
+
+[2026-09-03 22:13 UTC] #11887
+📊
+YouTube partners with Amazon to allow creators to earn commissions by tagging products in their content.
+@Fin_Watch
+
+[2026-09-04 01:04 UTC] #11888
+📊
+S&P 500 extends gains to over +1% on the day, adding +$700 billion in market cap.
+We are now less than 1% away from a new record high in the S&P 500.
+@Fin_Watch
+
+[2026-09-04 03:16 UTC] #11889
+🇺🇸
+US Treasury buys back $12,500,000,000 of its own debt.
+@Fin_Watch
+
+[2026-09-04 03:17 UTC] #11890
+🇰🇷
+South Korea is reportedly preparing to deploy military assets to support freedom of navigation in the Strait of Hormuz.
+@Fin_Watch
+
+[2026-09-04 09:49 UTC] #11891
+🇺🇸
+US diesel prices just hit an all-time high of $5.82 per gallon.
+@Fin_Watch
+
+[2026-09-04 12:32 UTC] #11892
+🚨
+🚨
+NFP comes in very hot.
+U.S. Aug Nonfarm Payrolls: 162K, [Est. 56K]
+July Unemployment Rate: 4.1%, [Est. 4.1%]
+US Treasury yields jump.
+Short term bearish for all markets.
+@Fin_Watch
+
+[2026-09-04 13:07 UTC] #11893
+🇮🇳
+India's central bank's short dollar position just hit an all time high of $137 billion.
+@Fin_Watch
+
+[2026-09-04 17:16 UTC] #11894
+🇺🇸
+PRESIDENT TRUMP JUST NOW: The market should be going up like a rocketship on these fantastic jobs numbers, not down.
+@Fin_Watch
+
+[2026-09-04 18:20 UTC] #11895
+🚨
+🚨
+LULU is down 58.8% ever since Michael Burry opened his long position in Q2 2025.
+@Fin_Watch
+
+[2026-09-04 20:20 UTC] #11896
+🇳🇴
+World's largest sovereign wealth fund plans "deep cuts" to its US Treasury holdings.
+@Fin_Watch
+
+[2026-09-04 22:25 UTC] #11897
+🚨
+🚨
+$420 Billion wiped out from the US stock market as the Fed rate hike odds jumped above 60%.
+@Fin_Watch
+
+[2026-09-05 00:25 UTC] #11898
+🇮🇳
+India’s Forex Reserves Hit $740 B for the First Time in History.
+@Fin_Watch
+
+[2026-09-05 02:20 UTC] #11899
+📊
+Global central banks purchased +23 tonnes of gold in July, marking their 4th consecutive monthly purchase.
+This follows +51 tonnes in June, their 2nd-largest monthly purchase since November 2024.
+@Fin_Watch
 
 
-[Telegram @Fin_Watch] === @Fin_Watch: no new posts since last check ===
 
+[Telegram @tech] === @tech - 6 new posts, 2026-09-03 12:00 to 2026-09-05 08:01 UTC ===
 
-[Telegram @tech] === @tech: no new posts since last check ===
+[2026-09-03 12:00 UTC] #3840
+📍
+World Labs Unveils 3D Model Atlas
+Atlas
+reconstructs a surrounding space in
+3D
+from text or visual files. Users can then
+move the camera
+and change the view while the
+scene geometry
+stays intact.
+With
+several photos
+, it builds a
+complete 3D space
+. From one image, it can infer hidden parts, while more source frames improve accuracy. Atlas also generates controllable video up to
+1 minute
+in
+1440p
+, with the
+camera path set directly
+. The same system can turn footage of a real room into a simulation for
+robot training
+.
+Atlas
+is currently available only to
+early-access partners
+. It will later serve as the basis for new versions of
+Marble
+and other World Labs products.
+📊
+@tech
 
+[2026-09-03 16:02 UTC] #3841
+🗣️
+A Man Broke AI Recruiters
+He gives
+absurd answers
+to routine interview questions, and the recruiter treats them as normal. Asked about salary, he mentions
+a sideways drill bit in the first quarter
+.
+The AI turns that into a question about
+horizontal drill diameters
+, then thanks him for sharing his expectations. That is how to behave around
+neuro-HR
+.
+📊
+@tech
 
-[Telegram @infinityhedge] === @infinityhedge: no posts in the last 2 days ===
+[2026-09-04 08:04 UTC] #3842
+🤖
+Astra Posts 98% on ARC-AGI-3
+OpenAI’s new model scored
+98% on ARC-AGI-3
+, a difficult abstract-reasoning test. It reached
+100% on ExploitBench
+, which measures vulnerability discovery and exploitation.
+Astra also shows gains in coding and advanced math, plus science and CAD. OpenAI is testing it as an agent that can
+execute long action chains
+. Its cyber capabilities led to
+tighter safety limits before release
+.
+Some results come from OpenAI’s own agent system, making direct comparisons with other models difficult. GPT-6 Astra will first be available to organizations in
+Daybreak Access
+, then to Plus and Pro, Business and Enterprise users in the
+next few days
+.
+📊
+@tech
+
+[2026-09-04 12:01 UTC] #3843
+🖥
+Nvidia Officially Buys Hugging Face
+The exact price is
+$12,930,300,000
+.
+Nvidia
+says it will continue supporting
+Hugging Face
+’s mission and its open, independent approach across hardware. Together, they aim to make
+open source
+the default way to develop models.
+📊
+@tech
+
+[2026-09-04 16:01 UTC] #3844
+🍏
+Jobs Letter Comes With Apple I
+An
+Apple I
+linked to
+Fred Hatfield
+is going to auction on
+October 14
+. Bonhams estimates it at
+$500,000 to $800,000
+. The lot includes
+Steve Jobs’s 1978 reply
+to Hatfield, who had complained that Apple computers had no software.
+Jobs offered 
+
+[Telegram @infinityhedge] === @infinityhedge - 2 new posts, 2026-09-04 12:30 to 2026-09-04 12:30 UTC ===
+
+[2026-09-04 12:30 UTC] #26741
+US AUGUST NFP 162K
+
+[2026-09-04 12:30 UTC] #26743
+US AUG NONFARM PAYROLLS +162K (EST. +56K)
+US AUG UNEMPLOYMENT RATE 4.1% (EST. 4.1%)
+US AUG AVG HOURLY EARNINGS RISES 0.3% M/M (EST. +0.3%)
+US AUG AVG HOURLY EARNINGS RISES 3.1% Y/Y (EST. +3.0%)
+
