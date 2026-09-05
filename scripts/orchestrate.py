@@ -53,6 +53,10 @@ def main():
     # Stage 2: Parallel web research (catalysts, news, macro)
     # These can theoretically run in parallel, but running sequentially is safer for API limits
     results['catalysts'] = run_script('catalysts')
+    # 3-month dated calendar for key names - internal 3-day freshness TTL, so
+    # most days this returns in seconds; a full refresh runs 4 parallel
+    # research calls and can take ~15 min.
+    results['catalyst_calendar'] = run_script('catalyst_calendar', timeout=1500)
     results['news'] = run_script('news')
     results['macro_events'] = run_script('macro_events')
 

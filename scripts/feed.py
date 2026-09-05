@@ -63,3 +63,42 @@ def relevant_excerpt(ticker_id, label, max_chars=MAX_CHARS):
     if not hits:
         return ""
     return "\n".join(hits)[:max_chars]
+
+
+@lru_cache(maxsize=1)
+def _week_lines():
+    """All lines from the rolling 7-day archive (newest day first), falling
+    back to today's feed-raw.txt when the archive doesn't exist yet."""
+    archive = ROOT / "data" / "feed-archive"
+    files = sorted(archive.glob("feed-*.txt"), reverse=True) if archive.exists() else []
+    if not files:
+        return _feed_lines()
+    lines, seen = [], set()
+    for f in files:
+        try:
+            text = f.read_text(errors="ignore")
+        except OSError:
+            continue
+        for line in text.splitlines():
+            if line.strip() and line not in seen:
+                seen.add(line)
+                lines.append(line)
+    return tuple(lines)
+
+
+def relevant_excerpt_week(ticker_id, label, max_chars=3000):
+    """relevant_excerpt over the last ~7 days of feed instead of just today -
+    for consumers with a longer horizon (catalyst_calendar.py), where e.g. a
+    conference mention from Tuesday's X posts still matters on Thursday."""
+    lines = _week_lines()
+    if not lines:
+        return ""
+    base_id = ticker_id.split(".")[0]
+    needles = [re.escape(base_id)]
+    if label:
+        needles.append(re.escape(label))
+    pattern = re.compile(r"\b(?:" + "|".join(needles) + r")\b", re.IGNORECASE)
+    hits = [line for line in lines if pattern.search(line)]
+    if not hits:
+        return ""
+    return "\n".join(hits)[:max_chars]

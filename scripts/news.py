@@ -168,6 +168,22 @@ def main():
     # that wants to know what today's feeds already said about a name.
     FEED_RAW_OUT.write_text("\n\n".join(items))
 
+    # Rolling 7-day archive of the daily feed - catalyst_calendar.py reads the
+    # whole week's chatter (a conference mention from Tuesday's X posts is
+    # still relevant to a 3-month calendar run on Thursday), while the daily
+    # scripts keep using today-only feed-raw.txt.
+    archive = FEED_RAW_OUT.parent / "feed-archive"
+    archive.mkdir(exist_ok=True)
+    today = datetime.date.today()
+    (archive / f"feed-{today.isoformat()}.txt").write_text("\n\n".join(items))
+    for old in archive.glob("feed-*.txt"):
+        try:
+            d = datetime.date.fromisoformat(old.stem.replace("feed-", ""))
+            if (today - d).days > 7:
+                old.unlink()
+        except ValueError:
+            pass
+
     ticker_list = "\n".join(f"{tid} = {label}" for tid, label in tickers.items())
     priority = priority_tickers(tickers)
     priority_list = ", ".join(f"{t} ({tickers[t]})" for t in priority) or "(none)"
