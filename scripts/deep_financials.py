@@ -54,6 +54,11 @@ WORKERS = 2  # each ticker also spawns 2 inner sub-calls (company-wide + segment
              # that pushed Alibaba's already-slow research (~9-10 min per
              # sub-call) past the timeout when 4 tickers ran at once.
 DEFAULT_TICKERS = ["META", "NVDA", "9988", "6181"]
+# Full per-stock-page coverage: Mag6 + key semis (+ Tencent). Research in
+# chunks - each ticker costs two long web-research calls.
+STOCK_PAGE_TICKERS = ["META", "NVDA", "9988", "6181", "AAPL", "MSFT", "GOOGL",
+                      "AMZN", "0700", "AMD", "AVGO", "INTC", "TSM", "ASML",
+                      "MU", "MRVL"]
 
 
 def ask_claude(prompt, timeout=900):
@@ -204,17 +209,40 @@ def research_one(item):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--tickers", help="comma-separated ticker ids; default the curated watchlist")
+    ap.add_argument("--all-pages", action="store_true",
+                    help="research the full stock-page ticker set")
+    ap.add_argument("--fresh-days", type=int, default=0,
+                    help="skip tickers researched within N days that already have data "
+                         "(lets a killed run be re-invoked to continue where it stopped)")
     args = ap.parse_args()
 
     universe = json.loads(UNIVERSE.read_text())
     labels = {m["id"]: m["label"] for g in universe["groups"] for m in g["members"]}
 
-    todo_ids = [t.strip() for t in args.tickers.split(",")] if args.tickers else DEFAULT_TICKERS
-    todo = [(tid, labels.get(tid, tid)) for tid in todo_ids]
-    print(f"{len(todo)} tickers to research")
+    todo_ids = ([t.strip() for t in args.tickers.split(",")] if args.tickers
+                else STOCK_PAGE_TICKERS if args.all_pages else DEFAULT_TICKERS)
 
     out = json.loads(OUT.read_text()) if OUT.exists() else {}
     today = datetime.date.today().isoformat()
+
+    if args.fresh_days:
+        def fresh(tid):
+            e = out.get(tid)
+            if not e or not (e.get("fiscal_years") or e.get("quarters")):
+                return False
+            try:
+                age = (datetime.date.today()
+                       - datetime.date.fromisoformat(e.get("fetched", ""))).days
+            except ValueError:
+                return False
+            return age < args.fresh_days
+        skipped = [t for t in todo_ids if fresh(t)]
+        todo_ids = [t for t in todo_ids if not fresh(t)]
+        if skipped:
+            print(f"skipping {len(skipped)} still-fresh: {skipped}")
+
+    todo = [(tid, labels.get(tid, tid)) for tid in todo_ids]
+    print(f"{len(todo)} tickers to research", flush=True)
 
     with ThreadPoolExecutor(max_workers=WORKERS) as ex:
         for tid, label, parsed in ex.map(research_one, todo):
@@ -237,7 +265,10 @@ def main():
                                 "fiscal_years": [], "quarters": [], "segments": [],
                                 "fetched": today}
                 print(f"  {tid:8} no data found - keeping any previous entry")
-            OUT.write_text(json.dumps(out, ensure_ascii=False, separators=(",", ":")))
+            payload = json.dumps(out, ensure_ascii=False, separators=(",", ":"))
+            OUT.write_text(payload)
+            (ROOT / "site" / "deep-financials.json").write_text(payload)
+            (ROOT / "deep-financials.json").write_text(payload)
 
     print(f"deep_financials: {len(out)} tickers -> {OUT}")
 
