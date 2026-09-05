@@ -214,16 +214,34 @@ def main():
     ap.add_argument("--fresh-days", type=int, default=0,
                     help="skip tickers researched within N days that already have data "
                          "(lets a killed run be re-invoked to continue where it stopped)")
+    ap.add_argument("--stale-only", action="store_true",
+                    help="research only stock-page tickers whose newest researched "
+                         "quarter ended >100 days ago (i.e. a new print has likely "
+                         "landed since) or that have no data - the daily post-earnings "
+                         "refresh mode")
     args = ap.parse_args()
 
     universe = json.loads(UNIVERSE.read_text())
     labels = {m["id"]: m["label"] for g in universe["groups"] for m in g["members"]}
 
     todo_ids = ([t.strip() for t in args.tickers.split(",")] if args.tickers
-                else STOCK_PAGE_TICKERS if args.all_pages else DEFAULT_TICKERS)
+                else STOCK_PAGE_TICKERS if (args.all_pages or args.stale_only)
+                else DEFAULT_TICKERS)
 
     out = json.loads(OUT.read_text()) if OUT.exists() else {}
     today = datetime.date.today().isoformat()
+
+    if args.stale_only:
+        cutoff = (datetime.date.today() - datetime.timedelta(days=100)).isoformat()
+        def stale(tid):
+            e = out.get(tid) or {}
+            qs = e.get("quarters") or []
+            if not qs:
+                return True
+            newest = max((q.get("period_end") or "") for q in qs)
+            return newest < cutoff
+        todo_ids = [t for t in todo_ids if stale(t)]
+        print(f"stale-only: {len(todo_ids)} due: {todo_ids}", flush=True)
 
     if args.fresh_days:
         def fresh(tid):

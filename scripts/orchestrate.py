@@ -57,6 +57,14 @@ def main():
     # most days this returns in seconds; a full refresh runs 4 parallel
     # research calls and can take ~15 min.
     results['catalyst_calendar'] = run_script('catalyst_calendar', timeout=1500)
+    # Stock Pages research - each has an internal freshness TTL so most days
+    # these are fast no-ops; full refreshes are long, hence generous timeouts.
+    results['stock_page_extras'] = run_script('stock_page_extras', '--fresh-days', '7', timeout=3600)
+    results['delivery_war'] = run_script('delivery_war', timeout=900)  # 3-day TTL internally
+    results['model_launches'] = run_script('model_launches', timeout=1800)  # 14-day TTL internally
+    # segment financials refresh only for names whose newest researched quarter
+    # is >100 days old (a fresh print has likely landed) - usually a no-op
+    results['deep_financials'] = run_script('deep_financials', '--stale-only', timeout=3600)
     results['news'] = run_script('news')
     results['macro_events'] = run_script('macro_events')
 

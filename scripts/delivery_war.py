@@ -50,6 +50,17 @@ def parse_obj(text):
 
 def main():
     today = datetime.date.today()
+    # 3-day TTL - the loss metrics only change quarterly; daily re-research
+    # would be pure spend
+    if OUT.exists():
+        try:
+            prev = json.loads(OUT.read_text())
+            age = (today - datetime.date.fromisoformat(prev.get("fetched", ""))).days
+            if age < 3 and prev.get("companies"):
+                print(f"delivery_war: fresh ({age}d old), skipping")
+                return
+        except (ValueError, json.JSONDecodeError, OSError):
+            pass
     prompt = (
         f"Today is {today.isoformat()}. Research the China food-delivery / instant-"
         "commerce subsidy war between Meituan (3690.HK), Alibaba (9988.HK, Taobao "
