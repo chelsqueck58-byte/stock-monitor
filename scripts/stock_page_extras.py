@@ -28,13 +28,25 @@ import threading
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
+import feed
+
 ROOT = Path(__file__).resolve().parent.parent
 UNIVERSE = ROOT / "config" / "universe.json"
 DATA_JSON = ROOT / "site" / "data.json"
 OUT = ROOT / "data" / "stock-page-extras.json"
 WORKERS = 3
 TICKERS = ["META", "NVDA", "9988", "6181", "AAPL", "MSFT", "GOOGL", "AMZN",
-           "0700", "AMD", "AVGO", "INTC", "TSM", "ASML", "MU", "MRVL"]
+           "0700", "AMD", "AVGO", "INTC", "TSM", "ASML", "MU", "MRVL",
+           "3690", "9618"]
+# HK/China-listed names: research MUST lean on Chinese-language sources -
+# product dates, delivery-war economics and policy moves appear there first.
+CHINA_TIDS = {"9988", "0700", "3690", "9618", "1810", "6181", "SMI", "688256"}
+CHINA_HINT = (
+    "\nThis is a China/HK-listed company: actively search CHINESE-LANGUAGE sources "
+    "and cite them - LatePost/晚点, 36kr, Caixin/财新, Jiemian/界面, Sina Finance/"
+    "新浪财经, ifeng/凤凰网, 21jingji, eastmoney/东方财富, IT之家, ijiwei/爱集微 for "
+    "semis, China Gold Association for gold - alongside HKEX filings and company IR. "
+    "English wires alone are not sufficient sourcing for this name.\n")
 
 
 def ask_claude(prompt, timeout=800):
@@ -61,6 +73,10 @@ def parse_obj(text):
 
 
 def research(tid, label, next_earn):
+    fx = feed.relevant_excerpt_week(tid, label, max_chars=2000)
+    feed_block = (f"\nTHIS WEEK'S FEED (Telegram/Gmail/X analyst accounts) on this name - "
+                  f"check it FIRST for chatter-sourced events and watch items, cite "
+                  f"[X @handle]/[Telegram]/[Gmail]:\n{fx}\n" if fx else "")
     prompt = (
         f"Today is {datetime.date.today().isoformat()}. You are an event-driven trader "
         f"building a reference page for {label} ({tid}). Research (web search; official "
@@ -85,6 +101,9 @@ def research(tid, label, next_earn):
         f"4. preview: for the next earnings ({next_earn or 'date TBC'}): {{\"expects\":"
         "\"consensus rev/EPS + the bar, <=220 chars\", \"watch\":[\"2-4 items, <=90 chars "
         "each\"], \"read\":\"one-line trader read on the asymmetry, <=160 chars\"}}.\n\n"
+        f"{feed_block}"
+        f"{CHINA_HINT if tid in CHINA_TIDS else ''}"
+        f"{feed.SOURCE_HINT}\n"
         "RULES: never invent dates/numbers; '(est.)' for estimates; every block cites "
         "sources. CRITICAL: reply with ONLY the JSON object:\n"
         '{"past_events":[...],"pe_narrative":"...","guidance_revisions":[...],'

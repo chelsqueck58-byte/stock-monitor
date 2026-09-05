@@ -58,7 +58,7 @@ DEFAULT_TICKERS = ["META", "NVDA", "9988", "6181"]
 # chunks - each ticker costs two long web-research calls.
 STOCK_PAGE_TICKERS = ["META", "NVDA", "9988", "6181", "AAPL", "MSFT", "GOOGL",
                       "AMZN", "0700", "AMD", "AVGO", "INTC", "TSM", "ASML",
-                      "MU", "MRVL"]
+                      "MU", "MRVL", "3690", "9618"]
 
 
 def ask_claude(prompt, timeout=900):
