@@ -69,18 +69,34 @@ def research_chunk(item):
                 f"{excerpt}\nCheck this first for any move dated within the last {FEED_RELEVANT_DAYS} "
                 "days before web-searching it.\n"
             )
+    # two move shapes share this pipeline: single-day (>=5% that day) and
+    # "grind" (a cumulative move over several trading days where no single
+    # day was that big - phrase these as a range, not a single headline day,
+    # or the model will hunt for a same-day catalyst that doesn't exist
+    move_lines = []
+    for m in moves:
+        if m.get("window_days"):
+            move_lines.append(f"{m['window_start']} to {m['d']} "
+                              f"({m['window_days']} trading days): {m['pct']:+}% cumulative")
+        else:
+            move_lines.append(f"{m['d']} {m['pct']:+}%")
     prompt = (
-        f"You research why {label} ({tid}) moved on specific days. For EACH dated move below, "
-        f"use web search to find the SPECIFIC reason it moved that day.{EXTRA_SOURCE_HINT}\n"
-        'RULES: the reason must be grounded in a real dated article. If no credible source, set '
+        f"You research why {label} ({tid}) moved on the dates/windows below. Two kinds: a plain "
+        "date is a single-day move (find what happened THAT day); a date range with 'cumulative' is "
+        "a slow multi-day grind where no single day was dramatic - find the narrative/catalysts "
+        f"across that window that add up to the net move (e.g. a string of related headlines, "
+        f"analyst upgrades, or a sector re-rating), not one article.{EXTRA_SOURCE_HINT}\n"
+        'RULES: the reason must be grounded in real dated article(s). If no credible source, set '
         'reason to "". Never invent. reason <=140 chars. market_wide=true ONLY if it was a '
-        "sector/index-wide move (e.g. broad China selloff), not company-specific. source = outlet.\n"
+        "sector/index-wide move (e.g. broad China selloff), not company-specific. source = outlet "
+        "(or comma-separated outlets for a grind spanning several stories).\n"
         f"{feed_block}\n"
         "CRITICAL OUTPUT RULE: after you finish searching, your reply must contain NOTHING but the "
         "JSON array. No explanation, no markdown fencing, no summary before or after it — the reply "
-        "IS the JSON array and nothing else.\n"
+        "IS the JSON array and nothing else. For date ranges, use the RANGE END as \"date\" in your "
+        "reply so it matches the input.\n"
         'Format: [{"date":"YYYY-MM-DD","reason":"...","source":"...","market_wide":false}]\n\n'
-        "MOVES:\n" + "\n".join(f"{m['d']} {m['pct']:+}%" for m in moves)
+        "MOVES:\n" + "\n".join(move_lines)
     )
     raw = ask_claude(prompt)
     parsed = parse_array(raw)

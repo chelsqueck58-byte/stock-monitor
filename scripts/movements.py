@@ -27,10 +27,16 @@ from sources import SourceError, get_source
 ROOT = Path(__file__).resolve().parent.parent
 CONFIG = ROOT / "config" / "universe.json"
 OUT = ROOT / "data" / "moves.json"
-BIG = 5.0        # research threshold — every move this size or bigger
+BIG = 5.0        # research threshold — every single-day move this size or bigger
 CAP = 999        # comprehensive: keep them all
 MARKET_MOVE = 1.5  # if the index moved >= this same-direction, tag market-wide
 LOOKBACK_DAYS = 450  # ~15 months - see module docstring for why this isn't 730
+GRIND_WINDOW = 5     # trading days
+GRIND_BIG = 6.0      # cumulative % over GRIND_WINDOW days that flags a "slow grind" -
+                     # confirmed live on META's Aug 18 -> Sep 4 2026 climb (+13.4%
+                     # cumulative), which never tripped BIG on any single day (worst
+                     # day was -4.4%) and so sat completely unresearched despite
+                     # being a real, catalyst-driven move
 
 
 def daily_moves(bars):
@@ -39,6 +45,42 @@ def daily_moves(bars):
         c, pc = bars[i]["close"], bars[i - 1]["close"]
         if c and pc:
             out.append({"d": bars[i]["date"], "pct": round((c / pc - 1) * 100, 1), "px": round(c, 2)})
+    return out
+
+
+def grind_moves(bars, daily):
+    """Detect multi-day 'slow grind' moves that never trip BIG on any single
+    day but add up to something real over GRIND_WINDOW trading days - e.g. a
+    steady climb on a string of sub-5% days. Skips any window that contains a
+    day already >=BIG (that day gets researched on its own; no need to double
+    up). Overlapping candidate windows are resolved by keeping the strongest
+    (by |cumulative %|) and discarding anything else that shares a day with it,
+    so a single real 2-3 week grind produces one flagged window, not five."""
+    n = len(bars)
+    big_days = {m["d"] for m in daily if abs(m["pct"]) >= BIG}
+    candidates = []
+    for i in range(GRIND_WINDOW, n):
+        c, pc = bars[i]["close"], bars[i - GRIND_WINDOW]["close"]
+        if not c or not pc:
+            continue
+        window_dates = [bars[j]["date"] for j in range(i - GRIND_WINDOW + 1, i + 1)]
+        if any(d in big_days for d in window_dates):
+            continue
+        pct = round((c / pc - 1) * 100, 1)
+        if abs(pct) >= GRIND_BIG:
+            candidates.append({
+                "d": bars[i]["date"], "pct": pct, "px": round(c, 2),
+                "window_days": GRIND_WINDOW, "window_start": bars[i - GRIND_WINDOW]["date"],
+                "_span": set(window_dates),
+            })
+    candidates.sort(key=lambda m: abs(m["pct"]), reverse=True)
+    out, claimed = [], set()
+    for m in candidates:
+        if m["_span"] & claimed:
+            continue
+        claimed |= m["_span"]
+        del m["_span"]
+        out.append(m)
     return out
 
 
@@ -80,8 +122,16 @@ def main():
             tid = member["id"]
             if tid not in bars_by_id:
                 continue
-            detected = [m for m in daily_moves(bars_by_id[tid]) if abs(m["pct"]) >= BIG]
-            prior_by_date = {m["d"]: m for m in existing.get(tid, {}).get("moves", [])}
+            all_daily = daily_moves(bars_by_id[tid])
+            detected = [m for m in all_daily if abs(m["pct"]) >= BIG]
+            prior_by_date = {m["d"]: m for m in existing.get(tid, {}).get("moves", [])
+                             if not m.get("window_days")}
+            # grinds keyed by (window_start, end date) - distinct from the plain-date
+            # key above so a grind ending on the same day as an unrelated single-day
+            # move (different ticker-days, same calendar date) never collides
+            prior_by_grind = {(m.get("window_start"), m["d"]): m
+                              for m in existing.get(tid, {}).get("moves", [])
+                              if m.get("window_days")}
 
             moves = []
             for m in detected:
@@ -90,6 +140,18 @@ def main():
                     continue
                 idx_moves = index_by_date.get(m["d"], [])
                 m["market_wide"] = any((ip > 0) == (m["pct"] > 0) and abs(ip) >= MARKET_MOVE for ip in idx_moves)
+                m["reason"] = None
+                m["source"] = None
+                m["checked"] = False
+                moves.append(m)
+                new_count += 1
+
+            for m in grind_moves(bars_by_id[tid], all_daily):
+                key = (m["window_start"], m["d"])
+                if key in prior_by_grind:
+                    moves.append(prior_by_grind[key])
+                    continue
+                m["market_wide"] = False  # grinds are cumulative drift, not a dated index-wide event
                 m["reason"] = None
                 m["source"] = None
                 m["checked"] = False
