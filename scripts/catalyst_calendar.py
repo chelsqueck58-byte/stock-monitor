@@ -1,4 +1,4 @@
-"""Dated catalyst calendar for the ~20 key liquid names, next 3 months.
+"""Dated catalyst calendar for the ~20 key liquid names, next 6 months.
 
 Unlike catalysts.py (one-line "live storyline" per priority ticker), this
 produces MULTIPLE dated events per stock - earnings dates, product launches/
@@ -121,7 +121,7 @@ def research_batch(batch, today, horizon):
     listing = "\n".join(blocks)
     prompt = (
         f"Today is {today.isoformat()}. For EACH stock below, find its dated upcoming "
-        f"CATALYSTS between now and {horizon.isoformat()} (next ~3 months). Cover, where they "
+        f"CATALYSTS between now and {horizon.isoformat()} (next ~6 months). Cover, where they "
         "exist:\n"
         "- next EARNINGS report date (confirmed from company IR if possible; if only an "
         "estimated date exists, still include it with '(est.)' in the title and "
@@ -142,7 +142,8 @@ def research_batch(batch, today, horizon):
         "- recurring SALES/SHIPMENT datapoints with known release dates: monthly revenue "
         "releases (Taiwan-listed names), EV delivery numbers, smartphone sell-through "
         "reports, memory contract-price prints - the scheduled numbers the market trades\n\n"
-        "2-7 events per stock, only events with a credible dated source from the last ~30 "
+        "3-10 events per stock (6 months has more room than 3 - two earnings prints, not "
+        "just one, plus the full conference/product calendar), only events with a credible dated source from the last ~30 "
         "days of reporting or an official calendar. Never invent a date: if a real event has "
         "no firmer timing than a month, use that month's mid-point as the date and set "
         "precision 'month'. If timing is vaguer than a month or the event is stale rumor, "
@@ -172,7 +173,7 @@ def research_macro(today, horizon):
         "events (politburo/economic work meetings, stimulus decision windows), major "
         "industry conferences (e.g. Nvidia GTC events, CES if in window, major semi "
         "industry events), TSMC monthly revenue release cadence (flag once), and any "
-        "US-China trade/export-control deadlines with a real date. 8-15 events, each with "
+        "US-China trade/export-control deadlines with a real date. 12-20 events, each with "
         "a credible source. Use type 'Macro' for economic/policy events and 'Industry' for "
         "conferences/industry datapoints. Never invent a date; precision 'month' with a "
         "mid-month placeholder date if only the month is known.\n\n"
@@ -193,7 +194,7 @@ def main():
 
     todo_ids = [t.strip() for t in args.tickers.split(",")] if args.tickers else KEY_TICKERS
     today = datetime.date.today()
-    horizon = today + datetime.timedelta(days=95)
+    horizon = today + datetime.timedelta(days=183)
 
     out = {"tickers": {}, "macro": {"events": [], "fetched": None}}
     if OUT.exists():

@@ -56,7 +56,7 @@ def main():
     # 3-month dated calendar for key names - internal 3-day freshness TTL, so
     # most days this returns in seconds; a full refresh runs 4 parallel
     # research calls and can take ~15 min.
-    results['catalyst_calendar'] = run_script('catalyst_calendar', timeout=1500)
+    results['catalyst_calendar'] = run_script('catalyst_calendar', timeout=2100)
     # Stock Pages research - each has an internal freshness TTL so most days
     # these are fast no-ops; full refreshes are long, hence generous timeouts.
     results['stock_page_extras'] = run_script('stock_page_extras', '--fresh-days', '7', timeout=3600)
