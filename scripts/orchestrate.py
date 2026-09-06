@@ -62,6 +62,7 @@ def main():
     results['stock_page_extras'] = run_script('stock_page_extras', '--fresh-days', '7', timeout=3600)
     results['delivery_war'] = run_script('delivery_war', timeout=900)  # 3-day TTL internally
     results['model_launches'] = run_script('model_launches', timeout=1800)  # 14-day TTL internally
+    results['deal_map'] = run_script('deal_map', timeout=1000)  # 7-day TTL internally
     # segment financials refresh only for names whose newest researched quarter
     # is >100 days old (a fresh print has likely landed) - usually a no-op
     results['deep_financials'] = run_script('deep_financials', '--stale-only', timeout=3600)

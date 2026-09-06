@@ -87,17 +87,23 @@ def research(tid, label, next_earn):
         "important but did NOT move the stock (do not filter to movers - the point is to "
         "see what the market shrugged off). Each: {\"date\":\"YYYY-MM-DD\", \"title\":"
         "\"<=110 chars\", \"why\":\"why it mattered / was expected to matter, <=110 chars\", "
-        "\"src\":\"outlet\"}. Do NOT include the stock's price reaction - that is computed "
-        "separately from price data.\n\n"
+        "\"impact\":\"pos\"|\"neg\"|\"unclear\" (the direction the news SHOULD have moved "
+        "the stock a priori), \"src\":\"outlet\"}. Do NOT include the stock's price "
+        "reaction - that is computed separately from price data.\n\n"
         "2. pe_narrative: 2-3 sentences (<=420 chars) on how the market's multiple for "
         "this name has re-rated over the last ~2 years and WHY (the market's stated "
         "reasons: rate cycle, AI narrative, capex fear, policy risk...), grounded in "
         "actual analyst/press commentary.\n\n"
-        "3. guidance_revisions: how the company's OWN guidance moved print-over-print "
-        "over the last ~4 quarters - for hyperscalers use the FY capex guide; otherwise "
-        "the most-watched guide (FY revenue/GM/segment). 2-5 items, each {\"when\":"
-        "\"e.g. Q2'26 call (Jul 2026)\", \"change\":\"e.g. FY26 capex raised to "
-        "$125-145B from $115-135B\", \"src\":\"...\"}. Only real disclosed guides.\n\n"
+        "3. guidance_table: the company's OWN guidance tracked across its last 4-5 "
+        "earnings calls, structured for a table whose COLUMNS are the calls "
+        "(chronological, oldest first) and ROWS are the guided metrics. Use the 1-3 "
+        "most-watched guides (hyperscalers: FY capex + next-Q revenue; semis: next-Q "
+        "revenue + GM; others: the guides the stock actually trades). Format: "
+        '{"calls":["Q3\'25 call (Oct 2025)","Q4\'25 call (Jan 2026)",...],'
+        '"rows":[{"metric":"FY26 capex","values":["-","$100-110B","$115-135B",'
+        '"$130-145B"],"src":"earnings releases"}]} - values array aligns 1:1 with '
+        "calls, use \"-\" where that call gave no guide for the metric. ONLY real "
+        "disclosed guides, exact ranges as stated.\n\n"
         f"4. preview: for the next earnings ({next_earn or 'date TBC'}): {{\"expects\":"
         "\"consensus rev/EPS + the bar, <=220 chars\", \"watch\":[\"2-4 items, <=90 chars "
         "each\"], \"read\":\"one-line trader read on the asymmetry, <=160 chars\"}}.\n\n"
@@ -111,7 +117,7 @@ def research(tid, label, next_earn):
         f"{feed.SOURCE_HINT}\n"
         "RULES: never invent dates/numbers; '(est.)' for estimates; every block cites "
         "sources. CRITICAL: reply with ONLY the JSON object:\n"
-        '{"past_events":[...],"pe_narrative":"...","guidance_revisions":[...],'
+        '{"past_events":[...],"pe_narrative":"...","guidance_table":{...},'
         '"preview":{...},"segment_explainers":[...]}'
     )
     raw = ask_claude(prompt)
@@ -185,6 +191,9 @@ def main():
         obj = research(tid, labels.get(tid, tid), next_earn)
         with lock:
             if obj and obj.get("past_events"):
+                gt = obj.get("guidance_table") or {}
+                if not (gt.get("calls") and gt.get("rows")):
+                    obj.pop("guidance_table", None)
                 obj["past_events"] = attach_moves(
                     [e for e in obj["past_events"] if e.get("date") and e.get("title")],
                     inst.get("bars") or [])
