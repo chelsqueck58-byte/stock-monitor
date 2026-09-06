@@ -152,3 +152,45 @@ earnings focus: 18 names total -> /Users/chelsqueck/stock-monitor/data/earnings.
   CRDO: Q1 FY27 earnings due Sept 1; guided $465-475M rev, high-60s margins signal AI data-center 
 catalysts: 33 names total -> /Users/chelsqueck/stock-monitor/data/catalysts.json
 macro events still fresh (2d old), skipping
+[2026-09-06T07:30:22.483320] processed 0 new message(s)
+[2026-09-06T07:30:22.702025] doc processor starting
+nothing new to merge
+API connection failed: ConnectionRefusedError(61, "Connect call failed ('127.0.0.1', 4001)")
+Make sure API port on TWS/IBG is open
+IB Gateway not reachable ([Errno 61] Connect call failed ('127.0.0.1', 4001)); keeping existing iv.json
+[gmail collect failed] No module named 'google'
+sources: X=117 Gmail=0 Telegram=4
+news: 15 tickers tagged (priority searched: ['TSLA', '9866', 'DBS', 'OCBC', 'SBUX', 'PEP', 'PG']) -> /Users/chelsqueck/stock-monitor/data/news.json
+  NVDA: Nvidia acquiring Hugging Face for $12.9B; will remain open platform, not required to use N
+  AMD: AMD & Cisco deployed MI335X GPUs+EPYC CPUs w/ HUMAIN (Saudi); up to 250MW buildout startin
+  INTC: Intel raised $20B at $95/sh; US govt 10% CHIPS stake; Nvidia ~$30B stake; SK Hynix eyeing 
+  AAPL: Recap: Apple secured semiconductor tariff exemption by committing to build Mac & iPhone ch
+  MU: Stock broke above $1,000; also doubling HBM capacity to ~100k wafers/mo by year-end for Nv
+  000660: Reportedly considering Intel Foundry for HBM4E base dies; Micron closing HBM capacity gap 
+  005930: Teaming up with Arm on 2nm on-device AI custom chips; OpenAI reportedly a key customer [X 
+  ARMUSD: Providing AIC architecture+RTL for Samsung's 2nm on-device AI custom chips; OpenAI reporte
+  MRVL: Nvidia-MediaTek partnership seen bullish for Marvell; Jensen Huang called Marvell the 'nex
+  2454: Nvidia-MediaTek partnership cited as bullish catalyst for Marvell, per analyst quoted on X
+  TSLA: Opened driverless Cybercab robotaxi (no steering wheel) in Austin w/ Starlink; stock fell 
+  META: Meta Connect confirmed for Sept 23-24 as Zuckerberg pushes AI & wearables roadmap [X @Stoc
+  CRDO: Reportedly considered for S&P 500 inclusion; announcement expected after close (unconfirme
+  PEP: Shifting $1.7B global media account to Publicis Groupe [Web]
+  PG: Rolled out new launches incl. Febreze x Dunkin' scent collection and updated Olay Repair S
+events: 14 tickers with dated catalysts -> /Users/chelsqueck/stock-monitor/data/events.json
+4 tickers due (skipped 0 still-fresh)
+  MU: Watch Q4 FY26 revenue guide (~$38-42B) & HBM4 ramp/2027 supply-agreement commentary vs SK 
+  PEP: Watch whether Q3 holds the 2-4% organic growth guide and extends its EPS-beat streak amid 
+  COST: Watch core comps ex-gas/FX (ran 6.6% in July), worldwide traffic (+3.6%), and US/Canada re
+  NKE: Watch if Q1 FY27 gross margin turns positive as guided (first expansion quarter of the tur
+earnings focus: 4 names total -> /Users/chelsqueck/stock-monitor/data/earnings.json
+8 tickers due (skipped 0 still-fresh): ['TSLA', '9866', 'DBS', 'OCBC', 'SBUX', 'PEP', 'COST', 'PG']
+  TSLA: Tesla opened fully driverless (no steering wheel) Cybercab robotaxi service to the public 
+  9866: NIO's Q3 delivery ramp is now the focus: ONVO/Firefly drove July deliveries up 71% YoY, te
+  DBS: DBS's capital-return path is the live story: ordinary dividend rising to S$0.66/qtr in 202
+  OCBC: OCBC's new China UnionPay/WeChat Pay scan-and-pay tie-up and Ant International cross-borde
+  SBUX: Starbucks faces a union-led national boycott from Sept 3 while defending its FY26 EPS guid
+  PEP: PepsiCo's next test is Q3 2026 earnings Oct 8 with CEO Laguarta, after shifting its $1.7B 
+  COST: Q4 FY26 earnings due Sept 24 with EPS $6.51E/rev $94.46B est.; watch margin, digital & mem
+  PG: Moody's raised credit outlook to positive on FCF/margin strength; CFO Schulten presents at
+catalysts: 56 names total -> /Users/chelsqueck/stock-monitor/data/catalysts.json
+macro events still fresh (0d old), skipping

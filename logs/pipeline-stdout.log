@@ -561,3 +561,262 @@ Wrote /Users/chelsqueck/stock-monitor/site/data.json (6093 KB) - 74 ok, 0 failed
   ✓ earnings_research
   ✓ movements_research
   ✓ build
+
+============================================================
+[PIPELINE START] 2026-09-06 07:30:01
+
+
+============================================================
+[07:30:01] Running fundamentals...
+
+fundamentals: 83 ok, 0 reused last-good, 0 never fetched -> /Users/chelsqueck/stock-monitor/data/fundamentals.json
+
+[fundamentals] ✓ OK
+
+============================================================
+[07:31:05] Running catalysts...
+
+8 tickers due (skipped 0 still-fresh): ['TSLA', '9866', 'DBS', 'OCBC', 'SBUX', 'PEP', 'COST', 'PG']
+  TSLA: Cybercab went driverless-public in Austin Sept 4 (no steering wheel); stock fell ~6% as in
+  9866: NIO's Sept 1 Q2 print beat on margin (18.5%, 2nd straight op-profit qtr) but Q3 guide (108
+  DBS: DBS continues its SGD3B buyback plus SGD0.15/qtr Capital Return dividend; Q3 results due e
+  OCBC: OCBC is executing its S$2.5B capital return program after record 1H26 profit (+13% to S$4.
+  SBUX: Starbucks just closed its Boyu Capital JV, selling 60% of China retail for ~$10B to fund t
+  PEP: PepsiCo hiked its dividend 4% to $1.48/share (record Sept 4, paid Sept 30) while executing
+  COST: FQ4 FY26 earnings due late Sept; market watching for a special dividend (last was $15/sh i
+  PG: Next earnings (FQ1 FY27, ~mid-Oct) will show margin hit from ~$400M tariff cost & 7,000-jo
+catalysts: 56 names total -> /Users/chelsqueck/stock-monitor/data/catalysts.json
+
+[catalysts] ✓ OK
+
+============================================================
+[07:33:04] Running catalyst_calendar...
+
+0 tickers due: []
+catalyst_calendar: 25 tickers, 96 ticker events, 23 macro events -> /Users/chelsqueck/stock-monitor/data/catalyst-calendar.json
+
+[catalyst_calendar] ✓ OK
+
+============================================================
+[07:33:04] Running stock_page_extras...
+
+0 tickers due (skipped 18 fresh): []
+stock_page_extras: 18 tickers -> /Users/chelsqueck/stock-monitor/data/stock-page-extras.json
+
+[stock_page_extras] ✓ OK
+
+============================================================
+[07:33:04] Running delivery_war...
+
+delivery_war: fresh (1d old), skipping
+
+[delivery_war] ✓ OK
+
+============================================================
+[07:33:04] Running model_launches...
+
+0 tickers due: []
+model_launches: 6 tickers, 8 ecosystem events -> /Users/chelsqueck/stock-monitor/data/model-launches.json
+
+[model_launches] ✓ OK
+
+============================================================
+[07:33:04] Running deal_map...
+
+deal_map: fresh (0d), skipping
+
+[deal_map] ✓ OK
+
+============================================================
+[07:33:05] Running deep_financials...
+
+stale-only: 3 due: ['6181', 'MU', '3690']
+3 tickers to research
+  6181     2 fiscal years, 6 quarters, 1 segments
+  MU       2 fiscal years, 8 quarters, 4 segments
+  3690     2 fiscal years, 8 quarters, 2 segments
+deep_financials: 27 tickers -> /Users/chelsqueck/stock-monitor/data/deep-financials.json
+
+[deep_financials] ✓ OK
+
+============================================================
+[07:49:47] Running news...
+
+[gmail collect failed] No module named 'google'
+sources: X=90 Gmail=0 Telegram=4
+news: 15 tickers tagged (priority searched: ['TSLA', '9866', 'DBS', 'OCBC', 'SBUX', 'PEP', 'PG']) -> /Users/chelsqueck/stock-monitor/data/news.json
+  NVDA: Nvidia investing $3.5B into MediaTek, which joins NVLink Fusion ecosystem for custom silic
+  MSFT: Lambda raised ~$1B in debt to buy Nvidia GPUs that Microsoft will lease, per Bloomberg [X 
+  AMZN: AWS deploying first AI Zone in Saudi Arabia with HUMAIN (up to 50MW, target 2028), using T
+  AMD: AMD/Cisco launched live MI335X GPU deployment w/ Saudi Arabia's HUMAIN; also named in AWS 
+  MRVL: Intel's EMIB-T packaging roadmap may make Marvell a customer for next-gen AI systems, per 
+  INTC: SK Hynix reportedly weighing Intel Foundry for portion of HBM4e base die production to eas
+  TSM: TSMC's HBM4 base dies reportedly cost 3-4x SK Hynix's in-house dies, cited as reason SK Hy
+  000660: SK Hynix reportedly considering Intel Foundry for portion of HBM4e base die production to 
+  MU: Micron Taiwan held first official mediation with Taoyuan union over bonus pay (Fri 9/4); n
+  2454: Nvidia investing $3.5B into MediaTek, which joins NVLink Fusion ecosystem for custom silic
+  TSLA: Elon Musk says Sony PlayStation & Microsoft Xbox consoles will soon plug directly into Tes
+  COHR: Sumitomo Chemical starts mass production of 4-inch InP wafers for AI data centers/networks
+  9866: Goldman Sachs maintained Buy on NIO (Sep 4) even as stock fell on Q2 revenue miss and soft
+  SBUX: Starbucks stock pops as CEO Niccol touts 'third place' revival and improved 2026 outlook i
+  PG: Moody's raised P&G's credit outlook to positive, citing sustained free cash flow and earni
+events: 14 tickers with dated catalysts -> /Users/chelsqueck/stock-monitor/data/events.json
+
+[news] ✓ OK
+
+============================================================
+[07:51:40] Running macro_events...
+
+macro events still fresh (0d old), skipping
+
+[macro_events] ✓ OK
+
+============================================================
+[07:51:40] Running movements...
+
+moves: 81 names, 3863 total (>= 5.0%), 0 new unresearched (0 fetch failures) -> /Users/chelsqueck/stock-monitor/data/moves.json
+
+[movements] ✓ OK
+
+============================================================
+[07:52:25] Running earnings_research...
+
+0 tickers due (skipped 4 still-fresh)
+earnings focus: 4 names total -> /Users/chelsqueck/stock-monitor/data/earnings.json
+
+[earnings_research] ✓ OK
+
+============================================================
+[07:52:25] Running movements_research...
+
+0 chunks across 81 names, 6 in parallel
+done: 3104/3863 moves sourced
+
+[movements_research] ✓ OK
+
+============================================================
+[07:52:26] Running build...
+
+  ok   SPY            770.19  730 bars
+  ok   QQQ            718.96  730 bars
+  ok   PDD             82.21  730 bars
+  ok   2513         1,075.00  162 bars
+  ok   0100           361.40  161 bars
+  ok   9988           110.10  730 bars
+  ok   0700           442.80  730 bars
+  ok   9618           110.40  730 bars
+  ok   3690            81.75  730 bars
+  ok   1810            28.44  730 bars
+  ok   9888            95.90  730 bars
+  ok   AMZN           258.51  730 bars
+  ok   NVDA           230.36  730 bars
+  ok   AAPL           319.97  730 bars
+  ok   MSFT           499.70  730 bars
+  ok   META           616.77  730 bars
+  ok   GOOGL          338.46  730 bars
+  ok   TSLA           354.08  730 bars
+  ok   TSM            428.91  730 bars
+  ok   000660   1,647,000.00  729 bars
+  ok   005930     255,500.00  729 bars
+  ok   MU           1,016.59  730 bars
+  ok   ARMUSD         252.09  730 bars
+  ok   688256       1,072.00  730 bars
+  ok   688825          54.80  30 bars
+  ok   AMD            477.57  730 bars
+  ok   ASML         1,714.88  730 bars
+  ok   INTC            95.80  730 bars
+  ok   AVGO           357.90  730 bars
+  ok   SMCI            39.59  730 bars
+  ok   MRVL           223.55  730 bars
+  ok   2454         4,415.00  729 bars
+  ok   GFS             45.21  730 bars
+  ok   WDC            467.46  730 bars
+  ok   AMAT           454.71  730 bars
+  ok   LRCX           307.65  730 bars
+  ok   KLAC           185.60  730 bars
+  ok   COHR           281.86  730 bars
+  ok   LITE           881.25  730 bars
+  ok   CRDO           170.57  730 bars
+  ok   TEL            208.65  730 bars
+  ok   GLW            154.30  730 bars
+  ok   CIEN           321.00  730 bars
+  ok   AAOI           105.53  730 bars
+  ok   FN             407.40  730 bars
+  ok   ACMR            74.44  730 bars
+  ok   NINOY           12.10  730 bars
+  ok   MPWR         1,223.86  730 bars
+  ok   VICR           188.55  730 bars
+  ok   IFNNY           66.23  730 bars
+  ok   SMI             67.20  730 bars
+  ok   0175            17.28  730 bars
+  ok   1211            86.15  730 bars
+  ok   2015            47.82  730 bars
+  ok   9868            43.40  730 bars
+  ok   9866            29.50  730 bars
+  ok   3750           574.50  322 bars
+  ok   9863            37.78  730 bars
+  ok   UOB             42.01  727 bars
+  ok   KEPPEL          11.54  727 bars
+  ok   DBS             78.65  727 bars
+  ok   OCBC            32.27  727 bars
+  ok   SINGTEL          4.52  727 bars
+  ok   STENG           10.48  727 bars
+  ok   SGX             25.30  727 bars
+  ok   CAPLAND          2.66  727 bars
+  ok   SE             112.09  730 bars
+  ok   GRAB             3.42  730 bars
+  ok   MCD            255.69  730 bars
+  ok   SBUX           104.47  730 bars
+  ok   PEP            137.63  730 bars
+  ok   WMT            107.14  730 bars
+  ok   COST           915.74  730 bars
+  ok   PG             146.44  730 bars
+  ok   KO              88.07  730 bars
+  ok   NKE             38.40  730 bars
+  ok   DPZ            341.08  730 bars
+  ok   GRMN           277.03  730 bars
+  ok   6181           398.40  538 bars
+  ok   1929            12.08  730 bars
+  ok   0590            21.98  730 bars
+  ok   0116            14.36  730 bars
+  ok   002867          10.88  730 bars
+
+Wrote /Users/chelsqueck/stock-monitor/site/data.json (6619 KB) - 83 ok, 0 failed, source=yahoo
+
+[build] ✓ OK
+
+============================================================
+[07:53:14] Running reprice_forward_pe...
+
+reprice_forward_pe: 47 year-entries repriced across 25 tickers -> /Users/chelsqueck/stock-monitor/data/forward-pe.json
+
+[reprice_forward_pe] ✓ OK
+
+============================================================
+[07:53:14] Deploying...
+
+[stock-monitor] deployed to GitHub Pages (production)
+[ai-supply-chain] deployed to GitHub Pages (main)
+
+[deploy] ✓ OK
+
+============================================================
+[PIPELINE COMPLETE] 2026-09-06 07:53:22
+[SUMMARY] 16/16 stages OK, elapsed 1401s
+
+  ✓ fundamentals
+  ✓ catalysts
+  ✓ catalyst_calendar
+  ✓ stock_page_extras
+  ✓ delivery_war
+  ✓ model_launches
+  ✓ deal_map
+  ✓ deep_financials
+  ✓ news
+  ✓ macro_events
+  ✓ movements
+  ✓ earnings_research
+  ✓ movements_research
+  ✓ build
+  ✓ reprice_forward_pe
+  ✓ deploy
