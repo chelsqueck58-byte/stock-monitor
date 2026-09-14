@@ -8,12 +8,6 @@ DIR="/Users/chelsqueck/stock-monitor"
 cd "$DIR"
 export PATH="/opt/homebrew/bin:/Users/chelsqueck/.local/bin:/usr/local/bin:/usr/bin:/bin"
 
-LOCK="/tmp/stock-monitor-pipeline.lock"
-if [ -f "$LOCK" ]; then
-  echo "$(date '+%F %T') pipeline already running (lock present), skipping"
-  exit 0
-fi
-
 TODAY=$(TZ=Asia/Hong_Kong date +%Y-%m-%d)
 HOUR=$(TZ=Asia/Hong_Kong date +%H)
 
@@ -34,6 +28,4 @@ if [ "$GEN_DATE" = "$TODAY" ]; then
 fi
 
 echo "$(date '+%F %T') data stale (last generated $GEN_DATE, today is $TODAY) -- running catch-up pipeline"
-touch "$LOCK"
-trap 'rm -f "$LOCK"' EXIT
 .venv/bin/python3 scripts/orchestrate.py

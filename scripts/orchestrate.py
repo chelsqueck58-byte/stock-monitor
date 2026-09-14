@@ -10,6 +10,7 @@ Runs all data collection scripts sequentially with sensible checkpoints:
 
 Run: .venv/bin/python scripts/orchestrate.py
 """
+import fcntl
 import subprocess
 import sys
 import datetime
@@ -19,6 +20,8 @@ ROOT = Path(__file__).resolve().parent.parent
 SCRIPTS = ROOT / "scripts"
 LOGS = ROOT / "logs"
 LOGS.mkdir(exist_ok=True)
+
+LOCK_PATH = Path("/tmp/stock-monitor-pipeline.lock")
 
 def run_script(name, *args, timeout=600):
     """Run a script and return True if successful."""
@@ -47,11 +50,25 @@ def main():
 
     results = {}
 
+    # Stage 0: prereq ingestion - your Telegram-forwarded research + IBKR IV
+    # data. Best-effort (matches the script's own `|| true` per step): never
+    # blocks the rest of the pipeline.
+    print(f"\n{'='*60}\n[{datetime.datetime.now().strftime('%H:%M:%S')}] Running refresh-news (prereqs)...\n", flush=True)
+    try:
+        prereq = subprocess.run(["/bin/zsh", str(SCRIPTS / "refresh-news.sh")],
+                                 cwd=ROOT, timeout=600, capture_output=False)
+        results['refresh_news'] = prereq.returncode == 0
+    except Exception as e:
+        results['refresh_news'] = False
+        print(f"\n[refresh_news] ✗ ERROR: {e}", flush=True)
+
     # Stage 1: Fundamentals (fresh P/E, market cap, earnings dates)
     results['fundamentals'] = run_script('fundamentals')
 
     # Stage 2: Parallel web research (catalysts, news, macro)
-    # These can theoretically run in parallel, but running sequentially is safer for API limits
+    # news.py MUST run before catalysts/earnings_research - it writes
+    # data/feed-raw.txt (X+Gmail+Telegram combined) that they read.
+    results['news'] = run_script('news')
     results['catalysts'] = run_script('catalysts')
     # 3-month dated calendar for key names - internal 3-day freshness TTL, so
     # most days this returns in seconds; a full refresh runs 4 parallel
@@ -66,7 +83,6 @@ def main():
     # segment financials refresh only for names whose newest researched quarter
     # is >100 days old (a fresh print has likely landed) - usually a no-op
     results['deep_financials'] = run_script('deep_financials', '--stale-only', timeout=3600)
-    results['news'] = run_script('news')
     results['macro_events'] = run_script('macro_events')
 
     # Stage 3: Price movements & research
@@ -102,6 +118,14 @@ def main():
         results['deploy'] = False
         print("\n[deploy] ✗ SKIPPED (build failed)", flush=True)
 
+    # Stage 6: Daily Telegram brief - only once build succeeded, since it's
+    # built from the same freshly-merged data the site uses.
+    if results['build']:
+        results['daily_brief'] = run_script('daily_brief')
+    else:
+        results['daily_brief'] = False
+        print("\n[daily_brief] ✗ SKIPPED (build failed)", flush=True)
+
     # Summary
     end = datetime.datetime.now()
     elapsed = (end - start).total_seconds()
@@ -118,4 +142,14 @@ def main():
     return 0 if ok == total else 1
 
 if __name__ == "__main__":
-    sys.exit(main())
+    lock_fd = open(LOCK_PATH, "w")
+    try:
+        fcntl.flock(lock_fd, fcntl.LOCK_EX | fcntl.LOCK_NB)
+    except BlockingIOError:
+        print(f"[{datetime.datetime.now().strftime('%H:%M:%S')}] another orchestrate.py run holds the lock, skipping", flush=True)
+        sys.exit(0)
+    try:
+        sys.exit(main())
+    finally:
+        fcntl.flock(lock_fd, fcntl.LOCK_UN)
+        lock_fd.close()
