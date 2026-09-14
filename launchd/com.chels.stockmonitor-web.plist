@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.chels.stockmonitor-web</string>
+    <key>UserName</key>
+    <string>chelsqueck</string>
+    <key>GroupName</key>
+    <string>staff</string>
+    <key>ProgramArguments</key>
+    <array>
+        <string>/Users/chelsqueck/stock-monitor/.venv/bin/python</string>
+        <string>-m</string>
+        <string>http.server</string>
+        <string>8787</string>
+        <string>--bind</string>
+        <string>127.0.0.1</string>
+        <string>--directory</string>
+        <string>/Users/chelsqueck/stock-monitor/site</string>
+    </array>
+    <key>KeepAlive</key>
+    <true/>
+    <key>RunAtLoad</key>
+    <true/>
+    <key>StandardOutPath</key>
+    <string>/tmp/stockmonitor_web.log</string>
+    <key>StandardErrorPath</key>
+    <string>/tmp/stockmonitor_web_err.log</string>
+</dict>
+</plist>

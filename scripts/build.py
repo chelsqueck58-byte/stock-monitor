@@ -130,15 +130,27 @@ def find_prev_event_reaction(moves, event_desc):
     return None
 
 
+TELE_MAX_AGE_DAYS = 30
+
+
 def load_tele_research():
     """Parse catalysts.md/fundamentals.md/historicals.md (your own Telegram
     research, curated by tele-memory.py) into {ticker: {catalysts, fundamentals,
-    historicals}} so it can be merged onto each instrument for the website."""
+    historicals}} so it can be merged onto each instrument for the website.
+
+    Bullets carry no per-item date (tele-memory.py rewrites each file whole,
+    not line by line), so freshness can only be judged per FILE, via mtime -
+    a file untouched in 30+ days means nothing in it has been confirmed
+    current in a month, so it's dropped entirely rather than risk surfacing
+    a stale line (like a months-old product-launch note) as if it were live."""
     out = {}
     for name, key in (("catalysts.md", "catalysts"), ("fundamentals.md", "fundamentals"),
                        ("historicals.md", "historicals")):
         p = TELE_DOCS / name
         if not p.exists():
+            continue
+        age_days = (datetime.now().timestamp() - p.stat().st_mtime) / 86400
+        if age_days > TELE_MAX_AGE_DAYS:
             continue
         text = p.read_text()
         for m in re.finditer(r"^## (.+?)\n(.*?)(?=\n## |\Z)", text, re.DOTALL | re.MULTILINE):

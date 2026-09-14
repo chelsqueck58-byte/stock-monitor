@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.x-reader.scrape-safe</string>
+    <key>UserName</key>
+    <string>chelsqueck</string>
+    <key>GroupName</key>
+    <string>staff</string>
+    <key>WorkingDirectory</key>
+    <string>/Users/chelsqueck/x-reader</string>
+    <key>ProgramArguments</key>
+    <array>
+        <string>/Users/chelsqueck/x-reader/.venv/bin/python</string>
+        <string>/Users/chelsqueck/x-reader/x_scrape_safe.py</string>
+    </array>
+    <key>EnvironmentVariables</key>
+    <dict>
+        <key>PATH</key>
+        <string>/opt/homebrew/bin:/Users/chelsqueck/.local/bin:/usr/local/bin:/usr/bin:/bin</string>
+        <key>HOME</key>
+        <string>/Users/chelsqueck</string>
+    </dict>
+    <key>StartCalendarInterval</key>
+    <array>
+        <dict>
+            <key>Hour</key>
+            <integer>7</integer>
+            <key>Minute</key>
+            <integer>25</integer>
+        </dict>
+    </array>
+    <key>StandardOutPath</key>
+    <string>/Users/chelsqueck/x-reader/scrape-safe-stdout.log</string>
+    <key>StandardErrorPath</key>
+    <string>/Users/chelsqueck/x-reader/scrape-safe-stderr.log</string>
+</dict>
+</plist>

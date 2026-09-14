@@ -1,7 +1,13 @@
 #!/bin/zsh
-# Daily intel refresh (07:30 HKT, one run/day): X/Gmail/Telegram -> per-ticker
-# news + events + earnings focus + IV + your own Telegram-sent research. The
-# 10:00/22:00 price builds then pick up the fresh data.
+# Prereq ingestion, run as orchestrate.py's first stage (one run/day): your
+# own Telegram-forwarded research + IBKR implied-vol data. Everything that
+# reads X (x-reader's own com.x-reader.scrape-safe daemon, ~5min earlier) or
+# writes/reads data/feed-raw.txt (news.py, catalysts.py, earnings_research.py,
+# macro_events.py) now runs inside orchestrate.py itself, in dependency order
+# - this used to be a second, independently-scheduled LaunchAgent racing
+# orchestrate.py's identical 07:30 trigger with no ordering guarantee between
+# them, and separately called x_scrape.py directly, duplicating x-reader's
+# own scrape and doubling the bot-detection surface for no benefit.
 export PATH="/opt/homebrew/bin:/Users/chelsqueck/.local/bin:/usr/local/bin:/usr/bin:/bin"
 
 # --- Your Telegram research pipeline (synced to this one daily run, not
@@ -14,20 +20,5 @@ export PATH="/opt/homebrew/bin:/Users/chelsqueck/.local/bin:/usr/local/bin:/usr/
 #    only token-spending tele step; tracks merged IDs, never re-parses).
 ~/.claude/scripts/.venv/bin/python ~/.claude/scripts/tele-memory.py || true
 
-# Refresh the X digest (writes ~/x-reader/digest.json). Non-fatal if it fails.
-~/x-reader/.venv/bin/python ~/x-reader/x_scrape.py >/dev/null 2>&1 || true
 # IV rank / implied move from IBKR (keeps last iv.json if Gateway is down).
 ~/stock-monitor/.venv/bin/python ~/stock-monitor/scripts/ivdata.py || true
-# News tags + dated events, one fetch + one Claude call (was two scripts).
-# Also writes data/feed-raw.txt (X+Gmail+Telegram combined) - the two scripts
-# below read it via scripts/feed.py, so this MUST run before them.
-~/stock-monitor/.venv/bin/python ~/stock-monitor/scripts/news.py
-# Upcoming-earnings focus (batched, grounded, freshness-TTL'd). Checks
-# feed-raw.txt for this ticker before web-searching.
-~/stock-monitor/.venv/bin/python ~/stock-monitor/scripts/earnings_research.py || true
-# Broader non-earnings catalysts for priority tickers (freshness-TTL'd). Same
-# feed-first check as earnings_research.py above.
-~/stock-monitor/.venv/bin/python ~/stock-monitor/scripts/catalysts.py || true
-# Macro calendar (Fed/CPI/NFP/PMI) - market-wide, not tied to any ticker.
-# Freshness-TTL'd weekly, dates don't move day to day.
-~/stock-monitor/.venv/bin/python ~/stock-monitor/scripts/macro_events.py || true

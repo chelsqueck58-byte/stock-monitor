@@ -43,6 +43,7 @@ import json
 import os
 import re
 import subprocess
+import time
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
@@ -64,12 +65,19 @@ STOCK_PAGE_TICKERS = ["META", "NVDA", "9988", "6181", "AAPL", "MSFT", "GOOGL",
 def ask_claude(prompt, timeout=900):
     env = os.environ.copy()
     env.pop("ANTHROPIC_API_KEY", None)
-    try:
-        r = subprocess.run(["claude", "-p", prompt, "--allowedTools", "WebSearch"],
-                            capture_output=True, text=True, env=env, timeout=timeout)
-        return r.stdout.strip() if r.returncode == 0 else ""
-    except subprocess.TimeoutExpired:
-        return ""
+    for attempt in range(3):
+        try:
+            r = subprocess.run(["claude", "-p", prompt, "--allowedTools", "WebSearch"],
+                                capture_output=True, text=True, env=env, timeout=timeout)
+            return r.stdout.strip() if r.returncode == 0 else ""
+        except subprocess.TimeoutExpired:
+            return ""
+        except FileNotFoundError:
+            # intermittent exec-lookup failure for "claude" seen under the
+            # hourly watchdog's launchd context; retry before giving up
+            if attempt == 2:
+                return ""
+            time.sleep(2)
 
 
 def parse_obj(text):
