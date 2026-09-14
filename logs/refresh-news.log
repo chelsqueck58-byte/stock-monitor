@@ -194,3 +194,40 @@ earnings focus: 4 names total -> /Users/chelsqueck/stock-monitor/data/earnings.j
   PG: Moody's raised credit outlook to positive on FCF/margin strength; CFO Schulten presents at
 catalysts: 56 names total -> /Users/chelsqueck/stock-monitor/data/catalysts.json
 macro events still fresh (0d old), skipping
+[2026-09-07T07:30:26.245298] processed 0 new message(s)
+[2026-09-07T07:30:26.499849] doc processor starting
+nothing new to merge
+API connection failed: ConnectionRefusedError(61, "Connect call failed ('127.0.0.1', 4001)")
+Make sure API port on TWS/IBG is open
+IB Gateway not reachable ([Errno 61] Connect call failed ('127.0.0.1', 4001)); keeping existing iv.json
+[gmail collect failed] No module named 'google'
+sources: X=90 Gmail=0 Telegram=4
+news: 14 tickers tagged (priority searched: ['TSLA', '9866', 'DBS', 'OCBC', 'SBUX', 'PEP', 'PG']) -> /Users/chelsqueck/stock-monitor/data/news.json
+  MU: Micron Taiwan held first mediation with Taoyuan union over bonus pay Fri 9/4; no consensus
+  000660: SK Hynix reportedly weighing Intel Foundry for part of HBM4e base die production to cut co
+  INTC: SK Hynix weighing Intel Foundry for HBM4e base dies to cut costs vs costlier TSMC HBM4 bas
+  TSM: TSMC HBM4 base dies reportedly cost 3-4x SK Hynix's in-house dies amid HBM4e cost-pressure
+  MRVL: Intel's EMIB-T next-gen AI system substrate architecture tips Marvell as a customer, per I
+  NVDA: Nvidia investing $3.5B into MediaTek; MediaTek joining NVLink Fusion ecosystem for custom 
+  2454: Nvidia investing $3.5B into MediaTek, which joins NVLink Fusion ecosystem for custom silic
+  MSFT: AI cloud startup Lambda raised ~$1B in debt to buy Nvidia GPUs that Microsoft will lease, 
+  AMD: AMD/Cisco launched MI335X GPU + EPYC CPU deployment with Saudi Arabia's HUMAIN, scaling to
+  AMZN: AWS deploying first AI Zone in Saudi Arabia w/ HUMAIN, up to 50MW by 2028, using Trainium 
+  TSLA: Musk says PlayStation & Xbox consoles will soon plug into Tesla vehicles, fitting Cybercab
+  005930: Trader reiterates bullish memory stance on Samsung (and Micron), says bottleneck rotates a
+  COHR: Sumitomo starts mass output of 4-inch InP wafers (core optical-semis material) for AI data
+  PG: CFO Andre Schulten to speak at Barclays Global Consumer Staples Conference, Sept 10, 2026 
+events: 14 tickers with dated catalysts -> /Users/chelsqueck/stock-monitor/data/events.json
+0 tickers due (skipped 4 still-fresh)
+earnings focus: 4 names total -> /Users/chelsqueck/stock-monitor/data/earnings.json
+8 tickers due (skipped 0 still-fresh): ['TSLA', '9866', 'DBS', 'OCBC', 'SBUX', 'PEP', 'COST', 'PG']
+  TSLA: Musk says PlayStation/Xbox consoles will plug directly into Tesla vehicles, tying entertai
+  9866: NIO Q2 revenue miss (Sep 1) despite 14.5% August delivery growth; next catalysts are ES9 S
+  DBS: Shares hit record SGD79+ on Sep 4 (mkt cap >SGD220B); only ~12% of SGD3B buyback mandate u
+  OCBC: Q2 net profit +22% YoY on wealth management/trading strength; aggressive buybacks fuel spe
+  SBUX: Oct FY26 earnings call to test if raised guidance (comps ≥5%, EPS $2.25-2.45) holds after 
+  PEP: Reports Q3 2026 results Oct 8 — first real read on whether Elliott-driven margin-expansion
+  COST: Costco reports FQ4 earnings Sep 24, 2026 after close; market watching comp sales trend and
+  PG: P&G reports FQ1 2027 earnings Oct 21, 2026; focus on tariff drag (~$400-600M after-tax) an
+catalysts: 56 names total -> /Users/chelsqueck/stock-monitor/data/catalysts.json
+macro events still fresh (1d old), skipping

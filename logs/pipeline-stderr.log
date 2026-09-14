@@ -11,3 +11,25 @@ Traceback (most recent call last):
   File "/Users/chelsqueck/stock-monitor/scripts/ivdata.py", line 9, in <module>
     from ib_insync import IB, Stock, util
 ModuleNotFoundError: No module named 'ib_insync'
+API connection failed: ConnectionRefusedError(61, "Connect call failed ('127.0.0.1', 4001)")
+Make sure API port on TWS/IBG is open
+[stock-monitor] deploy repo missing at /Users/chelsqueck/stock-monitor-pages
+[publish 08:01:17] discarding local drift in front-end file(s): supply-chain.html
+[publish 08:01:18] staged 6 file(s): catalyst-calendar.json, data.json, deal-map.json, deep-financials.json, forward-pe.json, moves.json
+[publish 08:01:21] pushed to origin/main: 2fb1a13
+API connection failed: ConnectionRefusedError(61, "Connect call failed ('127.0.0.1', 4001)")
+Make sure API port on TWS/IBG is open
+[publish 08:01:20] discarding local drift in front-end file(s): index.html, supply-chain.html
+[publish 08:01:21] staged 5 file(s): data.json, deep-financials.json, delivery-war.json, forward-pe.json, moves.json
+[publish 08:01:24] pushed to origin/main: a5c1e4a
+API connection failed: ConnectionRefusedError(61, "Connect call failed ('127.0.0.1', 4001)")
+Make sure API port on TWS/IBG is open
+[publish 07:43:47] discarding local drift in front-end file(s): index.html, supply-chain.html
+[publish 07:43:47] staged 1 file(s): data.json
+[publish 07:43:50] pushed to origin/main: 08f943d
+daily brief: no data to build from
+API connection failed: ConnectionRefusedError(61, "Connect call failed ('127.0.0.1', 4001)")
+Make sure API port on TWS/IBG is open
+[publish 07:52:24] discarding local drift in front-end file(s): index.html, supply-chain.html
+[publish 07:52:25] staged 4 file(s): data.json, deal-map.json, deep-financials.json, delivery-war.json
+[publish 07:52:27] pushed to origin/main: 3608888

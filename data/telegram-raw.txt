@@ -1,17 +1,63 @@
-[Telegram @tradehaven] === @tradehaven - 1 new posts, 2026-09-05 23:33 to 2026-09-05 23:33 UTC ===
+[Telegram @tradehaven] === @tradehaven - 4 new posts, 2026-09-13 22:07 to 2026-09-13 23:21 UTC ===
 
-[2026-09-05 23:33 UTC] #77669
-People aged 65 and older now outnumber children ages 5 and younger worldwide for the first time in recorded history, according to a
-new report
-by the U.S. Census.
-https://www.axios.com/2026/09/03/older-adults-outnumber-youngest-children-globally
+[2026-09-13 22:07 UTC] #77978
+Daily Morning Brew - An apocalypse or ill advised moment for AI
+https://caffeinatedcaptial.substack.com/p/the-daily-morning-brew-an-ill-advised?utm_source=share&utm_medium=android&r=5dyxxv
+
+[2026-09-13 23:02 UTC] #77979
+KEY DATA  14-Nov
+JP  Industrial Production
+IN  CPI
+AUCTIONS
+Bills  GE 6M/12M FR 3M/6M/12M US 3M/6M
+
+[2026-09-13 23:03 UTC] #77980
+Oil advanced after Saudi Arabia shut a major crude pipeline following attacks, disrupting a route that’s been used to bypass the Strait of Hormuz during the US-Iran war and deepening a global energy crunch.
+Global benchmark Brent rose toward $108 a barrel, after rallying almost 9% last week, while West Texas Intermediate was near $103. European natural gas also gained, surging as much as 3.8%. Saudi Arabia said late on Friday that it had halted the East-West pipeline as a precaution after attacks the previous day. There’s been no indication of when operations will resume.
+https://www.bloomberg.com/news/articles/2026-09-13/latest-oil-market-news-and-analysis-for-sept-14
+
+[2026-09-13 23:21 UTC] #77981
+With 50% of the votes counted, the two main blocs were separated by only 20,000 votes, Sweden public broadcaster SVT said.
+https://www.bbc.com/news/articles/c0qx5d79kdeo
 
 
 
 [Telegram @Fin_Watch] === @Fin_Watch: no new posts since last check ===
 
 
-[Telegram @tech] === @tech: no new posts since last check ===
+[Telegram @tech] === @tech - 1 new posts, 2026-09-13 16:02 to 2026-09-13 16:02 UTC ===
+
+[2026-09-13 16:02 UTC] #3894
+🤖
+OpenAI launches ChatGPT for finance
+ChatGPT for Financial Services
+runs on
+GPT-6 Astra
+. Its built-in sources include
+Daloopa
+and
+PitchBook
+.
+LSEG News
+and
+Crunchbase
+are also available, with each figure traceable to its source.
+The model
+analyzes filings and tables
+, then
+compares metrics across periods
+. Corporate
+Excel, Word, or PowerPoint
+templates can be connected for company-formatted output.
+Morgan Stanley
+and
+Evercore
+helped create it. Access is currently
+limited to eligible financial organizations
+.
+📊
+@tech
 
 
-[Telegram @infinityhedge] === @infinityhedge: no new posts since last check ===
+
+[Telegram @infinityhedge] === @infinityhedge: no posts in the last 2 days ===

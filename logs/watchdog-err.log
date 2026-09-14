@@ -1,0 +1,149 @@
+Traceback (most recent call last):
+  File "/Users/chelsqueck/stock-monitor/scripts/movements_research.py", line 160, in <module>
+    main(scope)
+  File "/Users/chelsqueck/stock-monitor/scripts/movements_research.py", line 148, in main
+    for tid, n in ex.map(research_chunk, items):
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/chelsqueck/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/concurrent/futures/_base.py", line 619, in result_iterator
+    yield _result_or_cancel(fs.pop())
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/chelsqueck/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/concurrent/futures/_base.py", line 317, in _result_or_cancel
+    return fut.result(timeout)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/Users/chelsqueck/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/concurrent/futures/_base.py", line 456, in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+  File "/Users/chelsqueck/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/concurrent/futures/_base.py", line 401, in __get_result
+    raise self._exception
+  File "/Users/chelsqueck/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/concurrent/futures/thread.py", line 59, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/chelsqueck/stock-monitor/scripts/movements_research.py", line 117, in research_chunk
+    data = json.loads(MOVES.read_text())
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/chelsqueck/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/json/__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/chelsqueck/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/json/decoder.py", line 338, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/chelsqueck/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/json/decoder.py", line 356, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+Traceback (most recent call last):
+  File "/Users/chelsqueck/stock-monitor/scripts/deep_financials.py", line 295, in <module>
+    main()
+  File "/Users/chelsqueck/stock-monitor/scripts/deep_financials.py", line 266, in main
+    for tid, label, parsed in ex.map(research_one, todo):
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/chelsqueck/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/concurrent/futures/_base.py", line 619, in result_iterator
+    yield _result_or_cancel(fs.pop())
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/chelsqueck/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/concurrent/futures/_base.py", line 317, in _result_or_cancel
+    return fut.result(timeout)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/Users/chelsqueck/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/concurrent/futures/_base.py", line 456, in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+  File "/Users/chelsqueck/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/concurrent/futures/_base.py", line 401, in __get_result
+    raise self._exception
+  File "/Users/chelsqueck/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/concurrent/futures/thread.py", line 59, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/chelsqueck/stock-monitor/scripts/deep_financials.py", line 200, in research_one
+    company_wide = fut_cw.result()
+                   ^^^^^^^^^^^^^^^
+  File "/Users/chelsqueck/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/concurrent/futures/_base.py", line 456, in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+  File "/Users/chelsqueck/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/concurrent/futures/_base.py", line 401, in __get_result
+    raise self._exception
+  File "/Users/chelsqueck/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/concurrent/futures/thread.py", line 59, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/chelsqueck/stock-monitor/scripts/deep_financials.py", line 128, in research_company_wide
+    return ask_and_parse(prompt)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/chelsqueck/stock-monitor/scripts/deep_financials.py", line 88, in ask_and_parse
+    raw = ask_claude(prompt)
+          ^^^^^^^^^^^^^^^^^^
+  File "/Users/chelsqueck/stock-monitor/scripts/deep_financials.py", line 68, in ask_claude
+    r = subprocess.run(["claude", "-p", prompt, "--allowedTools", "WebSearch"],
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/chelsqueck/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/subprocess.py", line 548, in run
+    with Popen(*popenargs, **kwargs) as process:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/chelsqueck/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/subprocess.py", line 1026, in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+  File "/Users/chelsqueck/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/subprocess.py", line 1955, in _execute_child
+    raise child_exception_type(errno_num, err_msg, err_filename)
+FileNotFoundError: [Errno 2] No such file or directory: 'claude'
+Traceback (most recent call last):
+  File "/Users/chelsqueck/stock-monitor/scripts/deep_financials.py", line 295, in <module>
+    main()
+  File "/Users/chelsqueck/stock-monitor/scripts/deep_financials.py", line 266, in main
+    for tid, label, parsed in ex.map(research_one, todo):
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/chelsqueck/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/concurrent/futures/_base.py", line 619, in result_iterator
+    yield _result_or_cancel(fs.pop())
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/chelsqueck/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/concurrent/futures/_base.py", line 317, in _result_or_cancel
+    return fut.result(timeout)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/Users/chelsqueck/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/concurrent/futures/_base.py", line 456, in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+  File "/Users/chelsqueck/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/concurrent/futures/_base.py", line 401, in __get_result
+    raise self._exception
+  File "/Users/chelsqueck/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/concurrent/futures/thread.py", line 59, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/chelsqueck/stock-monitor/scripts/deep_financials.py", line 200, in research_one
+    company_wide = fut_cw.result()
+                   ^^^^^^^^^^^^^^^
+  File "/Users/chelsqueck/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/concurrent/futures/_base.py", line 456, in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+  File "/Users/chelsqueck/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/concurrent/futures/_base.py", line 401, in __get_result
+    raise self._exception
+  File "/Users/chelsqueck/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/concurrent/futures/thread.py", line 59, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/chelsqueck/stock-monitor/scripts/deep_financials.py", line 128, in research_company_wide
+    return ask_and_parse(prompt)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/chelsqueck/stock-monitor/scripts/deep_financials.py", line 88, in ask_and_parse
+    raw = ask_claude(prompt)
+          ^^^^^^^^^^^^^^^^^^
+  File "/Users/chelsqueck/stock-monitor/scripts/deep_financials.py", line 68, in ask_claude
+    r = subprocess.run(["claude", "-p", prompt, "--allowedTools", "WebSearch"],
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/chelsqueck/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/subprocess.py", line 548, in run
+    with Popen(*popenargs, **kwargs) as process:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/chelsqueck/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/subprocess.py", line 1026, in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+  File "/Users/chelsqueck/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/subprocess.py", line 1955, in _execute_child
+    raise child_exception_type(errno_num, err_msg, err_filename)
+FileNotFoundError: [Errno 2] No such file or directory: 'claude'
+[publish 12:53:34] discarding local drift in front-end file(s): supply-chain.html
+[publish 12:53:35] staged 3 file(s): data.json, forward-pe.json, moves.json
+[publish 12:53:38] pushed to origin/main: b21a162
+API connection failed: ConnectionRefusedError(61, "Connect call failed ('127.0.0.1', 4001)")
+Make sure API port on TWS/IBG is open
+[stock-monitor] deploy repo missing at /Users/chelsqueck/stock-monitor-pages
+[publish 08:14:31] discarding local drift in front-end file(s): supply-chain.html
+[publish 08:14:32] staged 4 file(s): data.json, deal-map.json, deep-financials.json, moves.json
+[publish 08:14:35] pushed to origin/main: 143cce0
+API connection failed: ConnectionRefusedError(61, "Connect call failed ('127.0.0.1', 4001)")
+Make sure API port on TWS/IBG is open
+[publish 07:42:24] discarding local drift in front-end file(s): index.html, supply-chain.html
+[publish 07:42:24] staged 5 file(s): data.json, deal-map.json, deep-financials.json, forward-pe.json, moves.json
+[publish 07:42:28] pushed to origin/main: 89f32b4
+daily brief: no data to build from
+API connection failed: ConnectionRefusedError(61, "Connect call failed ('127.0.0.1', 4001)")
+Make sure API port on TWS/IBG is open
+[publish 00:28:45] discarding local drift in front-end file(s): index.html, supply-chain.html
+[publish 00:28:46] staged 3 file(s): catalyst-calendar.json, data.json, stock-page-extras.json
+[publish 00:28:48] pushed to origin/main: cdf45f8
+daily brief: no data to build from
