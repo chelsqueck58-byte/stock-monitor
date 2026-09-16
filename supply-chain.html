@@ -1743,6 +1743,34 @@ function pageFinPeriods(container) {
   while (qi < qs.length) { seq.push({ ...qs[qi], isFy: false }); qi++; }
   return seq;
 }
+// YoY revenue growth, computed from the RAW (unmerged) quarters/fiscal_years
+// arrays so a quarter always compares to the same quarter 4 slots earlier
+// (quarterly cadence) and a FY always compares to the FY immediately before
+// it - independent of how pageFinPeriods later interleaves them for display.
+function buildYoyMap(quarters, fiscalYears) {
+  const byEnd = (a, b) => String(a.period_end || "").localeCompare(String(b.period_end || ""));
+  const map = {};
+  const qs = (quarters || []).slice().sort(byEnd);
+  for (let i = 4; i < qs.length; i++) {
+    const cur = qs[i], prior = qs[i - 4];
+    if (cur.revenue_m != null && prior.revenue_m) {
+      map[cur.period_end] = Math.round((cur.revenue_m / prior.revenue_m - 1) * 1000) / 10;
+    }
+  }
+  const fys = (fiscalYears || []).slice().sort(byEnd);
+  for (let i = 1; i < fys.length; i++) {
+    const cur = fys[i], prior = fys[i - 1];
+    if (cur.revenue_m != null && prior.revenue_m) {
+      map[cur.period_end] = Math.round((cur.revenue_m / prior.revenue_m - 1) * 1000) / 10;
+    }
+  }
+  return map;
+}
+function yoyCellHtml(yoy, isFy) {
+  if (yoy == null) return `<td class="${isFy ? "deep-fin-fy-col" : ""}"><span class="cmp-na">—</span></td>`;
+  const cls = yoy >= 0 ? "u" : "d";
+  return `<td class="${isFy ? "deep-fin-fy-col" : ""}"><span class="pct ${cls}">${yoy >= 0 ? "+" : ""}${yoy}%</span></td>`;
+}
 function pageFinHeadCell(p) {
   if (p.isFy) {
     const short = (p.fy_label || "FY").replace(/^FY(20)?/, "FY");
@@ -1760,12 +1788,18 @@ function pageDeepFinHtml(tid) {
     return { cw: `<div class="rev-none">Segment financials research pending for this name — refreshes automatically as chunks complete.</div>`, seg: "" };
   const symbol = CCY_SYMBOL[d.currency] || ((d.currency || "") + " ");
   const periods = pageFinPeriods(d);
+  const yoyMap = buildYoyMap(d.quarters, d.fiscal_years);
   const metrics = [];
   for (const m of DEEP_FIN_METRICS) {
     metrics.push(m);
+    if (m.key === "revenue_m") metrics.push({ key: "__yoy", label: "Revenue YoY Growth", isYoy: true });
     if (m.key === "net_margin_pct") metrics.push({ key: "__np", label: "Net Profit (derived)", derived: true });
   }
   const cwRows = metrics.map(m => {
+    if (m.isYoy) {
+      const cells = periods.map(p => yoyCellHtml(yoyMap[p.period_end], p.isFy)).join("");
+      return `<tr><td><b>${esc(m.label)}</b></td>${cells}</tr>`;
+    }
     const cells = periods.map(p => {
       let val;
       if (m.derived) {
@@ -1807,6 +1841,8 @@ function pageDeepFinHtml(tid) {
       const cls = p.isFy ? "deep-fin-fy" : "pe-current";
       return `<td class="${p.isFy ? "deep-fin-fy-col" : ""}">${val ? `<span class="${cls}">${val}</span>` : na}</td>`;
     }).join("");
+    const segYoyMap = buildYoyMap(seg.quarters, seg.fiscal_years);
+    const segYoyRow = `<tr><td>Revenue YoY Growth</td>${segPeriods.map(p => yoyCellHtml(segYoyMap[p.period_end], p.isFy)).join("")}</tr>`;
     const headlineName = (segPeriods.find(p => p.headline_metric_name) || {}).headline_metric_name;
     const headlineRow = headlineName ? `<tr><td><b>${esc(headlineName)}</b></td>${segPeriods.map(p => {
       const cls = p.isFy ? "deep-fin-fy" : "pe-current";
@@ -1821,7 +1857,7 @@ function pageDeepFinHtml(tid) {
     segHtml += `<div style="margin-top:10px; font-weight:700; color:#9fd0ff; font-size:11px;">${esc(seg.name)}${pctTag}</div>
       ${sells ? `<div class="pg-mix-expl" style="margin:2px 0 4px">${esc(sells)}</div>` : ""}
       <table class="cmp-table deep-fin-table"><thead><tr><th>Metric</th>${segHead}</tr></thead>
-      <tbody><tr><td>Revenue</td>${revRow}</tr>${headlineRow}</tbody></table>`;
+      <tbody><tr><td>Revenue</td>${revRow}</tr>${segYoyRow}${headlineRow}</tbody></table>`;
   }
   return {
     cw: `<table class="cmp-table deep-fin-table"><thead><tr><th>Metric</th>${headCells}</tr></thead><tbody>${cwRows}</tbody></table>`,
@@ -2013,11 +2049,11 @@ function renderStockPage(tid) {
   html += pagePeHtml(tid);
   if (x.pe_narrative) html += `<div class="deep-fin-note" style="margin-top:6px"><b style="color:#9fd0ff">Re-rating narrative</b> <span class="muted">(interpretive, from analyst/press commentary)</span>: ${esc(x.pe_narrative)}</div>`;
 
-  // key metrics -> guidance table -> segments
+  // guidance -> key metrics -> segments
+  html += pageGuidanceHtml(x);
   html += pageSecHead("📐 Key metrics");
   const fin = pageDeepFinHtml(tid);
   html += fin.cw;
-  html += pageGuidanceHtml(x);
   html += fin.seg;
 
 
