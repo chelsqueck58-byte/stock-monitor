@@ -1728,14 +1728,36 @@ let PAGE_SEL = "META";
 // Stock Pages chronology: Q1..Q4 then that year's FY, then the next year's
 // quarters, FY - the full 2-year runway rather than Deep Financials' compact
 // 4Q+FY view.
+// Sortable key for a period. Company-wide periods always carry a real
+// period_end; PER-SEGMENT periods never do (the research schema only asks
+// for quarter_label/fy_label there) - without this fallback, sorting by an
+// all-missing period_end silently dumped every segment quarter first and
+// both FY markers at the very end instead of interleaving them, and broke
+// YoY lookups (every period collapsed onto the same "undefined" map key).
+// Parses the label's year + quarter/half number instead - correct even
+// across different fiscal calendars, since a company's own quarter_label
+// and fy_label share the same nominal fiscal-year number even when the
+// underlying calendar months differ (e.g. Alibaba's "Q4 FY2026 (Mar 2026)"
+// and "FY2026" both key off "2026").
+function periodSortKey(p) {
+  if (p.period_end) return p.period_end;
+  const label = p.fy_label || p.quarter_label || "";
+  const year = (label.match(/(\d{4})/) || [])[1] || "0000";
+  if (p.fy_label) return `${year}.9`;
+  const q = label.match(/\bQ\s*(\d)\b/i);
+  if (q) return `${year}.${q[1]}`;
+  const h = label.match(/\bH\s*(\d)\b/i);
+  if (h) return `${year}.${h[1] === "1" ? "2" : "4"}`;
+  return `${year}.5`;
+}
 function pageFinPeriods(container) {
-  const byEnd = (a, b) => String(a.period_end || "").localeCompare(String(b.period_end || ""));
-  const qs = (container.quarters || []).slice().sort(byEnd);
-  const fys = (container.fiscal_years || []).slice().sort(byEnd);
+  const byKey = (a, b) => periodSortKey(a).localeCompare(periodSortKey(b));
+  const qs = (container.quarters || []).slice().sort(byKey);
+  const fys = (container.fiscal_years || []).slice().sort(byKey);
   const seq = [];
   let qi = 0;
   for (const fy of fys) {
-    while (qi < qs.length && String(qs[qi].period_end || "") <= String(fy.period_end || "")) {
+    while (qi < qs.length && periodSortKey(qs[qi]) <= periodSortKey(fy)) {
       seq.push({ ...qs[qi], isFy: false }); qi++;
     }
     seq.push({ ...fy, isFy: true });
@@ -1748,20 +1770,20 @@ function pageFinPeriods(container) {
 // (quarterly cadence) and a FY always compares to the FY immediately before
 // it - independent of how pageFinPeriods later interleaves them for display.
 function buildYoyMap(quarters, fiscalYears) {
-  const byEnd = (a, b) => String(a.period_end || "").localeCompare(String(b.period_end || ""));
+  const byKey = (a, b) => periodSortKey(a).localeCompare(periodSortKey(b));
   const map = {};
-  const qs = (quarters || []).slice().sort(byEnd);
+  const qs = (quarters || []).slice().sort(byKey);
   for (let i = 4; i < qs.length; i++) {
     const cur = qs[i], prior = qs[i - 4];
     if (cur.revenue_m != null && prior.revenue_m) {
-      map[cur.period_end] = Math.round((cur.revenue_m / prior.revenue_m - 1) * 1000) / 10;
+      map[periodSortKey(cur)] = Math.round((cur.revenue_m / prior.revenue_m - 1) * 1000) / 10;
     }
   }
-  const fys = (fiscalYears || []).slice().sort(byEnd);
+  const fys = (fiscalYears || []).slice().sort(byKey);
   for (let i = 1; i < fys.length; i++) {
     const cur = fys[i], prior = fys[i - 1];
     if (cur.revenue_m != null && prior.revenue_m) {
-      map[cur.period_end] = Math.round((cur.revenue_m / prior.revenue_m - 1) * 1000) / 10;
+      map[periodSortKey(cur)] = Math.round((cur.revenue_m / prior.revenue_m - 1) * 1000) / 10;
     }
   }
   return map;
@@ -1797,7 +1819,7 @@ function pageDeepFinHtml(tid) {
   }
   const cwRows = metrics.map(m => {
     if (m.isYoy) {
-      const cells = periods.map(p => yoyCellHtml(yoyMap[p.period_end], p.isFy)).join("");
+      const cells = periods.map(p => yoyCellHtml(yoyMap[periodSortKey(p)], p.isFy)).join("");
       return `<tr><td><b>${esc(m.label)}</b></td>${cells}</tr>`;
     }
     const cells = periods.map(p => {
@@ -1842,7 +1864,7 @@ function pageDeepFinHtml(tid) {
       return `<td class="${p.isFy ? "deep-fin-fy-col" : ""}">${val ? `<span class="${cls}">${val}</span>` : na}</td>`;
     }).join("");
     const segYoyMap = buildYoyMap(seg.quarters, seg.fiscal_years);
-    const segYoyRow = `<tr><td>Revenue YoY Growth</td>${segPeriods.map(p => yoyCellHtml(segYoyMap[p.period_end], p.isFy)).join("")}</tr>`;
+    const segYoyRow = `<tr><td>Revenue YoY Growth</td>${segPeriods.map(p => yoyCellHtml(segYoyMap[periodSortKey(p)], p.isFy)).join("")}</tr>`;
     const headlineName = (segPeriods.find(p => p.headline_metric_name) || {}).headline_metric_name;
     const headlineRow = headlineName ? `<tr><td><b>${esc(headlineName)}</b></td>${segPeriods.map(p => {
       const cls = p.isFy ? "deep-fin-fy" : "pe-current";
