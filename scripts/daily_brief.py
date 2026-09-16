@@ -50,6 +50,9 @@ MACRO CALENDAR (next {days} days, already known - do not re-research dates, just
 one line of framing/context per event, e.g. what's being debated or priced in):
 {macro_block}
 
+SPY/QQQ (already known - do not WebSearch these, only VIX/US 10Y/DXY/Brent below need it):
+{index_block}
+
 X POSTS FROM FOLLOWED MARKET ACCOUNTS (last ~24h - never print an @handle; if a claim's \
 only attribution is the handle itself, state it without attribution; if it cites an \
 outlet, name the outlet):
@@ -61,8 +64,9 @@ Produce the brief in EXACTLY this structure and order, Telegram HTML only (<b>, 
 🌏 <b>Morning Brief — {today} {time_hkt} HKT</b>
 
 🚨 <b>Movers (≥{threshold:.0f}%)</b>
-One line per mover: ticker, % move, live current price (WebSearch it), then a tight \
-sentence naming the actual news/catalyst driving it (WebSearch for the real reason if \
+One line per mover: ticker, % move, live current price (already given below - do not \
+WebSearch it), then a tight sentence naming the actual news/catalyst driving it \
+(WebSearch for the real reason if \
 the data given doesn't already explain it - never leave a mover unexplained). Follow \
 each with a "→" line giving the one-sentence read-through / why it matters. If a name \
 in the full watchlist moved a lot yesterday but not in today's session, note that it's \
@@ -71,8 +75,8 @@ so plainly and name a few watchlist groups that stayed in a tight range as evide
 checked, not just asserted it.
 
 📊 <b>Index Snapshot</b>
-Live levels (WebSearch each): SPY, QQQ, VIX, US 10Y yield, DXY, Brent crude. One line \
-each, with the day's % or bp change.
+SPY, QQQ: use the levels given above, do not WebSearch them. VIX, US 10Y yield, DXY, \
+Brent crude: WebSearch each. One line each, with the day's % or bp change.
 
 📅 <b>Macro Calendar (next {days} days)</b>
 One bullet per calendar event above, each with a sentence of framing (what's being \
@@ -150,7 +154,9 @@ def movers_and_universe(moves, data_json):
         if abs(pct) >= MOVE_THRESHOLD:
             move_history = (moves.get(tid, {}).get("moves") or [{}])[0]
             reason = move_history.get("reason", "") if move_history.get("d") == last_date else ""
-            movers.append(f"- {tid} ({label}, {group}): {pct:+.1f}% on {last_date}"
+            last_close = inst.get("last_close")
+            price_str = f", last close {last_close}" if last_close is not None else ""
+            movers.append(f"- {tid} ({label}, {group}): {pct:+.1f}% on {last_date}{price_str}"
                           + (f" — known reason: {reason}" if reason else " — reason unknown, WebSearch it"))
 
     for group, rows in by_group.items():
@@ -159,6 +165,17 @@ def movers_and_universe(moves, data_json):
     movers_block = "\n".join(movers) if movers else \
         f"None. Every watchlist name stayed within +/-{MOVE_THRESHOLD:.0f}% in its most recent session."
     return overall_latest, movers_block, "\n".join(universe_lines)
+
+
+def index_snapshot_block(data_json):
+    by_id = {i.get("id"): i for i in data_json.get("instruments", [])}
+    lines = []
+    for tid in ("SPY", "QQQ"):
+        inst = by_id.get(tid)
+        if inst and inst.get("last_close") is not None:
+            lines.append(f"{tid}: {inst['last_close']} ({inst.get('change_pct', 0):+.1f}%) "
+                         f"as of {inst.get('last_date')}")
+    return "\n".join(lines) if lines else "(SPY/QQQ not found in data.json - WebSearch these too)"
 
 
 def macro_calendar_block(macro_events, today, days):
@@ -200,6 +217,7 @@ def build_message(today, time_hkt):
         universe_block=universe_block,
         days=CALENDAR_DAYS,
         macro_block=macro_calendar_block(macro_events, today, CALENDAR_DAYS),
+        index_block=index_snapshot_block(data_json),
         x_block=x_posts_block(),
     )
     return ask_claude(prompt)
