@@ -33,3 +33,8 @@ Make sure API port on TWS/IBG is open
 [publish 07:52:24] discarding local drift in front-end file(s): index.html, supply-chain.html
 [publish 07:52:25] staged 4 file(s): data.json, deal-map.json, deep-financials.json, delivery-war.json
 [publish 07:52:27] pushed to origin/main: 3608888
+API connection failed: ConnectionRefusedError(61, "Connect call failed ('127.0.0.1', 4001)")
+Make sure API port on TWS/IBG is open
+[publish 07:46:57] discarding local drift in front-end file(s): index.html, supply-chain.html
+[publish 07:46:58] staged 4 file(s): data.json, deal-map.json, deep-financials.json, forward-pe.json
+[publish 07:47:01] pushed to origin/main: d93851c

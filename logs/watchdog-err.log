@@ -147,3 +147,9 @@ Make sure API port on TWS/IBG is open
 [publish 00:28:46] staged 3 file(s): catalyst-calendar.json, data.json, stock-page-extras.json
 [publish 00:28:48] pushed to origin/main: cdf45f8
 daily brief: no data to build from
+API connection failed: ConnectionRefusedError(61, "Connect call failed ('127.0.0.1', 4001)")
+Make sure API port on TWS/IBG is open
+[publish 08:05:14] discarding local drift in front-end file(s): index.html, supply-chain.html
+[publish 08:05:15] staged 6 file(s): catalyst-calendar.json, data.json, deal-map.json, deep-financials.json, forward-pe.json, moves.json
+[publish 08:05:17] pushed to origin/main: 0c88ba5
+daily brief: no data to build from

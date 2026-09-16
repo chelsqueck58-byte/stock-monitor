@@ -2360,3 +2360,293 @@ daily brief sent for 2026-09-14
   ✓ reprice_forward_pe
   ✓ deploy
   ✓ daily_brief
+
+============================================================
+[PIPELINE START] 2026-09-15 07:30:03
+
+
+============================================================
+[07:30:03] Running refresh-news (prereqs)...
+
+[2026-09-15T07:30:25.144301] processed 0 new message(s)
+[2026-09-15T07:30:25.249288] doc processor starting
+nothing new to merge
+IB Gateway not reachable ([Errno 61] Connect call failed ('127.0.0.1', 4001)); keeping existing iv.json
+
+============================================================
+[07:30:25] Running fundamentals...
+
+fundamentals: 83 ok, 0 reused last-good, 0 never fetched -> /Users/chelsqueck/stock-monitor/data/fundamentals.json
+
+[fundamentals] ✓ OK
+
+============================================================
+[07:31:24] Running news...
+
+[gmail collect failed] ('invalid_grant: Bad Request', {'error': 'invalid_grant', 'error_description': 'Bad Request'})
+sources: X=40 Gmail=0 Telegram=4
+news: 17 tickers tagged (priority searched: ['AMZN', 'NVDA', 'META', 'TSM', '000660', '005930', 'MU', 'AMD', 'INTC', 'AVGO', 'KLAC', 'COHR', 'TEL', 'GLW', 'FN']) -> /Users/chelsqueck/stock-monitor/data/news.json
+  2513: Zhipu HK shares opened 5.7% lower in morning trade. [X @fxtrader]
+  000660: KOSPI opened down 3.14%; SK Hynix down 5% amid chipmaker selloff after Anthropic CEO's cal
+  005930: Samsung Elec down 3.6% as KOSPI fell 3.14% on chipmaker selloff after Anthropic's call to 
+  MU: Micron Taiwan's Taoyuan plant union rejected bonus package, threatened strike, seeking 15%
+  NVDA: Nvidia led chipmaker selloff, semiconductor gauge down 5.9%, after AI leaders proposed slo
+  AVGO: Broadcom fell in chipmaker rout, semiconductor gauge down 5.9%, after AI leaders proposed 
+  INTC: Samsung Electro-Mechanics & Qualcomm form 2.1D packaging alliance developing 'organic brid
+  ASML: TeraFab largely completed placing front-end equipment orders with ASML, Applied Materials,
+  AMAT: TeraFab largely completed placing front-end equipment orders with ASML, Applied Materials,
+  LRCX: TeraFab largely completed placing front-end equipment orders with ASML, Applied Materials,
+  TEL: TeraFab largely completed placing front-end equipment orders with ASML, Applied Materials,
+  SGX: SGX to offer crypto perpetual futures to US institutions as regulated exchanges join the r
+  SPY: S&P 500 fell 0.5% Monday as chip selloff and elevated oil prices weighed on sentiment ahea
+  QQQ: Nasdaq 100 fell 0.8% Monday as AI slowdown call from Anthropic CEO sparked chipmaker sello
+  META: META +2.7% on Muse AI assistant buzz; agreed $17.1B settlement with 51 states/territories 
+  TSM: TSM opened down 3.26% Sep 14 on profit-taking, packaging capacity constraints; Aug revenue
+  GLW: Corning shares fell ~12-13% after launching $2B at-the-market equity offering via Goldman 
+events: 15 tickers with dated catalysts -> /Users/chelsqueck/stock-monitor/data/events.json
+
+[news] ✓ OK
+
+============================================================
+[07:32:53] Running catalysts...
+
+19 tickers due (skipped 0 still-fresh): ['AMZN', 'NVDA', 'META', 'TSM', '000660', '005930', 'MU', 'AMD', 'INTC', 'AVGO', 'KLAC', 'COHR', 'TEL', 'GLW', 'FN', 'KEPPEL', 'CAPLAND', 'COST', 'NKE']
+  AMZN: Q3 earnings (~Oct 30) test whether AWS AI capex converts to growth, after Meta's multiyear
+  NVDA: Semis selloff (gauge -5.9%) as Anthropic-led calls to slow frontier AI revive DeepSeek-sho
+  META: Connect conference (Sep 23-24) is next test of $130-145B 2026 AI capex plan after Q2 FCF c
+  TSM: Q3 earnings (~mid-Oct) test if raised 40%+ 2026 revenue growth guide and $60-64B capex hol
+  000660: KOSPI selloff hit SK Hynix -5% as Anthropic-led AI-slowdown warnings revived DeepSeek-styl
+  005930: Samsung sold out its 2026 HBM supply after starting Nvidia HBM4 shipments in Q3, a key ste
+  MU: FQ4 earnings Sept 30 is the near-term test of tight DRAM/NAND supply and pricing after the
+  AMD: MI450 GPU ramp and Helios rack-scale platform in H2 are the concrete near-term catalyst af
+  INTC: Nvidia's ~$30B stake and $20B stock sale fund 14A ramp; watch for foundry customer wins (S
+  AVGO: Post-Q3 selloff despite AI semis revenue +221% YoY; market watching Jalapeño (OpenAI custo
+  KLAC: Next real catalyst is Oct 28 earnings (~$1.17 EPS est.); story stays AI-driven demand for 
+  COHR: Unveils PhotonLink optical platform at ECOC 2026 on Sept 21; also a prime beneficiary if F
+  TEL: Korea's TeraFab largely completed placing Q2 front-end equipment orders with ASML, AMAT, L
+  GLW: GLW dropped premarket after launching a $2B at-the-market equity offering, raising shareho
+  FN: FN's Nov 2 FQ1'27 earnings loom as the test of whether its datacom supply-chain fix materi
+  KEPPEL: Keppel is racing to hit its S$2-3bn 2026 non-core asset monetisation target (S$385m done Y
+  CAPLAND: CLI's strategic review outcome, due end-Sept 2026, could reveal a S$7-9bn non-core divestm
+  COST: Costco reports FQ4 earnings Sep 24; focus is on membership renewal rate and swirling specu
+  NKE: NKE reports Q1 FY27 earnings Oct 1; tariff costs (~$1.5B, ~120bps margin hit) and China tu
+catalysts: 62 names total -> /Users/chelsqueck/stock-monitor/data/catalysts.json
+
+[catalysts] ✓ OK
+
+============================================================
+[07:35:35] Running catalyst_calendar...
+
+0 tickers due: []
+catalyst_calendar: 25 tickers, 102 ticker events, 18 macro events -> /Users/chelsqueck/stock-monitor/data/catalyst-calendar.json
+
+[catalyst_calendar] ✓ OK
+
+============================================================
+[07:35:35] Running stock_page_extras...
+
+0 tickers due (skipped 18 fresh): []
+stock_page_extras: 18 tickers -> /Users/chelsqueck/stock-monitor/data/stock-page-extras.json
+
+[stock_page_extras] ✓ OK
+
+============================================================
+[07:35:35] Running delivery_war...
+
+delivery_war: fresh (1d old), skipping
+
+[delivery_war] ✓ OK
+
+============================================================
+[07:35:35] Running model_launches...
+
+0 tickers due: []
+model_launches: 6 tickers, 8 ecosystem events -> /Users/chelsqueck/stock-monitor/data/model-launches.json
+
+[model_launches] ✓ OK
+
+============================================================
+[07:35:36] Running deal_map...
+
+deal_map: 4 groups, 15 suppliers -> /Users/chelsqueck/stock-monitor/data/deal-map.json
+
+[deal_map] ✓ OK
+
+============================================================
+[07:38:09] Running deep_financials...
+
+stale-only: 1 due: ['MU']
+1 tickers to research
+  MU       2 fiscal years, 8 quarters, 4 segments
+deep_financials: 27 tickers -> /Users/chelsqueck/stock-monitor/data/deep-financials.json
+
+[deep_financials] ✓ OK
+
+============================================================
+[07:45:02] Running macro_events...
+
+macro events still fresh (1d old), skipping
+
+[macro_events] ✓ OK
+
+============================================================
+[07:45:02] Running movements...
+
+moves: 81 names, 5270 total (>= 5.0%), 0 new unresearched (0 fetch failures) -> /Users/chelsqueck/stock-monitor/data/moves.json
+
+[movements] ✓ OK
+
+============================================================
+[07:45:41] Running earnings_research...
+
+2 tickers due (skipped 7 still-fresh)
+  KO: Whether Q3 sustains ~5% global volume growth and Coca-Cola reaffirms/raises its 9-10% EPS 
+  VICR: Whether Vicor delivers on its guided ~10% sequential revenue growth, driven by AI/power-de
+earnings focus: 9 names total -> /Users/chelsqueck/stock-monitor/data/earnings.json
+
+[earnings_research] ✓ OK
+
+============================================================
+[07:46:09] Running movements_research...
+
+0 chunks across 81 names, 6 in parallel
+done: 3369/5270 moves sourced
+
+[movements_research] ✓ OK
+
+============================================================
+[07:46:09] Running build...
+
+  ok   SPY            760.88  730 bars
+  ok   QQQ            709.18  730 bars
+  ok   PDD             79.38  730 bars
+  ok   2513           721.00  168 bars
+  ok   0100           252.40  167 bars
+  ok   9988           105.90  730 bars
+  ok   0700           430.60  730 bars
+  ok   9618           106.00  730 bars
+  ok   3690            75.05  730 bars
+  ok   1810            27.16  730 bars
+  ok   9888            89.30  730 bars
+  ok   AMZN           253.54  730 bars
+  ok   NVDA           210.96  730 bars
+  ok   AAPL           333.08  730 bars
+  ok   MSFT           505.41  730 bars
+  ok   META           665.60  730 bars
+  ok   GOOGL          349.39  730 bars
+  ok   TSLA           358.97  730 bars
+  ok   TSM            418.01  730 bars
+  ok   000660   1,697,000.00  729 bars
+  ok   005930     249,000.00  729 bars
+  ok   MU             924.03  730 bars
+  ok   ARMUSD         239.01  730 bars
+  ok   688256       1,040.00  730 bars
+  ok   688825          54.49  36 bars
+  ok   AMD            493.41  730 bars
+  ok   ASML         1,575.15  730 bars
+  ok   INTC            97.19  730 bars
+  ok   AVGO           344.72  730 bars
+  ok   SMCI            36.74  730 bars
+  ok   MRVL           218.82  730 bars
+  ok   2454         4,560.00  729 bars
+  ok   GFS             43.54  730 bars
+  ok   WDC            426.94  730 bars
+  ok   AMAT           424.21  730 bars
+  ok   LRCX           273.49  730 bars
+  ok   KLAC           169.09  730 bars
+  ok   COHR           266.50  730 bars
+  ok   LITE           835.03  730 bars
+  ok   CRDO           150.09  730 bars
+  ok   TEL            203.37  730 bars
+  ok   GLW            143.60  730 bars
+  ok   CIEN           319.64  730 bars
+  ok   AAOI            95.76  730 bars
+  ok   FN             382.55  730 bars
+  ok   ACMR            66.86  730 bars
+  ok   NINOY           11.05  730 bars
+  ok   MPWR         1,143.24  730 bars
+  ok   VICR           184.73  730 bars
+  ok   IFNNY           62.19  730 bars
+  ok   SMI             61.30  730 bars
+  ok   0175            16.59  730 bars
+  ok   1211            80.20  730 bars
+  ok   2015            47.52  730 bars
+  ok   9868            42.02  730 bars
+  ok   9866            29.34  730 bars
+  ok   3750           549.00  328 bars
+  ok   9863            36.88  730 bars
+  ok   UOB             42.33  727 bars
+  ok   KEPPEL          11.33  727 bars
+  ok   DBS             77.66  727 bars
+  ok   OCBC            31.85  727 bars
+  ok   SINGTEL          4.46  727 bars
+  ok   STENG           10.22  727 bars
+  ok   SGX             22.91  727 bars
+  ok   CAPLAND          2.65  727 bars
+  ok   SE             108.68  730 bars
+  ok   GRAB             3.02  730 bars
+  ok   MCD            257.49  730 bars
+  ok   SBUX            99.07  730 bars
+  ok   PEP            136.34  730 bars
+  ok   WMT            109.08  730 bars
+  ok   COST           918.91  730 bars
+  ok   PG             146.13  730 bars
+  ok   KO              89.35  730 bars
+  ok   NKE             37.05  730 bars
+  ok   DPZ            323.77  730 bars
+  ok   GRMN           280.38  730 bars
+  ok   6181           369.00  544 bars
+  ok   1929            11.53  730 bars
+  ok   0590            21.34  730 bars
+  ok   0116            12.92  730 bars
+  ok   002867          10.52  730 bars
+
+Wrote /Users/chelsqueck/stock-monitor/site/data.json (6623 KB) - 83 ok, 0 failed, source=yahoo
+
+[build] ✓ OK
+
+============================================================
+[07:46:52] Running reprice_forward_pe...
+
+reprice_forward_pe: 47 year-entries repriced across 25 tickers -> /Users/chelsqueck/stock-monitor/data/forward-pe.json
+
+[reprice_forward_pe] ✓ OK
+
+============================================================
+[07:46:52] Deploying...
+
+[stock-monitor] deployed to GitHub Pages (production)
+[ai-supply-chain] published via publish.py (main)
+
+[deploy] ✓ OK
+
+============================================================
+[07:47:01] Running daily_brief...
+
+daily brief sent for 2026-09-15
+
+[daily_brief] ✓ OK
+
+============================================================
+[PIPELINE COMPLETE] 2026-09-15 07:51:50
+[SUMMARY] 18/18 stages OK, elapsed 1306s
+
+  ✓ refresh_news
+  ✓ fundamentals
+  ✓ news
+  ✓ catalysts
+  ✓ catalyst_calendar
+  ✓ stock_page_extras
+  ✓ delivery_war
+  ✓ model_launches
+  ✓ deal_map
+  ✓ deep_financials
+  ✓ macro_events
+  ✓ movements
+  ✓ earnings_research
+  ✓ movements_research
+  ✓ build
+  ✓ reprice_forward_pe
+  ✓ deploy
+  ✓ daily_brief
+[07:30:00] another orchestrate.py run holds the lock, skipping

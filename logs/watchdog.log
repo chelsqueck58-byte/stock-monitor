@@ -2255,3 +2255,323 @@ reprice_forward_pe: 47 year-entries repriced across 25 tickers -> /Users/chelsqu
   ✓ reprice_forward_pe
   ✓ deploy
   ✗ daily_brief
+2026-09-16 07:29:08 data stale (last generated 2026-09-15, today is 2026-09-16) -- running catch-up pipeline
+
+============================================================
+[PIPELINE START] 2026-09-16 07:29:08
+
+
+============================================================
+[07:29:08] Running refresh-news (prereqs)...
+
+[2026-09-16T07:29:29.629655] processed 0 new message(s)
+[2026-09-16T07:29:29.899901] doc processor starting
+nothing new to merge
+IB Gateway not reachable ([Errno 61] Connect call failed ('127.0.0.1', 4001)); keeping existing iv.json
+
+============================================================
+[07:29:30] Running fundamentals...
+
+fundamentals: 83 ok, 0 reused last-good, 0 never fetched -> /Users/chelsqueck/stock-monitor/data/fundamentals.json
+
+[fundamentals] ✓ OK
+
+============================================================
+[07:30:28] Running news...
+
+[gmail collect failed] ('invalid_grant: Bad Request', {'error': 'invalid_grant', 'error_description': 'Bad Request'})
+sources: X=50 Gmail=0 Telegram=4
+news: 16 tickers tagged (priority searched: ['AMZN', 'NVDA', 'META', 'TSM', 'MU', 'AMD', 'INTC', 'AVGO', 'KLAC', 'COHR', 'TEL', 'GLW', 'FN', 'SMI', 'UOB']) -> /Users/chelsqueck/stock-monitor/data/news.json
+  NVDA: Jeff Pu: NVDA in talks for x86 CPU (Intel) adoption for head-node + PC cooperation push [X
+  TSM: TSMC Co-CEO says company takes a 'conservative' strategy in applying AI to technology deve
+  005930: Samsung Foundry's Taylor fab began production early amid heavy Tesla order volume; utiliza
+  MU: Team Group GM: 'zero risk of memory prices dropping'; module makers warned of steep 2027 s
+  000660: Cramer dismisses bearish SK Hynix/DRAM short calls as 'nonsense'; memory prices seen with 
+  INTC: Jeff Pu raises TP to $150 on SOTP citing better 18A server CPU/EMIB yields + foundry clien
+  AAPL: Indian consumer regulator escalates probe into Apple's software warranty terms [TG @tradeh
+  CRDO: Announced new 1.6T optical transceiver product [X @aleabitoreddit]
+  GRAB: To acquire majority stake in BNPL platform Atome for US$1.5 billion [TG @tradehaven]
+  SPY: S&P 500 closed 0.4% lower as 10-yr yield hit highest since 2007 ahead of Fed rate decision
+  QQQ: Nasdaq 100 dropped 0.6% as Treasury yields surged to multi-decade highs ahead of Fed decis
+  AMZN: Suspended operations with cargo carrier 21 Air after Amazon-branded Boeing 767-300 crashed
+  META: Launched AI model 'Muse Spark 1.3'; drawing bullish analyst notes on new ad AI features an
+  COHR: Began sampling 300mm SiC substrates to AI chip partners; Deutsche Bank initiated coverage 
+  TEL: Shares tumbled ~11% to ¥55,920 amid sector-wide AI/chip stock selloff [Web]
+  GLW: Stock fell ~12-13% after disclosing $2B at-the-market equity offering via Goldman Sachs on
+events: 14 tickers with dated catalysts -> /Users/chelsqueck/stock-monitor/data/events.json
+
+[news] ✓ OK
+
+============================================================
+[07:32:45] Running catalysts...
+
+17 tickers due (skipped 0 still-fresh): ['AMZN', 'NVDA', 'META', 'TSM', 'MU', 'AMD', 'INTC', 'AVGO', 'KLAC', 'COHR', 'TEL', 'GLW', 'FN', 'SMI', 'UOB', 'COST', 'NKE']
+  AMZN: AWS Trainium AI-chip ramp and whether the ~$25B run rate holds is the key swing factor for
+  NVDA: Nov 17 Q3 earnings is the next major catalyst; China export-license policy (case-by-case r
+  META: Connect conference (Sep 23-24) unveils AI/wearables roadmap, key test of Muse AI agent's m
+  TSM: Q3 earnings (mid-Oct) tests whether the 2026 capex/guidance raise holds as AI chip demand 
+  MU: Sept 30 FQ4 earnings is the key test: DRAM contract prices seen up 50%+, NAND 60%+ this qu
+  AMD: MI450/Helios rack-scale GPU ramp, shipping in Q3 with heavy Q4 ramp, anchors guided ~$70B 
+  INTC: Jeff Pu raised TP to $150 on SOTP, citing better 18A/EMIB yields, foundry client wins, and
+  AVGO: Broadcom guided Q4 AI semi revenue to $21.7B (+236% YoY), citing accelerating TPU/custom c
+  KLAC: KLA heads into its Oct earnings with backlog above $12B and consensus EPS +33% YoY, as AI-
+  COHR: Coherent unveils its PhotonLink optical platform at ECOC on Sept 21, its next AI-datacente
+  TEL: Tokyo Electron's 5-for-1 stock split hits record date Sept 30, aimed at widening its share
+  GLW: Corning stock dropped 7%+ after launching a $2B at-the-market equity offering with Goldman
+  FN: Q1 FY27 print (qtr ended Sept 25) tests raised guidance of $1.375-1.425B rev, $4.10-4.25 n
+  SMI: Q3 2026 report due Nov: guided 2-4% QoQ rev growth to $3.07-3.13B, gross margin to 26-28% 
+  UOB: Market watching how aggressively UOB continues its S$2B buyback (~40% done, S$794m) as NIM
+  COST: Q4 FY2026 earnings due Sept 24 after market; consensus eyes $6.51 EPS, $94.46B revenue and
+  NKE: Oct 1 earnings is the key catalyst: guidance flagged revenue decline, margin contraction 3
+catalysts: 64 names total -> /Users/chelsqueck/stock-monitor/data/catalysts.json
+
+[catalysts] ✓ OK
+
+============================================================
+[07:34:42] Running catalyst_calendar...
+
+24 tickers due: ['META', 'NVDA', 'MSFT', 'GOOGL', 'AMZN', 'AAPL', 'TSLA', 'TSM', 'AVGO', 'AMD', 'ASML', 'MU', '000660', '005930', 'INTC', 'SMI', '688256', '2454', '9988', '0700', '3690', 'PDD', '1810', '6181']
+  META     3 events
+  NVDA     5 events
+  MSFT     3 events
+  GOOGL    4 events
+  AMZN     5 events
+  AAPL     5 events
+  TSLA     5 events
+  TSM      4 events
+  AVGO     3 events
+  AMD      4 events
+  ASML     4 events
+  MU       6 events
+  000660   6 events
+  005930   6 events
+  INTC     5 events
+  SMI      3 events
+  MACRO    18 events
+  688256   3 events
+  2454     6 events
+  9988     4 events
+  0700     4 events
+  3690     3 events
+  PDD      3 events
+  1810     4 events
+  6181     2 events
+catalyst_calendar: 25 tickers, 101 ticker events, 18 macro events -> /Users/chelsqueck/stock-monitor/data/catalyst-calendar.json
+
+[catalyst_calendar] ✓ OK
+
+============================================================
+[07:45:38] Running stock_page_extras...
+
+0 tickers due (skipped 18 fresh): []
+stock_page_extras: 18 tickers -> /Users/chelsqueck/stock-monitor/data/stock-page-extras.json
+
+[stock_page_extras] ✓ OK
+
+============================================================
+[07:45:38] Running delivery_war...
+
+delivery_war: fresh (2d old), skipping
+
+[delivery_war] ✓ OK
+
+============================================================
+[07:45:38] Running model_launches...
+
+0 tickers due: []
+model_launches: 6 tickers, 8 ecosystem events -> /Users/chelsqueck/stock-monitor/data/model-launches.json
+
+[model_launches] ✓ OK
+
+============================================================
+[07:45:38] Running deal_map...
+
+deal_map: 4 groups, 15 suppliers -> /Users/chelsqueck/stock-monitor/data/deal-map.json
+
+[deal_map] ✓ OK
+
+============================================================
+[07:51:52] Running deep_financials...
+
+stale-only: 1 due: ['MU']
+1 tickers to research
+  MU       2 fiscal years, 8 quarters, 4 segments
+deep_financials: 27 tickers -> /Users/chelsqueck/stock-monitor/data/deep-financials.json
+
+[deep_financials] ✓ OK
+
+============================================================
+[08:00:40] Running macro_events...
+
+macro events still fresh (2d old), skipping
+
+[macro_events] ✓ OK
+
+============================================================
+[08:00:40] Running movements...
+
+moves: 81 names, 5270 total (>= 5.0%), 8 new unresearched (0 fetch failures) -> /Users/chelsqueck/stock-monitor/data/moves.json
+
+[movements] ✓ OK
+
+============================================================
+[08:01:20] Running earnings_research...
+
+3 tickers due (skipped 8 still-fresh)
+  TSLA: Investors watching if margins stabilize amid heavy CapEx (>$25B) as Robotaxi expands to 7 
+  DPZ: Focus on whether order growth can offset weak ticket/comp trends, delivery margin sustaina
+  LRCX: Investors watching if Lam's FY27 Q1 guide holds (~52% rev growth, EPS +71%) as AI-driven W
+earnings focus: 11 names total -> /Users/chelsqueck/stock-monitor/data/earnings.json
+
+[earnings_research] ✓ OK
+
+============================================================
+[08:01:55] Running movements_research...
+
+8 chunks across 81 names, 6 in parallel
+  2513    chunk +1
+  0100    chunk +1
+  META    chunk +1
+  688825  chunk +1
+  2015    chunk +1
+  3750    chunk +1
+  6181    chunk +1
+  1929    chunk +1
+done: 3372/5270 moves sourced
+
+[movements_research] ✓ OK
+
+============================================================
+[08:04:25] Running build...
+
+  ok   SPY            760.88  729 bars
+  ok   QQQ            709.18  729 bars
+  ok   PDD             79.38  729 bars
+  ok   2513           680.00  169 bars
+  ok   0100           234.60  168 bars
+  ok   9988           107.20  730 bars
+  ok   0700           438.80  730 bars
+  ok   9618           106.30  730 bars
+  ok   3690            74.75  730 bars
+  ok   1810            26.50  730 bars
+  ok   9888            88.90  730 bars
+  ok   AMZN           253.54  729 bars
+  ok   NVDA           210.96  729 bars
+  ok   AAPL           333.08  729 bars
+  ok   MSFT           505.41  729 bars
+  ok   META           665.60  729 bars
+  ok   GOOGL          349.39  729 bars
+  ok   TSLA           358.97  729 bars
+  ok   TSM            418.01  729 bars
+  ok   000660   1,690,000.00  728 bars
+  ok   005930     248,500.00  728 bars
+  ok   MU             924.03  729 bars
+  ok   ARMUSD         239.01  729 bars
+  ok   688256       1,075.79  730 bars
+  ok   688825          54.22  37 bars
+  ok   AMD            493.41  729 bars
+  ok   ASML         1,575.15  729 bars
+  ok   INTC            97.19  729 bars
+  ok   AVGO           344.72  729 bars
+  ok   SMCI            36.74  729 bars
+  ok   MRVL           218.82  729 bars
+  ok   2454         4,430.00  729 bars
+  ok   GFS             43.54  729 bars
+  ok   WDC            426.94  729 bars
+  ok   AMAT           424.21  729 bars
+  ok   LRCX           273.49  729 bars
+  ok   KLAC           169.09  729 bars
+  ok   COHR           266.50  729 bars
+  ok   LITE           835.03  729 bars
+  ok   CRDO           150.09  729 bars
+  ok   TEL            203.37  729 bars
+  ok   GLW            143.60  729 bars
+  ok   CIEN           319.64  729 bars
+  ok   AAOI            95.76  729 bars
+  ok   FN             382.55  729 bars
+  ok   ACMR            66.86  729 bars
+  ok   NINOY           10.90  730 bars
+  ok   MPWR         1,143.24  729 bars
+  ok   VICR           184.73  729 bars
+  ok   IFNNY           62.55  730 bars
+  ok   SMI             60.75  730 bars
+  ok   0175            16.14  730 bars
+  ok   1211            79.05  730 bars
+  ok   2015            46.12  730 bars
+  ok   9868            40.38  730 bars
+  ok   9866            28.68  730 bars
+  ok   3750           516.00  329 bars
+  ok   9863            35.86  730 bars
+  ok   UOB             41.33  727 bars
+  ok   KEPPEL          11.20  727 bars
+  ok   DBS             76.75  727 bars
+  ok   OCBC            31.00  727 bars
+  ok   SINGTEL          4.45  727 bars
+  ok   STENG           10.13  727 bars
+  ok   SGX             22.53  727 bars
+  ok   CAPLAND          2.65  727 bars
+  ok   SE             108.68  729 bars
+  ok   GRAB             3.02  729 bars
+  ok   MCD            257.49  729 bars
+  ok   SBUX            99.07  729 bars
+  ok   PEP            136.34  729 bars
+  ok   WMT            109.08  729 bars
+  ok   COST           918.91  729 bars
+  ok   PG             146.13  729 bars
+  ok   KO              89.35  729 bars
+  ok   NKE             37.05  729 bars
+  ok   DPZ            323.77  729 bars
+  ok   GRMN           280.38  729 bars
+  ok   6181           355.80  545 bars
+  ok   1929            11.10  730 bars
+  ok   0590            20.92  730 bars
+  ok   0116            12.76  730 bars
+  ok   002867          10.45  730 bars
+
+Wrote /Users/chelsqueck/stock-monitor/site/data.json (6617 KB) - 83 ok, 0 failed, source=yahoo
+
+[build] ✓ OK
+
+============================================================
+[08:05:09] Running reprice_forward_pe...
+
+reprice_forward_pe: 47 year-entries repriced across 25 tickers -> /Users/chelsqueck/stock-monitor/data/forward-pe.json
+
+[reprice_forward_pe] ✓ OK
+
+============================================================
+[08:05:09] Deploying...
+
+[stock-monitor] deployed to GitHub Pages (production)
+[ai-supply-chain] published via publish.py (main)
+
+[deploy] ✓ OK
+
+============================================================
+[08:05:18] Running daily_brief...
+
+
+[daily_brief] ✗ FAILED
+
+============================================================
+[PIPELINE COMPLETE] 2026-09-16 08:06:20
+[SUMMARY] 17/18 stages OK, elapsed 2232s
+
+  ✓ refresh_news
+  ✓ fundamentals
+  ✓ news
+  ✓ catalysts
+  ✓ catalyst_calendar
+  ✓ stock_page_extras
+  ✓ delivery_war
+  ✓ model_launches
+  ✓ deal_map
+  ✓ deep_financials
+  ✓ macro_events
+  ✓ movements
+  ✓ earnings_research
+  ✓ movements_research
+  ✓ build
+  ✓ reprice_forward_pe
+  ✓ deploy
+  ✗ daily_brief

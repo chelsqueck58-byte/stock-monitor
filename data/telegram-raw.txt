@@ -1,63 +1,59 @@
-[Telegram @tradehaven] === @tradehaven - 4 new posts, 2026-09-13 22:07 to 2026-09-13 23:21 UTC ===
+[Telegram @tradehaven] === @tradehaven - 12 new posts, 2026-09-15 23:30 to 2026-09-16 04:30 UTC ===
 
-[2026-09-13 22:07 UTC] #77978
-Daily Morning Brew - An apocalypse or ill advised moment for AI
-https://caffeinatedcaptial.substack.com/p/the-daily-morning-brew-an-ill-advised?utm_source=share&utm_medium=android&r=5dyxxv
+[2026-09-15 23:30 UTC] #78047
+According to witnesses, after Xi Jinping returned to China from India, his plane arrived at Beijing Airport, and he was carried off the plane and taken away by a military helicopter. He was then rushed to Beijing 301 Hospital for emergency treatment.
+Previously, when Xi Jinping returned to Beijing from abroad, a large number of officials would greet him at the airport, and the streets along the route would be temporarily closed before he returned to Zhongnanhai by car. However, this time, when Xi Jinping arrived at Beijing Airport, there was no large number of officials to greet him, no welcoming ceremony, and no grand motorcade, nor any temporary street closures. Instead, he was directly picked up by a military helicopter and rushed to Beijing 301 Hospital for emergency treatment.
+https://x.com/xie_wanjun/status/2099717945517641997
 
-[2026-09-13 23:02 UTC] #77979
-KEY DATA  14-Nov
-JP  Industrial Production
-IN  CPI
-AUCTIONS
-Bills  GE 6M/12M FR 3M/6M/12M US 3M/6M
+[2026-09-15 23:39 UTC] #78048
+Glencore faces US$2 billion lawsuit as it alleges Radiant World fraud
+Glencore has directly accused Radiant World of fraud for the first time
+https://www.businesstimes.com.sg/companies-markets/glencore-faces-us2-billion-lawsuit-it-alleges-radiant-world-fraud
 
-[2026-09-13 23:03 UTC] #77980
-Oil advanced after Saudi Arabia shut a major crude pipeline following attacks, disrupting a route that’s been used to bypass the Strait of Hormuz during the US-Iran war and deepening a global energy crunch.
-Global benchmark Brent rose toward $108 a barrel, after rallying almost 9% last week, while West Texas Intermediate was near $103. European natural gas also gained, surging as much as 3.8%. Saudi Arabia said late on Friday that it had halted the East-West pipeline as a precaution after attacks the previous day. There’s been no indication of when operations will resume.
-https://www.bloomberg.com/news/articles/2026-09-13/latest-oil-market-news-and-analysis-for-sept-14
+[2026-09-16 00:39 UTC] #78050
+Singapore’s covered bond boom is largely a DBS story
+https://bt.sg/fUaR
 
-[2026-09-13 23:21 UTC] #77981
-With 50% of the votes counted, the two main blocs were separated by only 20,000 votes, Sweden public broadcaster SVT said.
-https://www.bbc.com/news/articles/c0qx5d79kdeo
+[2026-09-16 01:37 UTC] #78051
+US-China Discuss Cutting Some Tariffs As Leaders Prepare To Meet
+https://www.bloomberg.com/news/articles/2026-09-16/us-china-discuss-cutting-some-tariffs-as-leaders-prepare-to-meet
 
+[2026-09-16 01:41 UTC] #78052
+Chinese robots have begun building other Chinese robots, as a new factory capable of producing 1 humanoid every 10 minutes comes online.
+https://www.globaltimes.cn/page/202609/1370528.shtml
 
+[2026-09-16 02:02 UTC] #78053
+Iran war cost hits $38 billion, forecast to rise $3 billion a month, CBO says
+reut.rs/4cIYBJt
 
-[Telegram @Fin_Watch] === @Fin_Watch: no new posts since last check ===
+[2026-09-16 03:18 UTC] #78054
+Spot gold climbed 1% to $4,333.64
+WTI and Brent crude extended intraday losses
+Brent fell about 1.0%
 
+[2026-09-16 03:19 UTC] #78055
+OpenAI weighs funding round at $1.2tn valuation before IPO
+https://www.ft.com/content/27509db8-b032-4437-9b2a-e909f466022f?syn-25a6b1a6=1
 
-[Telegram @tech] === @tech - 1 new posts, 2026-09-13 16:02 to 2026-09-13 16:02 UTC ===
+[2026-09-16 03:20 UTC] #78056
+10Y UST 4.98%
 
-[2026-09-13 16:02 UTC] #3894
-🤖
-OpenAI launches ChatGPT for finance
-ChatGPT for Financial Services
-runs on
-GPT-6 Astra
-. Its built-in sources include
-Daloopa
-and
-PitchBook
-.
-LSEG News
-and
-Crunchbase
-are also available, with each figure traceable to its source.
-The model
-analyzes filings and tables
-, then
-compares metrics across periods
-. Corporate
-Excel, Word, or PowerPoint
-templates can be connected for company-formatted output.
-Morgan Stanley
-and
-Evercore
-helped create it. Access is currently
-limited to eligible financial organizations
-.
-📊
-@tech
+[2026-09-16 03:41 UTC] #78057
+The
+New Zealand Superannuation Fund
+, one of the world’s top-performing sovereign wealth funds, returned 14.2% in the year through June, powered by a rally in global equity markets despite being underweight in outperfor
+
+[Telegram @Fin_Watch] === @Fin_Watch - 1 new posts, 2026-09-15 23:35 to 2026-09-15 23:35 UTC ===
+
+[2026-09-15 23:35 UTC] #11972
+🇺🇸
+🇮🇷
+U.S. IS PREPARING A SALE OF 2,000-POUND BOMBS TO ISRAEL - WAPO
+@Fin_Watch
 
 
 
-[Telegram @infinityhedge] === @infinityhedge: no posts in the last 2 days ===
+[Telegram @tech] === @tech: no new posts since last check ===
+
+
+[Telegram @infinityhedge] === @infinityhedge: no new posts since last check ===
