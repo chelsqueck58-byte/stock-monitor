@@ -122,6 +122,12 @@ def research_company_wide(tid, label):
         "RULES: only real, filed numbers. If a metric wasn't disclosed for "
         "a given period, leave it null rather than estimating or "
         "backfilling.\n"
+        "TERSENESS: ebitda_basis states which basis you used in one short "
+        "clause (e.g. 'company-disclosed adjusted EBITDA' or 'operating "
+        "income + D&A') - never explain a derivation formula, a one-off "
+        "tax/accounting item, or any other caveat there; if something "
+        "genuinely unusual affected a period's numbers, that belongs in the "
+        "surrounding research writeup, not this field.\n"
         "CRITICAL: reply with ONLY the JSON object, nothing else.\n"
         'Format: {"currency":"USD","fiscal_year_end":"e.g. Dec 31",'
         '"fiscal_years":[{"fy_label":"FY2025","period_end":"2025-12-31",'
@@ -186,6 +192,15 @@ def research_segments(tid, label):
         "a given period (e.g. a company started reporting adjusted EBITDA "
         "only recently, or a segment didn't exist yet), leave it null "
         "rather than estimating or backfilling.\n"
+        "TERSENESS: headline_metric_value is a number, nothing else - never "
+        "append '(calculated)' or similar self-referential tags, and never "
+        "show your derivation (e.g. 'X / Y') inline - if you derived it "
+        "yourself just state the figure. 'note' is at most ONE short clause "
+        "flagging a structural fact (a rename, merge, or the one dollar "
+        "figure called out in the segment guidance above) - never explain "
+        "which figure analysts prefer, why a headline number is 'distorted', "
+        "or your own confidence/sourcing difficulty; state the fact plainly "
+        "or leave it null.\n"
         "CRITICAL: reply with ONLY the JSON object, nothing else.\n"
         'Format: {"segments":[{"name":"...",'
         '"fiscal_years":[{"fy_label":"FY2025","revenue_m":0.0,'
