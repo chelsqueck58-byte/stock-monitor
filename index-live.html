@@ -26,13 +26,13 @@
   header .legend b.vwap { color:var(--vwap); }
   #stale { display:none; background:var(--down); color:#fff; padding:10px 16px; font-weight:600; text-align:center; }
   #stale.show { display:block; }
-  main { padding:12px; display:grid; gap:10px; grid-template-columns:repeat(auto-fill,minmax(460px,1fr)); }
-  .monitor-grid { padding:12px; display:grid; gap:10px; grid-template-columns:repeat(auto-fill,minmax(460px,1fr)); }
+  main { padding:10px; display:grid; gap:8px; grid-template-columns:repeat(auto-fill,minmax(420px,1fr)); }
+  .monitor-grid { padding:10px; display:grid; gap:8px; grid-template-columns:repeat(auto-fill,minmax(420px,1fr)); }
   .section { grid-column:1/-1; font-size:12px; font-weight:600; color:var(--muted);
     text-transform:uppercase; letter-spacing:.5px; padding:8px 2px 2px; border-bottom:1px solid var(--border); }
   .card { background:var(--panel); border:1px solid var(--border); border-radius:8px; overflow:hidden; }
   .card.setup { border-color:var(--ema); box-shadow:inset 0 0 0 1px var(--ema); }
-  .card .top { display:flex; align-items:center; gap:6px; padding:8px 10px; flex-wrap:wrap; }
+  .card .top { display:flex; align-items:center; gap:6px; padding:6px 8px; flex-wrap:wrap; }
   .card .name { font-weight:600; }
   .card .id { color:var(--muted); font-size:11px; }
   .card .px { margin-left:auto; font-variant-numeric:tabular-nums; font-weight:600; }
@@ -45,30 +45,48 @@
   .badge.entry { color:var(--ema); background:rgba(227,179,65,.16); }
   .badge.cta-long { color:var(--up); background:rgba(38,166,65,.10); }
   .badge.cta-short { color:var(--down); background:rgba(248,81,73,.10); }
-  .remark { padding:5px 10px; font-size:11px; border-bottom:1px solid var(--border);
+  .remark { padding:4px 8px; font-size:11px; border-bottom:1px solid var(--border);
     font-variant-numeric:tabular-nums; }
   .remark.enter { color:var(--up); }
   .remark.exit { color:var(--down); }
   .remark.muted { color:var(--muted); }
   .remark .muted { color:var(--muted); }
-  .fund { padding:4px 10px; font-size:11px; color:var(--muted); border-bottom:1px solid var(--border);
+  .fund { padding:3px 8px; font-size:11px; color:var(--muted); border-bottom:1px solid var(--border);
     font-variant-numeric:tabular-nums; }
-  .news { padding:5px 10px; font-size:11px; color:#9fd0ff; border-bottom:1px solid var(--border); }
-  .cat { padding:5px 10px; font-size:11px; color:var(--text); border-top:1px solid var(--border); }
-  .cat b.e { color:var(--down); }
-  .catline { padding:5px 10px; font-size:11px; color:#c9a5f0; border-top:1px solid var(--border); }
-  .teleblock { padding:6px 10px; font-size:11px; border-top:1px solid var(--border); background:rgba(240,180,41,.05); }
+  /* Bubble chips: every discrete news/catalyst/event item gets its own bounded
+     pill instead of blending into a flat text row - that's what makes a card
+     with 3-4 different items scannable at a glance instead of a wall of text. */
+  .bubble { display:inline-flex; align-items:baseline; gap:4px; padding:3px 8px; margin:2px 4px 2px 0;
+    border-radius:12px; font-size:10.5px; line-height:1.35; background:rgba(88,166,255,.08);
+    border:1px solid rgba(88,166,255,.25); color:var(--text); }
+  .bubble .bd { color:var(--muted); font-size:9.5px; }
+  .bubble.earn { background:rgba(227,179,65,.14); border-color:rgba(227,179,65,.5); color:var(--ema); font-weight:600; }
+  .news { margin:4px 8px; padding:4px 8px; font-size:11px; color:#9fd0ff; border-radius:8px;
+    background:rgba(159,208,255,.06); border:1px solid rgba(159,208,255,.22); }
+  .cat { padding:3px 6px 5px; }
+  .catline { margin:4px 8px; padding:4px 8px; font-size:11px; color:#c9a5f0; border-radius:8px;
+    background:rgba(201,165,240,.06); border:1px solid rgba(201,165,240,.22); }
+  /* Per-item "news bubble" for the researched-past-moves list (recentPastEvents). */
+  .newsbubble-wrap { padding:4px 8px 6px; border-top:1px solid var(--border); }
+  .newsbubble { border:1px solid var(--border); border-radius:8px; padding:5px 8px; margin:4px 0;
+    font-size:11px; background:rgba(255,255,255,.02); }
+  .newsbubble.earn { border-color:rgba(227,179,65,.45); background:rgba(227,179,65,.06); }
+  .newsbubble .nb-tag { font-size:9px; font-weight:700; letter-spacing:.3px; color:var(--ema);
+    text-transform:uppercase; margin-right:2px; }
+  .newsbubble .nb-meta { color:var(--muted); font-size:10px; }
+  .newsbubble .nb-txt { color:var(--muted); font-size:10px; margin-top:2px; }
+  .teleblock { padding:5px 8px; font-size:11px; border-top:1px solid var(--border); background:rgba(240,180,41,.05); }
   .teleblock .th { color:#f0b429; font-weight:600; margin-bottom:2px; }
   .teleblock .tb { color:var(--text); margin:2px 0; white-space:pre-line; }
   .teleblock .tb:last-child { margin-bottom:0; }
-  .earn { padding:6px 10px; font-size:11px; border-top:1px solid var(--border); background:rgba(88,166,255,.05); }
+  .earn { padding:5px 8px; font-size:11px; border-top:1px solid var(--border); background:rgba(88,166,255,.05); }
   .earn .eh { color:var(--muted); }
   .earn .efocus { color:#9fd0ff; margin-top:3px; }
   .ct-prev { color:#c9a5f0; margin-top:3px; }
   .ct-event { font-weight:600; }
   .ct-focus { color:#9fd0ff; margin-top:2px; }
   .ideabox .nw { color:#9fd0ff; font-size:11px; margin-top:3px; }
-  .chart { height:300px; }
+  .chart { height:190px; }
   /* Top ideas section */
   #ideas { padding:10px 12px; border-bottom:1px solid var(--border); background:#12161c; }
   #catalysts30 { padding:10px 12px; border-bottom:1px solid var(--border); background:#12161c; }
@@ -474,14 +492,19 @@ function recentPastEvents(inst) {
     if (d >= today) return "";
     const daysAgo = Math.floor((today - d) / (24 * 60 * 60 * 1000));
     const cls = mv.pct >= 0 ? "u" : "d";
-    const label = mv.catalyst_type === "earnings" ? "📊" : (mv.catalyst_type === "beta" ? "📈" : "•");
-    return `<div style="font-size:11px; margin:4px 0; padding:4px 0; border-top:1px solid var(--border);">
+    // catalyst_type exists in the schema but the research pipeline doesn't
+    // populate it yet - fall back to scanning the reason text so the
+    // earnings label actually fires against today's real data.
+    const isEarnings = mv.catalyst_type === "earnings" ||
+      /\bearnings\b|\bEPS\b|\bQ[1-4]\b[^.]{0,25}\b(beat|miss|report)/i.test(mv.reason || "");
+    const label = isEarnings ? `<span class="nb-tag">📊 Earnings</span>` : (mv.catalyst_type === "beta" ? "📈" : "•");
+    return `<div class="newsbubble${isEarnings ? " earn" : ""}">
       ${label} <span class="pct ${cls}">${mv.pct >= 0 ? "+" : ""}${mv.pct.toFixed(2)}%</span>
-      <span style="color:var(--muted); font-size:10px;">(${daysAgo}d ago)</span>
-      <div style="font-size:10px; color:var(--muted); margin-top:2px;">${esc(mv.reason.substring(0, 90))}${mv.reason.length > 90 ? "..." : ""}</div>
+      <span class="nb-meta">(${daysAgo}d ago)</span>
+      <div class="nb-txt">${esc(mv.reason.substring(0, 90))}${mv.reason.length > 90 ? "..." : ""}</div>
     </div>`;
   }).join("");
-  return rows ? `<div style="padding:6px 10px; border-top:1px solid var(--border); background:rgba(88,166,255,.03);">${rows}</div>` : "";
+  return rows ? `<div class="newsbubble-wrap">${rows}</div>` : "";
 }
 
 function catalystTimeline(inst) {
@@ -496,7 +519,10 @@ function catalystTimeline(inst) {
   (inst.events || []).forEach(e => { const dd = daysTo(e.date); if (dd != null && dd >= 0 && dd <= 30) items.push({ d: e.date, days: dd, label: e.event, earn: false }); });
   if (!items.length) return "";
   items.sort((a, b) => a.days - b.days);
-  return `<div class="cat">📅 ${items.map(i => i.earn ? `<b class="e">${esc(i.label)} ${i.d} (${i.days}d)</b>` : `${esc(i.label)} ${i.d} (${i.days}d)`).join(" · ")}</div>`;
+  const chips = items.map(i =>
+    `<span class="bubble${i.earn ? " earn" : ""}">${i.earn ? "📊 " : ""}${esc(i.label)} <span class="bd">${i.d} (${i.days}d)</span></span>`
+  ).join("");
+  return `<div class="cat">${chips}</div>`;
 }
 function earningsBox(inst) {
   const f = inst.fund;
@@ -536,7 +562,7 @@ function drawChart(el, inst) {
     grid: { vertLines: { color: "#1b2027" }, horzLines: { color: "#1b2027" } },
     rightPriceScale: { borderColor: "#21262d" },
     timeScale: { borderColor: "#21262d", timeVisible: false },
-    crosshair: { mode: 0 }, height: 300,
+    crosshair: { mode: 0 }, height: 190,
   });
   // Clean filled-area price line (no candles, no in-plot number labels).
   const area = chart.addAreaSeries({
